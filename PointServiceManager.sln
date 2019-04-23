@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.28803.202
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSMDataManager", "PSMDataManager\PSMDataManager.csproj", "{3C468FA3-3E62-4561-B8F0-6174B8AC72B5}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "PSMData", "PSMData\PSMData.sqlproj", "{3EF1F662-36D4-46E0-B8C4-6138CB2430AE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,12 @@ Global
 		{3C468FA3-3E62-4561-B8F0-6174B8AC72B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3C468FA3-3E62-4561-B8F0-6174B8AC72B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3C468FA3-3E62-4561-B8F0-6174B8AC72B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EF1F662-36D4-46E0-B8C4-6138CB2430AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EF1F662-36D4-46E0-B8C4-6138CB2430AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EF1F662-36D4-46E0-B8C4-6138CB2430AE}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{3EF1F662-36D4-46E0-B8C4-6138CB2430AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EF1F662-36D4-46E0-B8C4-6138CB2430AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EF1F662-36D4-46E0-B8C4-6138CB2430AE}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
