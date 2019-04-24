@@ -1,0 +1,5 @@
+﻿CREATE TABLE [dbo].[Technician]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY,
+	[Nama] NVARCHAR(50) NOT NULL
+)
