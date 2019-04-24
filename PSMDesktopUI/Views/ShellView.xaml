@@ -5,8 +5,11 @@
                  xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  mc:Ignorable="d"
+                 ShowIcon="False"
                  TitleAlignment="Center"
-                 Title="Service Manager" 
+                 Title="Service Manager"
+                 WindowStartupLocation="CenterScreen"
+                 WindowState="Maximized"
                  Height="450" Width="800">
 
     <Grid>
