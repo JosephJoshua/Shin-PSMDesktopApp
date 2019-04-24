@@ -1,0 +1,12 @@
+﻿CREATE TABLE [dbo].[Member]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
+    [Nama] NVARCHAR(50) NOT NULL, 
+    [NoHp] VARCHAR(12) NOT NULL, 
+    [Alamat] NVARCHAR(50) NOT NULL, 
+    [TipeHp1] NVARCHAR(50) NOT NULL, 
+    [TipeHp2] NVARCHAR(50) NOT NULL, 
+    [TipeHp3] NVARCHAR(50) NOT NULL, 
+    [TipeHp4] NVARCHAR(50) NOT NULL, 
+    [TipeHp5] NVARCHAR(50) NOT NULL
+)
