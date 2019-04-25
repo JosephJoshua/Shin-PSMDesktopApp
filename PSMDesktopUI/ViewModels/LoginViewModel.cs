@@ -2,6 +2,8 @@
 using PSMDesktopUI.Helpers;
 using System;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
 
 namespace PSMDesktopUI.ViewModels
 {
@@ -50,6 +52,8 @@ namespace PSMDesktopUI.ViewModels
 
         public async Task Login()
         {
+            Application.Current.Dispatcher.Invoke(() => Mouse.OverrideCursor = Cursors.Wait);
+
             try
             {
                 var result = await _apiHelper.Authenticate(Username, Password);
@@ -57,6 +61,10 @@ namespace PSMDesktopUI.ViewModels
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                Application.Current.Dispatcher.Invoke(() => Mouse.OverrideCursor = null);
             }
         }
     }
