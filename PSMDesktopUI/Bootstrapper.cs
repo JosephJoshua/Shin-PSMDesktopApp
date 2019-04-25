@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using Caliburn.Micro;
+using PSMDesktopUI.Helpers;
 using PSMDesktopUI.ViewModels;
 
 namespace PSMDesktopUI
@@ -22,7 +23,8 @@ namespace PSMDesktopUI
 
             _container
                 .Singleton<IWindowManager, WindowManager>()
-                .Singleton<IEventAggregator, EventAggregator>();
+                .Singleton<IEventAggregator, EventAggregator>()
+                .Singleton<IApiHelper, ApiHelper>();
 
             GetType().Assembly.GetTypes()
                 .Where(type => type.IsClass)
