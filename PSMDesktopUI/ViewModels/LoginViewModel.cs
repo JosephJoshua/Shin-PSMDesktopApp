@@ -12,6 +12,8 @@ namespace PSMDesktopUI.ViewModels
         private string _username;
         private string _password;
 
+        private string _errorMessage;
+
         private IApiHelper _apiHelper;
 
         public string Username
@@ -40,6 +42,24 @@ namespace PSMDesktopUI.ViewModels
             }
         }
 
+        public string ErrorMessage
+        {
+            get { return _errorMessage; }
+
+            set
+            {
+                _errorMessage = value;
+
+                NotifyOfPropertyChange(() => ErrorMessage);
+                NotifyOfPropertyChange(() => IsErrorMessageVisibile);
+            }
+        }
+
+        public bool IsErrorMessageVisibile
+        {
+            get { return !string.IsNullOrEmpty(ErrorMessage); }
+        }
+
         public bool CanLogin
         {
             get { return !string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password); }
@@ -56,11 +76,13 @@ namespace PSMDesktopUI.ViewModels
 
             try
             {
+                ErrorMessage = string.Empty;
+
                 var result = await _apiHelper.Authenticate(Username, Password);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                ErrorMessage = ex.Message;
             }
             finally
             {
