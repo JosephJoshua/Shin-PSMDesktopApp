@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using Caliburn.Micro;
-using PSMDesktopUI.Helpers;
+using PSMDesktopUI.Library.Api;
+using PSMDesktopUI.Library.Models;
 using PSMDesktopUI.ViewModels;
 
 namespace PSMDesktopUI
@@ -24,6 +25,7 @@ namespace PSMDesktopUI
             _container
                 .Singleton<IWindowManager, WindowManager>()
                 .Singleton<IEventAggregator, EventAggregator>()
+                .Singleton<ILoggedInUserModel, LoggedInUserModel>()
                 .Singleton<IApiHelper, ApiHelper>();
 
             GetType().Assembly.GetTypes()

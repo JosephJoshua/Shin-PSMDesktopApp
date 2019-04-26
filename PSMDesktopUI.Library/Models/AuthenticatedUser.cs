@@ -1,4 +1,4 @@
-﻿namespace PSMDesktopUI.Models
+﻿namespace PSMDesktopUI.Library.Models
 {
     public class AuthenticatedUser
     {
