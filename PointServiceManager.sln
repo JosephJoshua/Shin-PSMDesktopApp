@@ -9,6 +9,8 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "PSMData", "PSMData\PSMData.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSMDesktopUI", "PSMDesktopUI\PSMDesktopUI.csproj", "{780C942C-CD02-4357-A6BB-D085AD516A98}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSMDataManager.Library", "PSMDataManager.Library\PSMDataManager.Library.csproj", "{0ACF3383-2C08-4203-B76B-0E378E62A442}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{780C942C-CD02-4357-A6BB-D085AD516A98}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{780C942C-CD02-4357-A6BB-D085AD516A98}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{780C942C-CD02-4357-A6BB-D085AD516A98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0ACF3383-2C08-4203-B76B-0E378E62A442}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0ACF3383-2C08-4203-B76B-0E378E62A442}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0ACF3383-2C08-4203-B76B-0E378E62A442}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0ACF3383-2C08-4203-B76B-0E378E62A442}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
