@@ -1,5 +1,5 @@
 ﻿using Caliburn.Micro;
-using PSMDesktopUI.Helpers;
+using PSMDesktopUI.Library.Api;
 using System;
 using System.Threading.Tasks;
 using System.Windows;
@@ -18,7 +18,7 @@ namespace PSMDesktopUI.ViewModels
 
         public string Username
         {
-            get { return _username; }
+            get => _username;
 
             set
             {
@@ -31,7 +31,7 @@ namespace PSMDesktopUI.ViewModels
 
         public string Password
         {
-            get { return _password; }
+            get => _password;
 
             set
             {
@@ -44,7 +44,7 @@ namespace PSMDesktopUI.ViewModels
 
         public string ErrorMessage
         {
-            get { return _errorMessage; }
+            get => _errorMessage;
 
             set
             {
@@ -57,12 +57,12 @@ namespace PSMDesktopUI.ViewModels
 
         public bool IsErrorMessageVisibile
         {
-            get { return !string.IsNullOrEmpty(ErrorMessage); }
+            get => !string.IsNullOrEmpty(ErrorMessage);
         }
 
         public bool CanLogin
         {
-            get { return !string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password); }
+            get => !string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password);
         }
 
         public LoginViewModel(IApiHelper apiHelper)
@@ -79,6 +79,9 @@ namespace PSMDesktopUI.ViewModels
                 ErrorMessage = string.Empty;
 
                 var result = await _apiHelper.Authenticate(Username, Password);
+                await _apiHelper.GetLoggedInUserInfo(result.access_token);
+
+                Application.Current.Dispatcher.Invoke(() => TryClose());
             }
             catch (Exception ex)
             {
