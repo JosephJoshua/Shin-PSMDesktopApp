@@ -7,10 +7,11 @@
     xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
     ShowTitle="False"
     ShowIcon="False"
+    ShowInTaskbar="False"
     ResizeMode="NoResize"
     WindowStartupLocation="CenterOwner"
     Title="Service Manager"
-    Height="215" Width="475">
+    Height="198" Width="475">
 
     <Grid>
         <dxlc:LayoutControl Orientation="Vertical" dxe:ValidationService.IsValidationContainer="True">

@@ -145,6 +145,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="EventModels\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

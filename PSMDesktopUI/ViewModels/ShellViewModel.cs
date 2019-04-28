@@ -1,29 +1,37 @@
 ﻿using Caliburn.Micro;
+using System.Threading.Tasks;
 
 namespace PSMDesktopUI.ViewModels
 {
     public class ShellViewModel : Conductor<IScreen>.Collection.OneActive
     {
-        private IWindowManager _windowManager;
+        private readonly IWindowManager _windowManager;
+        private readonly SimpleContainer _container;
 
-        private LoginViewModel _loginViewModel;
-        private MembersViewModel _membersViewModel;
+        private readonly MembersViewModel _membersViewModel;
         
-        public ShellViewModel(IWindowManager windowManager, LoginViewModel loginViewModel, MembersViewModel membersViewModel)
+        public ShellViewModel(IWindowManager windowManager, SimpleContainer container, MembersViewModel membersViewModel)
         {
             _windowManager = windowManager;
+            _container = container;
 
-            _loginViewModel = loginViewModel;
             _membersViewModel = membersViewModel;
-
-            Items.Add(_membersViewModel);
         }
 
-        protected override void OnViewReady(object view)
+        protected override async void OnViewLoaded(object view)
         {
-            base.OnViewReady(view);
+            base.OnViewLoaded(view);
 
-            _windowManager.ShowDialog(_loginViewModel);
+            await Task.Delay(1000);
+
+            if (_windowManager.ShowDialog(_container.GetInstance<LoginViewModel>()) == false)
+            {
+                TryClose();
+            }
+            else
+            {
+                Items.Add(_membersViewModel);
+            }
         }
     }
 }

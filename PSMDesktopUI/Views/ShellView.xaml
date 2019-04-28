@@ -14,7 +14,7 @@
     Height="450" Width="800">
 
     <Grid>
-        <TabControl Name="Items" />
+        <TabControl Name="Items" SelectedIndex="0" />
     </Grid>
-
+    
 </dx:ThemedWindow>
