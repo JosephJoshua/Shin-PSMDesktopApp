@@ -14,7 +14,7 @@ namespace PSMDesktopUI.ViewModels
 
         private string _errorMessage;
 
-        private IApiHelper _apiHelper;
+        private readonly IApiHelper _apiHelper;
 
         public string Username
         {
@@ -81,7 +81,7 @@ namespace PSMDesktopUI.ViewModels
                 var result = await _apiHelper.Authenticate(Username, Password);
                 await _apiHelper.GetLoggedInUserInfo(result.access_token);
 
-                Application.Current.Dispatcher.Invoke(() => TryClose());
+                Application.Current.Dispatcher.Invoke(() => TryClose(true));
             }
             catch (Exception ex)
             {
