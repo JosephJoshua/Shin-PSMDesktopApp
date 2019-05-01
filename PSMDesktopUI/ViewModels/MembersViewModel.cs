@@ -1,15 +1,20 @@
 ﻿using Caliburn.Micro;
+using PSMDesktopUI.Library.Api;
 using PSMDesktopUI.Library.Models;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace PSMDesktopUI.ViewModels
 {
     public sealed class MembersViewModel : Screen
     {
-        private BindingList<Member> _members;
-        private Member _selectedMember;
+        private IMemberEndpoint _memberEndpoint;
 
-        public BindingList<Member> Members
+        private BindingList<MemberModel> _members;
+        private MemberModel _selectedMember;
+
+        public BindingList<MemberModel> Members
         {
             get => _members;
 
@@ -20,7 +25,7 @@ namespace PSMDesktopUI.ViewModels
             }
         }
 
-        public Member SelectedMember
+        public MemberModel SelectedMember
         {
             get => _selectedMember;
 
@@ -41,14 +46,22 @@ namespace PSMDesktopUI.ViewModels
             get => SelectedMember != null;
         }
 
-        public MembersViewModel()
+        public MembersViewModel(IMemberEndpoint memberEndpoint)
         {
             DisplayName = "Members";
+            _memberEndpoint = memberEndpoint;
+        }
+
+        protected override async void OnViewLoaded(object view)
+        {
+            base.OnViewLoaded(view);
+
+            await LoadMembers();
         }
 
         public void AddMember()
         {
-
+            
         }
 
         public void EditMember()
@@ -61,9 +74,10 @@ namespace PSMDesktopUI.ViewModels
 
         }
 
-        public void RefreshGrid()
+        public async Task LoadMembers()
         {
-
+            List<MemberModel> memberList = await _memberEndpoint.GetAll();
+            Members = new BindingList<MemberModel>(memberList);
         }
     }
 }
