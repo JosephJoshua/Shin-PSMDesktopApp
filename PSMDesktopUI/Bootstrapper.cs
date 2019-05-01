@@ -20,7 +20,9 @@ namespace PSMDesktopUI
 
         protected override void Configure()
         {
-            _container.Instance(_container);
+            _container
+                .Instance(_container)
+                .PerRequest<IMemberEndpoint, MemberEndpoint>();
 
             _container
                 .Singleton<IWindowManager, WindowManager>()

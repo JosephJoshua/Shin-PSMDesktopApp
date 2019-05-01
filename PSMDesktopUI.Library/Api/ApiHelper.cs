@@ -13,6 +13,11 @@ namespace PSMDesktopUI.Library.Api
         private HttpClient _apiClient { get; set; }
         private ILoggedInUserModel _loggedInUser;
 
+        public HttpClient ApiClient
+        {
+            get => _apiClient;
+        }
+
         public ApiHelper(ILoggedInUserModel loggedInUser)
         {
             InitializeClient();

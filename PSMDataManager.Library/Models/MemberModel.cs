@@ -1,8 +1,8 @@
-﻿namespace PSMDesktopUI.Library.Models
+﻿namespace PSMDataManager.Library.Models
 {
-    public class Member
+    public class MemberModel
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         public string Nama { get; set; }
 
