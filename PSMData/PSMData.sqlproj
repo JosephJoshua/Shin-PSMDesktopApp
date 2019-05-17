@@ -72,6 +72,8 @@
     <Build Include="dbo\Tables\Service.sql" />
     <Build Include="dbo\Stored Procedures\spGetUser.sql" />
     <Build Include="dbo\Stored Procedures\spGetAllMembers.sql" />
+    <Build Include="dbo\Stored Procedures\spInsertMember.sql" />
+    <Build Include="dbo\Tables\JenisPekerjaan.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PSMData.refactorlog" />

@@ -1,4 +1,4 @@
-﻿<dx:ThemedWindow 
+﻿<dx:ThemedWindow
     x:Class="PSMDesktopUI.Views.ShellView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -6,11 +6,12 @@
     xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    Style="{StaticResource WindowStyle}"
     ShowIcon="False"
     TitleAlignment="Center"
-    Title="Service Manager"
     WindowStartupLocation="CenterScreen"
     WindowState="Maximized"
+    Title="Service Manager"
     Height="450" Width="800">
 
     <Grid>
