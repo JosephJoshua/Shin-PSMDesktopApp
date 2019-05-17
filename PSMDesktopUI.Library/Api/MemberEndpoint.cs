@@ -17,9 +17,6 @@ namespace PSMDesktopUI.Library.Api
 
         public async Task<List<MemberModel>> GetAll()
         {
-            await Task.Delay(2000);
-            return new List<MemberModel>();
-
             using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/member"))
             {
                 if (response.IsSuccessStatusCode)
