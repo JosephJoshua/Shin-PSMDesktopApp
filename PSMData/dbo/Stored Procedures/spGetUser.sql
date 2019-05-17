@@ -1,5 +1,7 @@
 ﻿create procedure [dbo].[spGetUser]
+(
 	@Id nvarchar(128)
+)
 as
 begin
 	set nocount on;

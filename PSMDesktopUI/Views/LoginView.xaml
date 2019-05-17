@@ -5,6 +5,7 @@
     xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
     xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
     xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+    Style="{StaticResource WindowStyle}"
     ShowTitle="False"
     ShowIcon="False"
     ShowInTaskbar="False"

@@ -13,5 +13,18 @@ namespace PSMDataManager.Controllers
             MemberData data = new MemberData();
             return data.GetMembers();
         }
+
+        public IHttpActionResult Post(MemberModel member)
+        {
+            if (string.IsNullOrEmpty(member.Nama))
+            {
+                return BadRequest();
+            }
+
+            MemberData data = new MemberData();
+            data.InsertMember(member);
+
+            return Ok();
+        }
     }
 }

@@ -11,8 +11,21 @@ namespace PSMDesktopUI.ViewModels
     {
         private IMemberEndpoint _memberEndpoint;
 
+        private bool _isLoading = false;
+
         private BindingList<MemberModel> _members;
         private MemberModel _selectedMember;
+
+        public bool IsLoading
+        {
+            get => _isLoading;
+
+            set
+            {
+                _isLoading = value;
+                NotifyOfPropertyChange(() => IsLoading);
+            }
+        }
 
         public BindingList<MemberModel> Members
         {
@@ -36,14 +49,19 @@ namespace PSMDesktopUI.ViewModels
             }
         }
 
+        public bool CanAddMember
+        {
+            get => !IsLoading;
+        }
+
         public bool CanEditMember
         {
-            get => SelectedMember != null;
+            get => !IsLoading && SelectedMember != null;
         }
 
         public bool CanDeleteMember
         {
-            get => SelectedMember != null;
+            get => !IsLoading && SelectedMember != null;
         }
 
         public MembersViewModel(IMemberEndpoint memberEndpoint)
@@ -76,7 +94,22 @@ namespace PSMDesktopUI.ViewModels
 
         public async Task LoadMembers()
         {
+            if (IsLoading) return;
+
+            IsLoading = true;
+
+            NotifyOfPropertyChange(() => CanAddMember);
+            NotifyOfPropertyChange(() => CanEditMember);
+            NotifyOfPropertyChange(() => CanDeleteMember);
+
             List<MemberModel> memberList = await _memberEndpoint.GetAll();
+
+            IsLoading = false;
+
+            NotifyOfPropertyChange(() => CanAddMember);
+            NotifyOfPropertyChange(() => CanEditMember);
+            NotifyOfPropertyChange(() => CanDeleteMember);
+
             Members = new BindingList<MemberModel>(memberList);
         }
     }

@@ -13,5 +13,13 @@ namespace PSMDataManager.Library.DataAccess
             var data = sql.LoadData<MemberModel, dynamic>("dbo.spGetAllMembers", new { }, "PSMData");
             return data;
         }
+
+        public void InsertMember(MemberModel member)
+        {
+            SqlDataAccess sql = new SqlDataAccess();
+            var p = new { member.Nama, member.NoHp, member.Alamat, member.TipeHp1, member.TipeHp2, member.TipeHp3, member.TipeHp4, member.TipeHp5 };
+
+            sql.SaveData<dynamic>("dbo.spInsertMember", p, "PSMData");
+        }
     }
 }
