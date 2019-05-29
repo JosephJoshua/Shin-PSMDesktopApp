@@ -7,5 +7,9 @@ namespace PSMDesktopUI.Library.Api
     public interface IMemberEndpoint
     {
         Task<List<MemberModel>> GetAll();
+
+        Task Insert(MemberModel member);
+
+        Task Delete(int id);
     }
 }

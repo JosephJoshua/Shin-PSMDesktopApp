@@ -21,5 +21,13 @@ namespace PSMDataManager.Library.DataAccess
 
             sql.SaveData<dynamic>("dbo.spInsertMember", p, "PSMData");
         }
+
+        public void DeleteMember(int id)
+        {
+            SqlDataAccess sql = new SqlDataAccess();
+            var p = new { id };
+
+            sql.SaveData<dynamic>("dbo.spDeleteMember", p, "PSMData");
+        }
     }
 }

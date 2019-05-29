@@ -8,7 +8,7 @@ namespace PSMDesktopUI.Library.Api
 {
     public class MemberEndpoint : IMemberEndpoint
     {
-        private IApiHelper _apiHelper;
+        private readonly IApiHelper _apiHelper;
 
         public MemberEndpoint(IApiHelper apiHelper)
         {
@@ -29,6 +29,16 @@ namespace PSMDesktopUI.Library.Api
                     throw new Exception(response.ReasonPhrase);
                 }
             }
+        }
+
+        public async Task Insert(MemberModel member)
+        {
+            await _apiHelper.ApiClient.PostAsJsonAsync("/api/Member", member);
+        }
+
+        public async Task Delete(int id)
+        {
+            await _apiHelper.ApiClient.DeleteAsync("/api/Member/" + id);
         }
     }
 }
