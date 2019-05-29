@@ -11,6 +11,8 @@ namespace PSMDesktopUI.ViewModels
 {
     public sealed class MembersViewModel : Screen
     {
+        private readonly SimpleContainer _container;
+
         private readonly IWindowManager _windowManager;
         private readonly IMemberEndpoint _memberEndpoint;
 
@@ -70,10 +72,11 @@ namespace PSMDesktopUI.ViewModels
             get => !IsLoading && SelectedMember != null;
         }
 
-        public MembersViewModel(IWindowManager windowManager, IMemberEndpoint memberEndpoint)
+        public MembersViewModel(SimpleContainer container, IWindowManager windowManager, IMemberEndpoint memberEndpoint)
         {
             DisplayName = "Members";
 
+            _container = container;
             _windowManager = windowManager;
             _memberEndpoint = memberEndpoint;
         }
@@ -87,9 +90,10 @@ namespace PSMDesktopUI.ViewModels
 
         public async Task AddMember()
         {
-            // TODO: Show add member dialog
-
-            await LoadMembers();
+            if (_windowManager.ShowDialog(_container.GetInstance<AddMemberViewModel>()) == true)
+            {
+                await LoadMembers();
+            }
         }
 
         public void EditMember()

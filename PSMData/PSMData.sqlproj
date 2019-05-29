@@ -61,9 +61,12 @@
     <Folder Include="dbo\Views" />
     <Folder Include="dbo\Stored Procedures" />
     <Folder Include="PublishLocations" />
+    <Folder Include="dbo\Scripts" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PublishLocations\PSMData.publish.xml" />
+    <None Include="dbo\Stored Procedures\createIdSequence.sql" />
+    <None Include="dbo\Scripts\idSequence.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\User.sql" />
