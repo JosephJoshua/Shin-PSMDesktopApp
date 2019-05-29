@@ -25,12 +25,12 @@
 
                 <dxlc:LayoutItem Label="Username:" Margin="4" FontSize="14" Foreground="White">
                     <dxe:TextEdit x:Name="Username" Margin="10 0 0 0" Height="30"
-                                  Text="{Binding Path=Username,UpdateSourceTrigger=PropertyChanged}" />
+                                  Text="{Binding Path=Username, UpdateSourceTrigger=PropertyChanged}" />
                 </dxlc:LayoutItem>
 
                 <dxlc:LayoutItem Label="Password:" Margin="4" FontSize="14" Foreground="White">
                     <dxe:PasswordBoxEdit Margin="10 0 0 0" Height="30"
-                                         Text="{Binding Path=Password,UpdateSourceTrigger=PropertyChanged}" />
+                                         Text="{Binding Path=Password, UpdateSourceTrigger=PropertyChanged}" />
                 </dxlc:LayoutItem>
             </dxlc:LayoutGroup>
 

@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[Service]
 (
-	[NomorNota] INT NOT NULL PRIMARY KEY IDENTITY(888000, 1),
+	[NomorNota] INT NOT NULL PRIMARY KEY,
 	[Tanggal] DATETIME2 NOT NULL,
 	[NamaPelanggan] NVARCHAR(50) NOT NULL, 
     [NoHp] VARCHAR(12) NULL, 

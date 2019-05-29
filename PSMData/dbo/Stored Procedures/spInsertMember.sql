@@ -14,7 +14,7 @@ begin
 	set nocount on;
 
 	insert into [dbo].[Member]
-	(Nama, NoHp, Alamat, TipeHp1, TipeHp2, TipeHp3, TipeHp4, TipeHp5)
+	(Id, Nama, NoHp, Alamat, TipeHp1, TipeHp2, TipeHp3, TipeHp4, TipeHp5)
 	values
-	(@Nama, @NoHp, @Alamat, @TipeHp1, @TipeHp2, @TipeHp3, @TipeHp4, @TipeHp5);
+	(next value for [dbo].[idSequence], @Nama, @NoHp, @Alamat, @TipeHp1, @TipeHp2, @TipeHp3, @TipeHp4, @TipeHp5);
 end

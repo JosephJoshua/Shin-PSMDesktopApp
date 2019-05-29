@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[Member]
 (
-	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1, 1), 
+	[Id] INT NOT NULL PRIMARY KEY, 
     [Nama] NVARCHAR(50) NOT NULL, 
     [NoHp] VARCHAR(12) NULL, 
     [Alamat] NVARCHAR(50) NULL, 
