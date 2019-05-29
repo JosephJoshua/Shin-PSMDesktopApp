@@ -1,15 +1,18 @@
 ﻿using Caliburn.Micro;
+using DevExpress.Xpf.Core;
 using PSMDesktopUI.Library.Api;
 using PSMDesktopUI.Library.Models;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace PSMDesktopUI.ViewModels
 {
     public sealed class MembersViewModel : Screen
     {
-        private IMemberEndpoint _memberEndpoint;
+        private readonly IWindowManager _windowManager;
+        private readonly IMemberEndpoint _memberEndpoint;
 
         private bool _isLoading = false;
 
@@ -45,7 +48,10 @@ namespace PSMDesktopUI.ViewModels
             set
             {
                 _selectedMember = value;
+
                 NotifyOfPropertyChange(() => SelectedMember);
+                NotifyOfPropertyChange(() => CanEditMember);
+                NotifyOfPropertyChange(() => CanDeleteMember);
             }
         }
 
@@ -64,9 +70,11 @@ namespace PSMDesktopUI.ViewModels
             get => !IsLoading && SelectedMember != null;
         }
 
-        public MembersViewModel(IMemberEndpoint memberEndpoint)
+        public MembersViewModel(IWindowManager windowManager, IMemberEndpoint memberEndpoint)
         {
             DisplayName = "Members";
+
+            _windowManager = windowManager;
             _memberEndpoint = memberEndpoint;
         }
 
@@ -77,9 +85,11 @@ namespace PSMDesktopUI.ViewModels
             await LoadMembers();
         }
 
-        public void AddMember()
+        public async Task AddMember()
         {
-            
+            // TODO: Show add member dialog
+
+            await LoadMembers();
         }
 
         public void EditMember()
@@ -87,9 +97,13 @@ namespace PSMDesktopUI.ViewModels
 
         }
 
-        public void DeleteMember()
+        public async Task DeleteMember()
         {
-
+            if (DXMessageBox.Show("Are you sure you want to delete this member?", "Members", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                await _memberEndpoint.Delete(SelectedMember.Id);
+                await LoadMembers();
+            }
         }
 
         public async Task LoadMembers()

@@ -8,12 +8,14 @@ namespace PSMDataManager.Controllers
     [Authorize]
     public class MemberController : ApiController
     {
+        [HttpGet]
         public List<MemberModel> Get()
         {
             MemberData data = new MemberData();
             return data.GetMembers();
         }
 
+        [HttpPost]
         public IHttpActionResult Post(MemberModel member)
         {
             if (string.IsNullOrEmpty(member.Nama))
@@ -23,6 +25,15 @@ namespace PSMDataManager.Controllers
 
             MemberData data = new MemberData();
             data.InsertMember(member);
+
+            return Ok();
+        }
+
+        [HttpDelete]
+        public IHttpActionResult Delete(int id)
+        {
+            MemberData data = new MemberData();
+            data.DeleteMember(id);
 
             return Ok();
         }
