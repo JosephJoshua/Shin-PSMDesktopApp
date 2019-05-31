@@ -29,6 +29,20 @@ namespace PSMDataManager.Controllers
             return Ok();
         }
 
+        [HttpPut]
+        public IHttpActionResult Put(MemberModel member)
+        {
+            if (member.Id < 0)
+            {
+                return BadRequest();
+            }
+
+            MemberData data = new MemberData();
+            data.UpdateMember(member);
+
+            return Ok();
+        }
+
         [HttpDelete]
         public IHttpActionResult Delete(int id)
         {

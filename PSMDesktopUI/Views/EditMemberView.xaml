@@ -1,5 +1,5 @@
 ﻿<dx:ThemedWindow
-    x:Class="PSMDesktopUI.Views.AddMemberView"
+    x:Class="PSMDesktopUI.Views.EditMemberView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
@@ -9,17 +9,24 @@
     ShowTitle="False"
     ShowIcon="False"
     ShowInTaskbar="False"
-    ResizeMode="NoResize"
     WindowStartupLocation="CenterOwner"
-    Height="445" Width="525">
+    ResizeMode="NoResize"
+    Height="490" Width="525">
 
     <Grid>
         <dxlc:LayoutControl Orientation="Vertical" dxe:ValidationService.IsValidationContainer="True">
-            <dxlc:LayoutGroup Orientation="Vertical" ItemSpace="4">
+            <dxlc:LayoutGroup Orientation="Vertical">
+                <dxlc:LayoutItem Label="Id:" Margin="4" FontSize="14" Foreground="White">
+                    <dxe:TextEdit x:Name="Id" Margin="10 0 0 0" Height="30"
+                                  IsReadOnly="True"
+                                  Text="{Binding Path=Id, UpdateSourceTrigger=PropertyChanged}" />
+                </dxlc:LayoutItem>
+                
                 <dxlc:LayoutItem Label="Nama:" Margin="4" FontSize="14" Foreground="White">
                     <dxlc:LayoutGroup Orientation="Horizontal" Height="30" ItemSpace="0">
                         <dxe:TextEdit Margin="10 0 0 0" Width="30"
-                                      Text="M-" IsReadOnly="True" />
+                                      IsReadOnly="True"
+                                      Text="{Binding Path=NamePrefix, Mode=OneWay}" />
 
                         <dxe:TextEdit x:Name="Nama"
                                       Text="{Binding Path=Nama, UpdateSourceTrigger=PropertyChanged}" />
@@ -63,8 +70,8 @@
             </dxlc:LayoutGroup>
 
             <dxlc:LayoutGroup Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 10 0 0">
-                <dx:SimpleButton x:Name="Add"
-                                 Content="Add" Height="35" MinWidth="100"
+                <dx:SimpleButton x:Name="Save"
+                                 Content="Save" Height="35" MinWidth="100"
                                  FontSize="15" Margin="0 0 5 0" />
 
                 <dx:SimpleButton x:Name="Cancel"

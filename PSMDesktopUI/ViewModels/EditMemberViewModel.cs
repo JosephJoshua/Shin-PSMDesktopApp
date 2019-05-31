@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace PSMDesktopUI.ViewModels
 {
-    public class AddMemberViewModel : Screen
+    public class EditMemberViewModel : Screen
     {
         private readonly IMemberEndpoint _memberEndpoint;
 
+        private int _id;
         private string _nama;
         private string _noHp;
         private string _alamat;
@@ -20,6 +21,17 @@ namespace PSMDesktopUI.ViewModels
         private string _tipeHp4;
         private string _tipeHp5;
 
+        public int Id
+        {
+            get => _id;
+
+            set
+            {
+                _id = value;
+                NotifyOfPropertyChange(() => Id);
+            }
+        }
+
         public string Nama
         {
             get => _nama;
@@ -29,8 +41,13 @@ namespace PSMDesktopUI.ViewModels
                 _nama = value;
 
                 NotifyOfPropertyChange(() => Nama);
-                NotifyOfPropertyChange(() => CanAdd);
+                NotifyOfPropertyChange(() => CanSave);
             }
+        }
+
+        public string NamePrefix
+        {
+            get => AppValues.MEMBER_NAME_PREFIX;
         }
 
         public string NoHp
@@ -110,21 +127,36 @@ namespace PSMDesktopUI.ViewModels
             }
         }
 
-        public bool CanAdd
+        public bool CanSave
         {
             get => !string.IsNullOrEmpty(Nama);
         }
 
-        public AddMemberViewModel(IMemberEndpoint memberEndpoint)
+        public EditMemberViewModel(IMemberEndpoint memberEndpoint)
         {
             _memberEndpoint = memberEndpoint;
         }
 
-        public async Task Add()
+        public void SetFieldValues(MemberModel member)
+        {
+            Id = member.Id;
+            Nama = member.Nama.StartsWith(AppValues.MEMBER_NAME_PREFIX) ? member.Nama.Remove(0, 2) : member.Nama;
+            NoHp = member.NoHp;
+            Alamat = member.Alamat;
+
+            TipeHp1 = member.TipeHp1;
+            TipeHp2 = member.TipeHp2;
+            TipeHp3 = member.TipeHp3;
+            TipeHp4 = member.TipeHp4;
+            TipeHp5 = member.TipeHp5;
+        }
+
+        public async Task Save()
         {
             MemberModel member = new MemberModel
             {
-                Nama = AppValues.MEMBER_NAME_PREFIX + Nama,
+                Id = Id,
+                Nama = Nama.StartsWith(AppValues.MEMBER_NAME_PREFIX) ? Nama : AppValues.MEMBER_NAME_PREFIX + Nama,
                 NoHp = NoHp,
                 Alamat = Alamat,
                 TipeHp1 = TipeHp1,
@@ -134,7 +166,7 @@ namespace PSMDesktopUI.ViewModels
                 TipeHp5 = TipeHp5,
             };
 
-            await _memberEndpoint.Insert(member);
+            await _memberEndpoint.Update(member);
 
             TryClose(true);
         }

@@ -22,6 +22,14 @@ namespace PSMDataManager.Library.DataAccess
             sql.SaveData<dynamic>("dbo.spInsertMember", p, "PSMData");
         }
 
+        public void UpdateMember(MemberModel member)
+        {
+            SqlDataAccess sql = new SqlDataAccess();
+            var p = new { member.Id, member.Nama, member.NoHp, member.Alamat, member.TipeHp1, member.TipeHp2, member.TipeHp3, member.TipeHp4, member.TipeHp5 };
+
+            sql.SaveData<dynamic>("dbo.spUpdateMember", p, "PSMData");
+        }
+
         public void DeleteMember(int id)
         {
             SqlDataAccess sql = new SqlDataAccess();

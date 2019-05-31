@@ -52,6 +52,7 @@
     <Compile Include="Api\IApiHelper.cs" />
     <Compile Include="Api\IMemberEndpoint.cs" />
     <Compile Include="Api\MemberEndpoint.cs" />
+    <Compile Include="AppValues.cs" />
     <Compile Include="Models\AuthenticatedUser.cs" />
     <Compile Include="Models\ILoggedInUserModel.cs" />
     <Compile Include="Models\LoggedInUserModel.cs" />
