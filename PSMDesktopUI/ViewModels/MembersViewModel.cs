@@ -96,9 +96,15 @@ namespace PSMDesktopUI.ViewModels
             }
         }
 
-        public void EditMember()
+        public async Task EditMember()
         {
+            EditMemberViewModel editMemberVM = _container.GetInstance<EditMemberViewModel>();
+            editMemberVM.SetFieldValues(SelectedMember);
 
+            if (_windowManager.ShowDialog(editMemberVM) == true)
+            {
+                await LoadMembers();
+            }
         }
 
         public async Task DeleteMember()

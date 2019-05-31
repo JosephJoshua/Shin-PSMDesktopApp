@@ -10,6 +10,8 @@ namespace PSMDesktopUI.Library.Api
 
         Task Insert(MemberModel member);
 
+        Task Update(MemberModel member);
+
         Task Delete(int id);
     }
 }

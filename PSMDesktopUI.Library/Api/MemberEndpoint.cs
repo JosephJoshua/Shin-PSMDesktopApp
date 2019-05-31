@@ -36,6 +36,11 @@ namespace PSMDesktopUI.Library.Api
             await _apiHelper.ApiClient.PostAsJsonAsync("/api/Member", member);
         }
 
+        public async Task Update(MemberModel member)
+        {
+            await _apiHelper.ApiClient.PutAsJsonAsync("/api/Member", member);
+        }
+
         public async Task Delete(int id)
         {
             await _apiHelper.ApiClient.DeleteAsync("/api/Member/" + id);
