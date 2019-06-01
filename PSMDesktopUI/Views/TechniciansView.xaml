@@ -1,5 +1,5 @@
-﻿<UserControl 
-    x:Class="PSMDesktopUI.Views.MembersView"
+﻿<UserControl
+    x:Class="PSMDesktopUI.Views.TechniciansView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -11,7 +11,7 @@
     xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
     mc:Ignorable="d"
     d:DesignHeight="450" d:DesignWidth="800">
-    
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -22,16 +22,16 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-
+        
         <!-- Title -->
         <TextBlock Grid.Column="0" Grid.Row="0"
                    Grid.ColumnSpan="2"
-                   Text="Members"
+                   Text="Technicians"
                    FontSize="24"
                    Foreground="White"
                    HorizontalAlignment="Center"
-                   Margin="0 0 0 10" />
-
+                   Margin="0 0 10 0" />
+        
         <!-- Progress bar -->
         <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
                      Grid.Column="0" Grid.Row="1"
@@ -40,17 +40,17 @@
                      Height="40"
                      HorizontalAlignment="Center"
                      VerticalAlignment="Center"
-                     Value="0"  
+                     Value="0"
                      IsIndeterminate="True"
                      Visibility="{c:Binding Path=IsLoading}" />
-
+        
         <!-- Data grid -->
         <dxg:GridControl Grid.Column="0" Grid.Row="1"
                          Grid.ColumnSpan="2"
                          Margin="0 10 0 0"
                          SelectionMode="Row"
-                         CurrentItem="{Binding Path=SelectedMember, Mode=OneWayToSource}"
-                         ItemsSource="{Binding Path=Members}"
+                         CurrentItem="{Binding Path=SelectedTechnician, Mode=OneWayToSource}"
+                         ItemsSource="{Binding Path=Technicians}"
                          Visibility="{c:Binding Path=!IsLoading}">
 
             <dxg:GridColumn Header="Id" Width="*" Binding="{Binding Path=Id}">
@@ -59,14 +59,7 @@
                 </dxg:GridColumn.EditSettings>
             </dxg:GridColumn>
 
-            <dxg:GridColumn Header="Nama" Width="3*" Binding="{Binding Path=Nama}" />
-            <dxg:GridColumn Header="No HP" Width="2*" Binding="{Binding Path=NoHp}" />
-            <dxg:GridColumn Header="Alamat" Width="2*" Binding="{Binding Path=Alamat}" />
-            <dxg:GridColumn Header="Tipe HP 1" Width="2*" Binding="{Binding Path=TipeHp1}" />
-            <dxg:GridColumn Header="Tipe HP 2" Width="2*" Binding="{Binding Path=TipeHp2}" />
-            <dxg:GridColumn Header="Tipe HP 3" Width="2*" Binding="{Binding Path=TipeHp3}" />
-            <dxg:GridColumn Header="Tipe HP 4" Width="2*" Binding="{Binding Path=TipeHp4}" />
-            <dxg:GridColumn Header="Tipe HP 5" Width="2*" Binding="{Binding Path=TipeHp5}" />
+            <dxg:GridColumn Header="Nama" Width="9*" Binding="{Binding Path=Nama}" />
 
         </dxg:GridControl>
         
@@ -78,39 +71,30 @@
                            Margin="16">
 
             <StackPanel>
-                <Button ToolTip="Add" 
+                <Button ToolTip="Add"
                         Background="{DynamicResource PrimaryHueMidBrush}"
                         Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
-                        IsEnabled="{Binding Path=CanAddMember}"
-                        cal:Message.Attach="[Event Click] = [Action AddMember]">
+                        IsEnabled="{Binding Path=CanAddTechnician}"
+                        cal:Message.Attach="[Event Click] = [Action AddTechnician]">
                     <material:PackIcon Kind="Add" />
                 </Button>
 
-                <Button ToolTip="Edit" 
+                <Button ToolTip="Delete"
                         Background="{DynamicResource PrimaryHueMidBrush}"
                         Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
-                        IsEnabled="{Binding Path=CanEditMember}"
-                        cal:Message.Attach="[Event Click] = [Action EditMember]">
-                    <material:PackIcon Kind="Edit" />
-                </Button>
-
-                <Button ToolTip="Delete" 
-                        Background="{DynamicResource PrimaryHueMidBrush}"
-                        Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
-                        IsEnabled="{Binding Path=CanDeleteMember}"
-                        cal:Message.Attach="[Event Click] = [Action DeleteMember]">
+                        IsEnabled="{Binding Path=CanDeleteTechnician}"
+                        cal:Message.Attach="[Event Click] = [Action DeleteTechnician]">
                     <material:PackIcon Kind="Delete" />
                 </Button>
 
-                <Button ToolTip="Refresh" 
+                <Button ToolTip="Refresh"
                         Background="{DynamicResource PrimaryHueMidBrush}"
                         Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
-                        cal:Message.Attach="[Event Click] = [Action LoadMembers]">
+                        cal:Message.Attach="[Event Click] = [Action LoadTechnicians]">
                     <material:PackIcon Kind="Refresh" />
                 </Button>
             </StackPanel>
-
+            
         </material:PopupBox>
     </Grid>
-    
 </UserControl>

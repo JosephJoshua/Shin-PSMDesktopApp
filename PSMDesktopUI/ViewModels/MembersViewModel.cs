@@ -28,7 +28,11 @@ namespace PSMDesktopUI.ViewModels
             set
             {
                 _isLoading = value;
+
                 NotifyOfPropertyChange(() => IsLoading);
+                NotifyOfPropertyChange(() => CanAddMember);
+                NotifyOfPropertyChange(() => CanEditMember);
+                NotifyOfPropertyChange(() => CanDeleteMember);
             }
         }
 
@@ -121,19 +125,9 @@ namespace PSMDesktopUI.ViewModels
             if (IsLoading) return;
 
             IsLoading = true;
-
-            NotifyOfPropertyChange(() => CanAddMember);
-            NotifyOfPropertyChange(() => CanEditMember);
-            NotifyOfPropertyChange(() => CanDeleteMember);
-
             List<MemberModel> memberList = await _memberEndpoint.GetAll();
 
             IsLoading = false;
-
-            NotifyOfPropertyChange(() => CanAddMember);
-            NotifyOfPropertyChange(() => CanEditMember);
-            NotifyOfPropertyChange(() => CanDeleteMember);
-
             Members = new BindingList<MemberModel>(memberList);
         }
     }

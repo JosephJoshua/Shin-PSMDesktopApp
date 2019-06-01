@@ -9,13 +9,15 @@ namespace PSMDesktopUI.ViewModels
         private readonly SimpleContainer _container;
 
         private readonly MembersViewModel _membersViewModel;
+        private readonly TechniciansViewModel _techniciansViewModel;
         
-        public ShellViewModel(IWindowManager windowManager, SimpleContainer container, MembersViewModel membersViewModel)
+        public ShellViewModel(IWindowManager windowManager, SimpleContainer container, MembersViewModel membersViewModel, TechniciansViewModel techniciansViewModel)
         {
             _windowManager = windowManager;
             _container = container;
 
             _membersViewModel = membersViewModel;
+            _techniciansViewModel = techniciansViewModel;
         }
 
         protected override async void OnViewLoaded(object view)
@@ -31,6 +33,7 @@ namespace PSMDesktopUI.ViewModels
             else
             {
                 Items.Add(_membersViewModel);
+                Items.Add(_techniciansViewModel);
             }
         }
     }
