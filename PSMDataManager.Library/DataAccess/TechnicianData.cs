@@ -13,5 +13,21 @@ namespace PSMDataManager.Library.DataAccess
             var data = sql.LoadData<TechnicianModel, dynamic>("dbo.spGetAllTechnicians", new { }, "PSMData");
             return data;
         }
+
+        public void InsertTechnician(TechnicianModel technician)
+        {
+            SqlDataAccess sql = new SqlDataAccess();
+            var p = new { technician.Nama };
+
+            sql.SaveData<dynamic>("dbo.spInsertTechnician", p, "PSMData");
+        }
+
+        public void DeleteTechnician(int id)
+        {
+            SqlDataAccess sql = new SqlDataAccess();
+            var p = new { id };
+
+            sql.SaveData<dynamic>("dbo.spDeleteTechnician", p, "PSMData");
+        }
     }
 }

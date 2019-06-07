@@ -77,6 +77,8 @@
     <Build Include="dbo\Stored Procedures\spDeleteMember.sql" />
     <Build Include="dbo\Stored Procedures\spUpdateMember.sql" />
     <Build Include="dbo\Stored Procedures\spGetAllTechnicians.sql" />
+    <Build Include="dbo\Stored Procedures\spDeleteTechnician.sql" />
+    <Build Include="dbo\Stored Procedures\spInsertTechnician.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PSMData.refactorlog" />

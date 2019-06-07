@@ -30,5 +30,15 @@ namespace PSMDesktopUI.Library.Api
                 }
             }
         }
+
+        public async Task Insert(TechnicianModel technician)
+        {
+            await _apiHelper.ApiClient.PostAsJsonAsync("/api/Technician", technician);
+        }
+
+        public async Task Delete(int id)
+        {
+            await _apiHelper.ApiClient.DeleteAsync("/api/Technician/" + id);
+        }
     }
 }

@@ -1,9 +1,11 @@
 ﻿using Caliburn.Micro;
+using DevExpress.Xpf.Core;
 using PSMDesktopUI.Library.Api;
 using PSMDesktopUI.Library.Models;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace PSMDesktopUI.ViewModels
 {
@@ -85,14 +87,21 @@ namespace PSMDesktopUI.ViewModels
             await LoadTechnicians();
         }
 
-        public void AddTechnician()
+        public async Task AddTechnician()
         {
-
+            if (_windowManager.ShowDialog(_container.GetInstance<AddTechnicianViewModel>()) == true)
+            {
+                await LoadTechnicians();
+            }
         }
 
-        public void DeleteTechnician()
+        public async Task DeleteTechnician()
         {
-
+            if (DXMessageBox.Show("Are you sure you want to delete this technician?", "Technicians", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                await _technicianEndpoint.Delete(SelectedTechnician.Id);
+                await LoadTechnicians();
+            }
         }
 
         public async Task LoadTechnicians()
