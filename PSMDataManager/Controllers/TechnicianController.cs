@@ -14,5 +14,23 @@ namespace PSMDataManager.Controllers
             TechnicianData data = new TechnicianData();
             return data.GetTechnicians();
         }
+
+        [HttpPost]
+        public IHttpActionResult Post(TechnicianModel technician)
+        {
+            TechnicianData data = new TechnicianData();
+            data.InsertTechnician(technician);
+
+            return Ok();
+        }
+
+        [HttpDelete]
+        public IHttpActionResult Delete(int id)
+        {
+            TechnicianData data = new TechnicianData();
+            data.DeleteTechnician(id);
+
+            return Ok();
+        }
     }
 }

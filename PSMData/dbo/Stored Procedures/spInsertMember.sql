@@ -16,5 +16,5 @@ begin
 	insert into [dbo].[Member]
 	(Id, Nama, NoHp, Alamat, TipeHp1, TipeHp2, TipeHp3, TipeHp4, TipeHp5)
 	values
-	(next value for [dbo].[idSequence], @Nama, @NoHp, @Alamat, @TipeHp1, @TipeHp2, @TipeHp3, @TipeHp4, @TipeHp5);
+	(next value for [dbo].[memberIdSequence], @Nama, @NoHp, @Alamat, @TipeHp1, @TipeHp2, @TipeHp3, @TipeHp4, @TipeHp5);
 end

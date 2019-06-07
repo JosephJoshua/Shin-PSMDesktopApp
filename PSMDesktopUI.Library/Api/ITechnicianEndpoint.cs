@@ -7,5 +7,9 @@ namespace PSMDesktopUI.Library.Api
     public interface ITechnicianEndpoint
     {
         Task<List<TechnicianModel>> GetAll();
+
+        Task Insert(TechnicianModel technician);
+
+        Task Delete(int id);
     }
 }
