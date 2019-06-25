@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows;
 using Caliburn.Micro;
 using PSMDesktopUI.Library.Api;
+using PSMDesktopUI.Library.Helpers;
 using PSMDesktopUI.Library.Models;
 using PSMDesktopUI.ViewModels;
 
@@ -29,7 +30,8 @@ namespace PSMDesktopUI
                 .Singleton<IWindowManager, WindowManager>()
                 .Singleton<IEventAggregator, EventAggregator>()
                 .Singleton<ILoggedInUserModel, LoggedInUserModel>()
-                .Singleton<IApiHelper, ApiHelper>();
+                .Singleton<IApiHelper, ApiHelper>()
+                .Singleton<IInternetConnectionHelper, InternetConnectionHelper>();
 
             GetType().Assembly.GetTypes()
                 .Where(type => type.IsClass)

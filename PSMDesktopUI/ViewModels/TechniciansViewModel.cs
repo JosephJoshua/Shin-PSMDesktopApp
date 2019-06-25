@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using DevExpress.Xpf.Core;
 using PSMDesktopUI.Library.Api;
+using PSMDesktopUI.Library.Helpers;
 using PSMDesktopUI.Library.Models;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,6 +15,7 @@ namespace PSMDesktopUI.ViewModels
         private readonly SimpleContainer _container;
 
         private readonly IWindowManager _windowManager;
+        private readonly IInternetConnectionHelper _internetConnectionHelper;
         private readonly ITechnicianEndpoint _technicianEndpoint;
 
         private bool _isLoading = false;
@@ -62,21 +64,22 @@ namespace PSMDesktopUI.ViewModels
 
         public bool CanAddTechnician
         {
-            get => !IsLoading;
+            get => !IsLoading && _internetConnectionHelper.HasInternetConnection;
         }
 
         public bool CanDeleteTechnician
         {
-            get => !IsLoading && SelectedTechnician != null;
+            get => !IsLoading && SelectedTechnician != null && _internetConnectionHelper.HasInternetConnection;
         }
 
-        public TechniciansViewModel(SimpleContainer container, IWindowManager windowManager, ITechnicianEndpoint technicianEndpoint)
+        public TechniciansViewModel(SimpleContainer container, IInternetConnectionHelper internetConnectionHelper, IWindowManager windowManager, ITechnicianEndpoint technicianEndpoint)
         {
             DisplayName = "Technicians";
 
             _container = container;
 
             _windowManager = windowManager;
+            _internetConnectionHelper = internetConnectionHelper;
             _technicianEndpoint = technicianEndpoint;
         }
 
@@ -106,7 +109,7 @@ namespace PSMDesktopUI.ViewModels
 
         public async Task LoadTechnicians()
         {
-            if (IsLoading) return;
+            if (IsLoading || !_internetConnectionHelper.HasInternetConnection) return;
 
             IsLoading = true;
             List<TechnicianModel> technicianList = await _technicianEndpoint.GetAll();
