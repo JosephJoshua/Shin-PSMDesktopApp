@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using DevExpress.Xpf.Core;
 using PSMDesktopUI.Library.Api;
+using PSMDesktopUI.Library.Helpers;
 using PSMDesktopUI.Library.Models;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,6 +15,7 @@ namespace PSMDesktopUI.ViewModels
         private readonly SimpleContainer _container;
 
         private readonly IWindowManager _windowManager;
+        private readonly IInternetConnectionHelper _internetConnectionHelper;
         private readonly IMemberEndpoint _memberEndpoint;
 
         private bool _isLoading = false;
@@ -63,25 +65,26 @@ namespace PSMDesktopUI.ViewModels
 
         public bool CanAddMember
         {
-            get => !IsLoading;
+            get => !IsLoading && _internetConnectionHelper.HasInternetConnection;
         }
 
         public bool CanEditMember
         {
-            get => !IsLoading && SelectedMember != null;
+            get => !IsLoading && SelectedMember != null && _internetConnectionHelper.HasInternetConnection;
         }
 
         public bool CanDeleteMember
         {
-            get => !IsLoading && SelectedMember != null;
+            get => !IsLoading && SelectedMember != null && _internetConnectionHelper.HasInternetConnection;
         }
 
-        public MembersViewModel(SimpleContainer container, IWindowManager windowManager, IMemberEndpoint memberEndpoint)
+        public MembersViewModel(SimpleContainer container, IWindowManager windowManager, IInternetConnectionHelper internetConnectionHelper, IMemberEndpoint memberEndpoint)
         {
             DisplayName = "Members";
 
             _container = container;
             _windowManager = windowManager;
+            _internetConnectionHelper = internetConnectionHelper;
             _memberEndpoint = memberEndpoint;
         }
 
@@ -94,7 +97,9 @@ namespace PSMDesktopUI.ViewModels
 
         public async Task AddMember()
         {
-            if (_windowManager.ShowDialog(_container.GetInstance<AddMemberViewModel>()) == true)
+            AddMemberViewModel addMemberVM = _container.GetInstance<AddMemberViewModel>();
+
+            if (_windowManager.ShowDialog(addMemberVM) == true)
             {
                 await LoadMembers();
             }
@@ -122,7 +127,7 @@ namespace PSMDesktopUI.ViewModels
 
         public async Task LoadMembers()
         {
-            if (IsLoading) return;
+            if (IsLoading || !_internetConnectionHelper.HasInternetConnection) return;
 
             IsLoading = true;
             List<MemberModel> memberList = await _memberEndpoint.GetAll();
