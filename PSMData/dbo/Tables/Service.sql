@@ -11,7 +11,7 @@
     [Kelengkapan] VARCHAR(50) NULL, 
     [Warna] VARCHAR(50) NULL, 
     [KataSandiPola] VARCHAR(50) NULL, 
-    [Teknisi] NVARCHAR(50) NULL, 
+    [TechnicianId] int NULL, 
     [StatusServisan] VARCHAR(50) NULL, 
     [TanggalKonfirmasi] DATETIME2 NULL, 
     [IsiKonfirmasi] NVARCHAR(256) NULL, 
@@ -23,5 +23,6 @@
     [HargaSparepart] MONEY NULL, 
     [Sisa] MONEY NULL, 
     [LabaRugi] MONEY NULL, 
-    [TanggalPengambilan] DATETIME2 NULL,
+    [TanggalPengambilan] DATETIME2 NULL, 
+    CONSTRAINT [FK_Service_ToTechnician] FOREIGN KEY ([TechnicianId]) REFERENCES [Technician]([Id]),
 )
