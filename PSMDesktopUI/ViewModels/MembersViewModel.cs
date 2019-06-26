@@ -12,8 +12,6 @@ namespace PSMDesktopUI.ViewModels
 {
     public sealed class MembersViewModel : Screen
     {
-        private readonly SimpleContainer _container;
-
         private readonly IWindowManager _windowManager;
         private readonly IInternetConnectionHelper _internetConnectionHelper;
         private readonly IMemberEndpoint _memberEndpoint;
