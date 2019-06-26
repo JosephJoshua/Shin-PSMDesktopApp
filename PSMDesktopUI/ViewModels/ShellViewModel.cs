@@ -6,15 +6,13 @@ namespace PSMDesktopUI.ViewModels
     public class ShellViewModel : Conductor<IScreen>.Collection.OneActive
     {
         private readonly IWindowManager _windowManager;
-        private readonly SimpleContainer _container;
 
         private readonly MembersViewModel _membersViewModel;
         private readonly TechniciansViewModel _techniciansViewModel;
         
-        public ShellViewModel(IWindowManager windowManager, SimpleContainer container, MembersViewModel membersViewModel, TechniciansViewModel techniciansViewModel)
+        public ShellViewModel(IWindowManager windowManager, MembersViewModel membersViewModel, TechniciansViewModel techniciansViewModel)
         {
             _windowManager = windowManager;
-            _container = container;
 
             _membersViewModel = membersViewModel;
             _techniciansViewModel = techniciansViewModel;
@@ -26,7 +24,7 @@ namespace PSMDesktopUI.ViewModels
 
             await Task.Delay(1000);
 
-            if (_windowManager.ShowDialog(_container.GetInstance<LoginViewModel>()) == false)
+            if (_windowManager.ShowDialog(IoC.Get<LoginViewModel>()) == false)
             {
                 TryClose();
             }
