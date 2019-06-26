@@ -12,8 +12,6 @@ namespace PSMDesktopUI.ViewModels
 {
     public sealed class TechniciansViewModel : Screen
     {
-        private readonly SimpleContainer _container;
-
         private readonly IWindowManager _windowManager;
         private readonly IInternetConnectionHelper _internetConnectionHelper;
         private readonly ITechnicianEndpoint _technicianEndpoint;
@@ -72,11 +70,9 @@ namespace PSMDesktopUI.ViewModels
             get => !IsLoading && SelectedTechnician != null && _internetConnectionHelper.HasInternetConnection;
         }
 
-        public TechniciansViewModel(SimpleContainer container, IInternetConnectionHelper internetConnectionHelper, IWindowManager windowManager, ITechnicianEndpoint technicianEndpoint)
+        public TechniciansViewModel(IInternetConnectionHelper internetConnectionHelper, IWindowManager windowManager, ITechnicianEndpoint technicianEndpoint)
         {
             DisplayName = "Technicians";
-
-            _container = container;
 
             _windowManager = windowManager;
             _internetConnectionHelper = internetConnectionHelper;
@@ -92,7 +88,7 @@ namespace PSMDesktopUI.ViewModels
 
         public async Task AddTechnician()
         {
-            if (_windowManager.ShowDialog(_container.GetInstance<AddTechnicianViewModel>()) == true)
+            if (_windowManager.ShowDialog(IoC.Get<AddTechnicianViewModel>()) == true)
             {
                 await LoadTechnicians();
             }

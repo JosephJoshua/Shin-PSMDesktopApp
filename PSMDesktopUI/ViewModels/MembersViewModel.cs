@@ -78,11 +78,10 @@ namespace PSMDesktopUI.ViewModels
             get => !IsLoading && SelectedMember != null && _internetConnectionHelper.HasInternetConnection;
         }
 
-        public MembersViewModel(SimpleContainer container, IWindowManager windowManager, IInternetConnectionHelper internetConnectionHelper, IMemberEndpoint memberEndpoint)
+        public MembersViewModel(IWindowManager windowManager, IInternetConnectionHelper internetConnectionHelper, IMemberEndpoint memberEndpoint)
         {
             DisplayName = "Members";
 
-            _container = container;
             _windowManager = windowManager;
             _internetConnectionHelper = internetConnectionHelper;
             _memberEndpoint = memberEndpoint;
@@ -97,7 +96,7 @@ namespace PSMDesktopUI.ViewModels
 
         public async Task AddMember()
         {
-            AddMemberViewModel addMemberVM = _container.GetInstance<AddMemberViewModel>();
+            AddMemberViewModel addMemberVM = IoC.Get<AddMemberViewModel>();
 
             if (_windowManager.ShowDialog(addMemberVM) == true)
             {
@@ -107,7 +106,7 @@ namespace PSMDesktopUI.ViewModels
 
         public async Task EditMember()
         {
-            EditMemberViewModel editMemberVM = _container.GetInstance<EditMemberViewModel>();
+            EditMemberViewModel editMemberVM = IoC.Get<EditMemberViewModel>();
             editMemberVM.SetFieldValues(SelectedMember);
 
             if (_windowManager.ShowDialog(editMemberVM) == true)
