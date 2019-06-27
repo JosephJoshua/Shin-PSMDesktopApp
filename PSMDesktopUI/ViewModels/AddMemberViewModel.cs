@@ -112,7 +112,7 @@ namespace PSMDesktopUI.ViewModels
 
         public bool CanAdd
         {
-            get => !string.IsNullOrEmpty(Nama);
+            get => !string.IsNullOrWhiteSpace(Nama);
         }
 
         public AddMemberViewModel(IMemberEndpoint memberEndpoint)

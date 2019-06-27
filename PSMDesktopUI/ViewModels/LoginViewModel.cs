@@ -64,7 +64,7 @@ namespace PSMDesktopUI.ViewModels
 
         public bool CanLogin
         {
-            get => !string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password);
+            get => !string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password);
         }
 
         public LoginViewModel(IApiHelper apiHelper, IInternetConnectionHelper internetConnectionHelper)
