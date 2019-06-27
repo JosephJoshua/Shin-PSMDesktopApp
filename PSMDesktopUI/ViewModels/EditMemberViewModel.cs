@@ -129,7 +129,7 @@ namespace PSMDesktopUI.ViewModels
 
         public bool CanSave
         {
-            get => !string.IsNullOrEmpty(Nama);
+            get => !string.IsNullOrWhiteSpace(Nama);
         }
 
         public EditMemberViewModel(IMemberEndpoint memberEndpoint)
