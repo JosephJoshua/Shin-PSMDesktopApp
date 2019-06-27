@@ -18,7 +18,7 @@ namespace PSMDataManager.Controllers
         [HttpPost]
         public IHttpActionResult Post(MemberModel member)
         {
-            if (string.IsNullOrEmpty(member.Nama))
+            if (string.IsNullOrWhiteSpace(member.Nama))
             {
                 return BadRequest("The field 'Nama' cannot be null or empty.");
             }
@@ -35,6 +35,11 @@ namespace PSMDataManager.Controllers
             if (member.Id < 0)
             {
                 return BadRequest();
+            }
+
+            if (string.IsNullOrWhiteSpace(member.Nama))
+            {
+                return BadRequest("The field 'Nama' cannot be null or empty");
             }
 
             MemberData data = new MemberData();
