@@ -20,7 +20,7 @@ namespace PSMDataManager.Controllers
         {
             if (string.IsNullOrEmpty(member.Nama))
             {
-                return BadRequest();
+                return BadRequest("The field 'Nama' cannot be null or empty.");
             }
 
             MemberData data = new MemberData();
