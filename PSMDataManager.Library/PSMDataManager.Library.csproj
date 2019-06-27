@@ -46,8 +46,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataAccess\MemberData.cs" />
+    <Compile Include="DataAccess\ServiceData.cs" />
     <Compile Include="DataAccess\TechnicianData.cs" />
     <Compile Include="Models\MemberModel.cs" />
+    <Compile Include="Models\ServiceModel.cs" />
     <Compile Include="Models\TechnicianModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
