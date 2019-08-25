@@ -45,9 +45,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataAccess\DamageData.cs" />
     <Compile Include="DataAccess\MemberData.cs" />
     <Compile Include="DataAccess\ServiceData.cs" />
     <Compile Include="DataAccess\TechnicianData.cs" />
+    <Compile Include="Models\DamageModel.cs" />
     <Compile Include="Models\MemberModel.cs" />
     <Compile Include="Models\ServiceModel.cs" />
     <Compile Include="Models\TechnicianModel.cs" />

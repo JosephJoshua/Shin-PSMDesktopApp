@@ -1,0 +1,171 @@
+﻿<UserControl
+    x:Class="PSMDesktopUI.Views.ServicesView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:c="clr-namespace:CalcBinding;assembly=CalcBinding"
+    xmlns:cal="http://www.caliburnproject.org"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+    xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
+    mc:Ignorable ="d"
+    d:DesignHeight="450" d:DesignWidth="800"
+    Loaded="View_Loaded">
+
+    <UserControl.Resources>
+        <Style TargetType="ScrollBar">
+            <Setter Property="Background" Value="#333337" />
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="4*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <!-- Title -->
+        <TextBlock Grid.Column="0" Grid.Row="0"
+                   Grid.ColumnSpan="2"
+                   Text="Services"
+                   FontSize="24"
+                   Foreground="White"
+                   HorizontalAlignment="Center"
+                   Margin="0 0 0 10" />
+        
+        <!-- Progress bar -->
+        <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
+                     Grid.Column="0" Grid.Row="1"
+                     Width="40"
+                     Height="40"
+                     HorizontalAlignment="Center"
+                     VerticalAlignment="Center"
+                     Value="0"
+                     IsIndeterminate="True"
+                     Visibility="{c:Binding Path=IsLoading}" />
+        
+        <!-- Data grid -->
+        <dxg:GridControl x:Name="ServicesGrid" Grid.Column="0" Grid.Row="1"
+                         Margin="0 10 0 0"
+                         SelectionMode="Row"
+                         CurrentItem="{Binding Path=SelectedService, Mode=OneWayToSource}"
+                         ItemsSource="{Binding Path=Services}"
+                         Visibility="{c:Binding Path=!IsLoading}">
+
+            <dxg:GridColumn Header="No. Nota" Binding="{Binding Path=NomorNota}">
+                <dxg:GridColumn.EditSettings>
+                    <dxe:TextEditSettings HorizontalContentAlignment="Left" />
+                </dxg:GridColumn.EditSettings>
+            </dxg:GridColumn>
+
+            <dxg:GridColumn Header="Tanggal" Binding="{Binding Path=Tanggal}" />
+            <dxg:GridColumn Header="Nama Pelanggan" Binding="{Binding Path=NamaPelanggan}" />
+            <dxg:GridColumn Header="No Hp" Binding="{Binding Path=NoHp}" />
+            <dxg:GridColumn Header="Tipe Hp" Binding="{Binding Path=TipeHp}" />
+            <dxg:GridColumn Header="Imei" Binding="{Binding Path=Imei}" />
+            <dxg:GridColumn Header="Damage Id" Binding="{Binding Path=DamageId}" />
+            <dxg:GridColumn Header="Yang Belum Dicek" Binding="{Binding Path=YangBelumDicek}" />
+            <dxg:GridColumn Header="Kelengkapan" Binding="{Binding Path=Kelengkapan}" />
+            <dxg:GridColumn Header="Warna" Binding="{Binding Path=Warna}" />
+            <dxg:GridColumn Header="Kata Sandi/Pola" Binding="{Binding Path=KataSandiPola}" />
+            <dxg:GridColumn Header="Technician Id" Binding="{Binding Path=TechnicianId}" />
+            <dxg:GridColumn Header="Status Servisan" Binding="{Binding Path=StatusServisan}" />
+            <dxg:GridColumn Header="Tanggal Konfirmasi" Binding="{Binding Path=TanggalKonfirmasi}" />
+            <dxg:GridColumn Header="Isi Konfirmasi" Binding="{Binding Path=IsiKonfirmasi}" />
+            <dxg:GridColumn Header="Biaya" Binding="{Binding Path=Biaya}" />
+            <dxg:GridColumn Header="Discount" Binding="{Binding Path=Discount}" />
+            <dxg:GridColumn Header="Dp" Binding="{Binding Path=Dp}" />
+            <dxg:GridColumn Header="Tambahan Biaya" Binding="{Binding Path=TambahanBiaya}" />
+            <dxg:GridColumn Header="Total Biaya" Binding="{Binding Path=TotalBiaya}" />
+            <dxg:GridColumn Header="Harga Sparepart" Binding="{Binding Path=HargaSparepart}" />
+            <dxg:GridColumn Header="Sisa" Binding="{Binding Path=Sisa}" />
+            <dxg:GridColumn Header="Laba/Rugi" Binding="{Binding Path=LabaRugi}" />
+            <dxg:GridColumn Header="Tanggal Pengambilan" Binding="{Binding Path=TanggalPengambilan}" />
+
+        </dxg:GridControl>
+        
+        <!-- Floating action buttons -->
+        <material:PopupBox Style="{StaticResource MaterialDesignMultiFloatingActionPopupBox}"
+                           Grid.Column="0" Grid.Row="1"
+                           HorizontalAlignment="Right"
+                           VerticalAlignment="Bottom"
+                           Margin="32">
+
+            <StackPanel>
+                <Button ToolTip="Add"
+                        Background="{DynamicResource PrimaryHueMidBrush}"
+                        Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                        IsEnabled="{Binding Path=CanAddService}"
+                        cal:Message.Attach="[Event Click] = [Action AddService]">
+                    <material:PackIcon Kind="Add" />
+                </Button>
+
+                <Button ToolTip="Edit"
+                        Background="{DynamicResource PrimaryHueMidBrush}"
+                        Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                        IsEnabled="{Binding Path=CanEditService}"
+                        cal:Message.Attach="[Event Click] = [Action EditService]">
+                    <material:PackIcon Kind="Edit" />
+                </Button>
+
+                <Button ToolTip="Delete"
+                        Background="{DynamicResource PrimaryHueMidBrush}"
+                        Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                        IsEnabled="{Binding Path=CanDeleteService}"
+                        cal:Message.Attach="[Event Click] = [Action DeleteService]">
+                    <material:PackIcon Kind="Delete" />
+                </Button>
+
+                <Button ToolTip="Refresh"
+                        Background="{DynamicResource PrimaryHueMidBrush}"
+                        Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                        cal:Message.Attach="[Event Click] = [Action LoadServices]">
+                    <material:PackIcon Kind="Refresh" />
+                </Button>
+
+                <Button ToolTip="Print"
+                        Background="{DynamicResource PrimaryHueMidBrush}"
+                        Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                        cal:Message.Attach="[Event Click] = [Action PrintService]">
+                    <material:PackIcon Kind="Printer" />
+                </Button>
+            </StackPanel>
+        </material:PopupBox>
+        
+        <!-- Info box -->
+        <StackPanel Grid.Column="1" Grid.Row="1"
+                    Orientation="Vertical"
+                    Margin="10 10 0 0">
+            <TextBlock Text="{Binding Path=SelectedService.NomorNota, StringFormat=No. Nota: {0}}" />
+            <TextBlock Text="{Binding Path=SelectedService.Tanggal, StringFormat=Tanggal: {0}}" />
+            <TextBlock Text="{Binding Path=SelectedService.NamaPelanggan, StringFormat=Nama Pelanggan: {0}}" />
+            <TextBlock Text="{Binding Path=SelectedService.NoHp, StringFormat=No Hp: {0}}" />
+            <TextBlock Text="{Binding Path=SelectedService.TipeHp, StringFormat=Tipe Hp: {0}}" />
+            <TextBlock Text="{Binding Path=SelectedService.Imei, StringFormat=Imei: {0}}" />
+            <TextBlock Text="{Binding Path=SelectedServiceDamage, StringFormat=Kerusakan: {0}}" />
+            <TextBlock Text="{Binding Path=SelectedService.YangBelumDicek, StringFormat=Yang Belum Dicek: {0}}" />
+            <TextBlock Text="{Binding Path=SelectedService.Kelengkapan, StringFormat=Kelengkapan: {0}}" />
+            <TextBlock Text="{Binding Path=SelectedService.Warna, StringFormat=Warna: {0}}" />
+            <TextBlock Text="{Binding Path=SelectedService.KataSandiPola, StringFormat=Kata Sandi/Pola: {0}}" />
+            <TextBlock Text="{Binding Path=SelectedServiceTechnician, StringFormat=Teknisi: {0}}" />
+            <TextBlock Text="{Binding Path=SelectedService.StatusServisan, StringFormat=Status Servisan: {0}}" />
+            <TextBlock Text="{Binding Path=SelectedService.TanggalKonfirmasi, StringFormat=Tanggal Konfirmasi: {0}}" />
+            <TextBlock Text="{Binding Path=SelectedService.IsiKonfirmasi, StringFormat=Isi Konfirmasi: {0}}" />
+            <TextBlock Text="{Binding Path=SelectedService.Biaya, StringFormat=Biaya: {0}}" />
+            <TextBlock Text="{Binding Path=SelectedService.Discount, StringFormat=Discount: {0}%}" />
+            <TextBlock Text="{Binding Path=SelectedService.Dp, StringFormat=Dp: {0}}" />
+            <TextBlock Text="{Binding Path=SelectedService.TambahanBiaya, StringFormat=TambahanBiaya: {0}}" />
+            <TextBlock Text="{Binding Path=SelectedService.TotalBiaya, StringFormat=Total Biaya: {0}}" />
+            <TextBlock Text="{Binding Path=SelectedService.HargaSparepart, StringFormat=Harga Sparepart: {0}}" />
+            <TextBlock Text="{Binding Path=SelectedService.Sisa, StringFormat=Sisa: {0}}" />
+            <TextBlock Text="{Binding Path=SelectedService.LabaRugi, StringFormat=Laba/Rugi: {0}}" />
+            <TextBlock Text="{Binding Path=SelectedService.TanggalPengambilan, StringFormat=Tanggal Pengambilan: {0}}" />
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -17,7 +17,7 @@ namespace PSMDesktopUI.Library.Api
 
         public async Task<List<TechnicianModel>> GetAll()
         {
-            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/Technician"))
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/Technician").ConfigureAwait(false))
             {
                 if (response.IsSuccessStatusCode)
                 {
@@ -33,12 +33,12 @@ namespace PSMDesktopUI.Library.Api
 
         public async Task Insert(TechnicianModel technician)
         {
-            await _apiHelper.ApiClient.PostAsJsonAsync("/api/Technician", technician);
+            await _apiHelper.ApiClient.PostAsJsonAsync("/api/Technician", technician).ConfigureAwait(false);
         }
 
         public async Task Delete(int id)
         {
-            await _apiHelper.ApiClient.DeleteAsync("/api/Technician/" + id);
+            await _apiHelper.ApiClient.DeleteAsync("/api/Technician/" + id).ConfigureAwait(false);
         }
     }
 }
