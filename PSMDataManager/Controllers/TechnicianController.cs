@@ -9,6 +9,7 @@ namespace PSMDataManager.Controllers
     public class TechnicianController : ApiController
     {
         [HttpGet]
+        [Route("api/Technician")]
         public List<TechnicianModel> Get()
         {
             TechnicianData data = new TechnicianData();

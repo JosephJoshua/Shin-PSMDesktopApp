@@ -17,7 +17,7 @@ namespace PSMDesktopUI.Library.Api
 
         public async Task<List<MemberModel>> GetAll()
         {
-            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/member"))
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/Member").ConfigureAwait(false))
             {
                 if (response.IsSuccessStatusCode)
                 {
@@ -33,17 +33,17 @@ namespace PSMDesktopUI.Library.Api
 
         public async Task Insert(MemberModel member)
         {
-            await _apiHelper.ApiClient.PostAsJsonAsync("/api/Member", member);
+            await _apiHelper.ApiClient.PostAsJsonAsync("/api/Member", member).ConfigureAwait(false);
         }
 
         public async Task Update(MemberModel member)
         {
-            await _apiHelper.ApiClient.PutAsJsonAsync("/api/Member", member);
+            await _apiHelper.ApiClient.PutAsJsonAsync("/api/Member", member).ConfigureAwait(false);
         }
 
         public async Task Delete(int id)
         {
-            await _apiHelper.ApiClient.DeleteAsync("/api/Member/" + id);
+            await _apiHelper.ApiClient.DeleteAsync("/api/Member/" + id).ConfigureAwait(false);
         }
     }
 }

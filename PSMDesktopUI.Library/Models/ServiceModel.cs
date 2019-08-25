@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PSMDataManager.Library.Models
+namespace PSMDesktopUI.Library.Models
 {
     public class ServiceModel
     {
@@ -44,7 +44,7 @@ namespace PSMDataManager.Library.Models
 
         public decimal TotalBiaya { get; set; }
 
-        public decimal HargaSparepart { get; set; }
+        public decimal HargaSparepart { get; set; } 
 
         public decimal Sisa { get; set; }
 

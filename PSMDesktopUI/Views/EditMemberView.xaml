@@ -16,13 +16,13 @@
     <Grid>
         <dxlc:LayoutControl Orientation="Vertical" dxe:ValidationService.IsValidationContainer="True">
             <dxlc:LayoutGroup Orientation="Vertical">
-                <dxlc:LayoutItem Label="Id:" Margin="4" FontSize="14" Foreground="White">
+                <dxlc:LayoutItem Label="Id:" Margin="4">
                     <dxe:TextEdit x:Name="Id" Margin="10 0 0 0" Height="30"
                                   IsReadOnly="True"
                                   Text="{Binding Path=Id, UpdateSourceTrigger=PropertyChanged}" />
                 </dxlc:LayoutItem>
                 
-                <dxlc:LayoutItem Label="Nama:" Margin="4" FontSize="14" Foreground="White">
+                <dxlc:LayoutItem Label="Nama:" Margin="4">
                     <dxlc:LayoutGroup Orientation="Horizontal" Height="30" ItemSpace="0">
                         <dxe:TextEdit Margin="10 0 0 0" Width="30"
                                       IsReadOnly="True"
@@ -33,37 +33,37 @@
                     </dxlc:LayoutGroup>
                 </dxlc:LayoutItem>
 
-                <dxlc:LayoutItem Label="No Hp:" Margin="4" FontSize="14" Foreground="White">
+                <dxlc:LayoutItem Label="No Hp:" Margin="4">
                     <dxe:TextEdit x:Name="NoHp" Margin="10 0 0 0" Height="30"
                                   Text="{Binding Path=NoHp, UpdateSourceTrigger=PropertyChanged}" />
                 </dxlc:LayoutItem>
 
-                <dxlc:LayoutItem Label="Alamat:" Margin="4" FontSize="14" Foreground="White">
+                <dxlc:LayoutItem Label="Alamat:" Margin="4">
                     <dxe:TextEdit x:Name="Alamat" Margin="10 0 0 0" Height="30"
                                   Text="{Binding Path=Alamat, UpdateSourceTrigger=PropertyChanged}" />
                 </dxlc:LayoutItem>
 
-                <dxlc:LayoutItem Label="Tipe Hp 1:" Margin="4" FontSize="14" Foreground="White">
+                <dxlc:LayoutItem Label="Tipe Hp 1:" Margin="4">
                     <dxe:TextEdit x:Name="TipeHp1" Margin="10 0 0 0" Height="30"
                                   Text="{Binding Path=TipeHp1, UpdateSourceTrigger=PropertyChanged}" />
                 </dxlc:LayoutItem>
 
-                <dxlc:LayoutItem Label="Tipe Hp 2:" Margin="4" FontSize="14" Foreground="White">
+                <dxlc:LayoutItem Label="Tipe Hp 2:" Margin="4">
                     <dxe:TextEdit x:Name="TipeHp2" Margin="10 0 0 0" Height="30"
                                   Text="{Binding Path=TipeHp2, UpdateSourceTrigger=PropertyChanged}" />
                 </dxlc:LayoutItem>
 
-                <dxlc:LayoutItem Label="Tipe Hp 3:" Margin="4" FontSize="14" Foreground="White">
+                <dxlc:LayoutItem Label="Tipe Hp 3:" Margin="4">
                     <dxe:TextEdit x:Name="TipeHp3" Margin="10 0 0 0" Height="30"
                                   Text="{Binding Path=TipeHp3, UpdateSourceTrigger=PropertyChanged}" />
                 </dxlc:LayoutItem>
 
-                <dxlc:LayoutItem Label="Tipe Hp 4:" Margin="4" FontSize="14" Foreground="White">
+                <dxlc:LayoutItem Label="Tipe Hp 4:" Margin="4">
                     <dxe:TextEdit x:Name="TipeHp4" Margin="10 0 0 0" Height="30"
                                   Text="{Binding Path=TipeHp4, UpdateSourceTrigger=PropertyChanged}" />
                 </dxlc:LayoutItem>
 
-                <dxlc:LayoutItem Label="Tipe Hp 5:" Margin="4" FontSize="14" Foreground="White">
+                <dxlc:LayoutItem Label="Tipe Hp 5:" Margin="4">
                     <dxe:TextEdit x:Name="TipeHp5" Margin="10 0 0 0" Height="30"
                                   Text="{Binding Path=TipeHp5, UpdateSourceTrigger=PropertyChanged}" />
                 </dxlc:LayoutItem>

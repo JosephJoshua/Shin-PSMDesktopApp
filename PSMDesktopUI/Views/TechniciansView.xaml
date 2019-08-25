@@ -12,6 +12,12 @@
     mc:Ignorable="d"
     d:DesignHeight="450" d:DesignWidth="800">
 
+    <UserControl.Resources>
+        <Style TargetType="ScrollBar">
+            <Setter Property="Background" Value="#333337" />
+        </Style>
+    </UserControl.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />

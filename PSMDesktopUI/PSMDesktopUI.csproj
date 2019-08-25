@@ -97,15 +97,22 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Bootstrapper.cs" />
+    <Compile Include="EnumHelper.cs" />
+    <Compile Include="ValueConverters\EnumToCollectionConverter.cs" />
     <Compile Include="ViewModels\AddMemberViewModel.cs" />
+    <Compile Include="ViewModels\AddServiceViewModel.cs" />
     <Compile Include="ViewModels\AddTechnicianViewModel.cs" />
     <Compile Include="ViewModels\EditMemberViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MembersViewModel.cs" />
+    <Compile Include="ViewModels\ServicesViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="ViewModels\TechniciansViewModel.cs" />
     <Compile Include="Views\AddMemberView.xaml.cs">
       <DependentUpon>AddMemberView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AddServiceView.xaml.cs">
+      <DependentUpon>AddServiceView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\AddTechnicianView.xaml.cs">
       <DependentUpon>AddTechnicianView.xaml</DependentUpon>
@@ -118,6 +125,9 @@
     </Compile>
     <Compile Include="Views\MembersView.xaml.cs">
       <DependentUpon>MembersView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ServicesView.xaml.cs">
+      <DependentUpon>ServicesView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ShellView.xaml.cs">
       <DependentUpon>ShellView.xaml</DependentUpon>
@@ -173,6 +183,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\AddServiceView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\AddTechnicianView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -186,6 +200,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MembersView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ServicesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

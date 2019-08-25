@@ -24,7 +24,9 @@ namespace PSMDesktopUI
             _container
                 .Instance(_container)
                 .PerRequest<IMemberEndpoint, MemberEndpoint>()
-                .PerRequest<ITechnicianEndpoint, TechnicianEndpoint>();
+                .PerRequest<ITechnicianEndpoint, TechnicianEndpoint>()
+                .PerRequest<IServiceEndpoint, ServiceEndpoint>()
+                .PerRequest<IDamageEndpoint, DamageEndpoint>();
 
             _container
                 .Singleton<IWindowManager, WindowManager>()

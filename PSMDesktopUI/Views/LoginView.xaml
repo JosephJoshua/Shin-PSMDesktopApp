@@ -23,12 +23,12 @@
                                  Label="{Binding Path=ErrorMessage, Mode=OneWay}"
                                  Visibility="{Binding Path=IsErrorMessageVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
-                <dxlc:LayoutItem Label="Username:" Margin="4" FontSize="14" Foreground="White">
+                <dxlc:LayoutItem Label="Username:" Margin="4">
                     <dxe:TextEdit x:Name="Username" Margin="10 0 0 0" Height="30"
                                   Text="{Binding Path=Username, UpdateSourceTrigger=PropertyChanged}" />
                 </dxlc:LayoutItem>
 
-                <dxlc:LayoutItem Label="Password:" Margin="4" FontSize="14" Foreground="White">
+                <dxlc:LayoutItem Label="Password:" Margin="4">
                     <dxe:PasswordBoxEdit Margin="10 0 0 0" Height="30"
                                          Text="{Binding Path=Password, UpdateSourceTrigger=PropertyChanged}" />
                 </dxlc:LayoutItem>

@@ -97,7 +97,7 @@ namespace PSMDesktopUI.ViewModels
             }
             finally
             {
-                Application.Current.Dispatcher.Invoke(() => Mouse.OverrideCursor = null);
+               Application.Current.Dispatcher.Invoke(() => Mouse.OverrideCursor = null);
             }
         }
     }
