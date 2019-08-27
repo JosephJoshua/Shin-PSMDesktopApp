@@ -26,6 +26,7 @@ namespace PSMDesktopUI
                 .PerRequest<IMemberEndpoint, MemberEndpoint>()
                 .PerRequest<ITechnicianEndpoint, TechnicianEndpoint>()
                 .PerRequest<IServiceEndpoint, ServiceEndpoint>()
+                .PerRequest<ISparepartEndpoint, SparepartEndpoint>()
                 .PerRequest<IDamageEndpoint, DamageEndpoint>();
 
             _container

@@ -18,6 +18,7 @@ namespace PSMDesktopUI.ViewModels
         private readonly IServiceEndpoint _serviceEndpoint;
         private readonly ITechnicianEndpoint _technicianEndpoint;
         private readonly IDamageEndpoint _damageEndpoint;
+        private readonly ISparepartEndpoint _sparepartEndpoint;
 
         private bool _isLoading = false;
 
@@ -37,6 +38,7 @@ namespace PSMDesktopUI.ViewModels
 
                 NotifyOfPropertyChange(() => IsLoading);
                 NotifyOfPropertyChange(() => CanAddService);
+                NotifyOfPropertyChange(() => CanAddSparepart);
                 NotifyOfPropertyChange(() => CanEditService);
                 NotifyOfPropertyChange(() => CanDeleteService);
                 NotifyOfPropertyChange(() => CanPrintService);
@@ -65,6 +67,7 @@ namespace PSMDesktopUI.ViewModels
                 NotifyOfPropertyChange(() => SelectedService);
                 NotifyOfPropertyChange(() => SelectedServiceTechnician);
                 NotifyOfPropertyChange(() => SelectedServiceDamage);
+                NotifyOfPropertyChange(() => CanAddSparepart);
                 NotifyOfPropertyChange(() => CanEditService);
                 NotifyOfPropertyChange(() => CanDeleteService);
                 NotifyOfPropertyChange(() => CanPrintService);
@@ -96,6 +99,11 @@ namespace PSMDesktopUI.ViewModels
             get => !IsLoading && _internetConnectionHelper.HasInternetConnection;
         }
 
+        public bool CanAddSparepart
+        {
+            get => !IsLoading && SelectedService != null && _internetConnectionHelper.HasInternetConnection;
+        }
+
         public bool CanEditService
         {
             get => !IsLoading && SelectedService != null && _internetConnectionHelper.HasInternetConnection;
@@ -112,7 +120,7 @@ namespace PSMDesktopUI.ViewModels
         }
 
         public ServicesViewModel(IWindowManager windowManager, IInternetConnectionHelper internetConnectionHelper, IServiceEndpoint serviceEndpoint, ITechnicianEndpoint technicianEndpoint,
-            IDamageEndpoint damageEndpoint)
+                                 IDamageEndpoint damageEndpoint, ISparepartEndpoint sparepartEndpoint)
         {
             DisplayName = "Services";
 
@@ -121,6 +129,7 @@ namespace PSMDesktopUI.ViewModels
             _serviceEndpoint = serviceEndpoint;
             _technicianEndpoint = technicianEndpoint;
             _damageEndpoint = damageEndpoint;
+            _sparepartEndpoint = sparepartEndpoint;
         }
 
         protected override async void OnViewLoaded(object view)
@@ -138,6 +147,11 @@ namespace PSMDesktopUI.ViewModels
             {
                 await LoadServices();
             }
+        }
+
+        public async Task AddSparepart()
+        {
+            await Task.Delay(100);
         }
 
         public async Task EditService()
@@ -166,6 +180,22 @@ namespace PSMDesktopUI.ViewModels
 
             IsLoading = true;
             List<ServiceModel> serviceList = await _serviceEndpoint.GetAll();
+
+            for (int i = 0; i < serviceList.Count; i++)
+            {
+                // List<SparepartModel> spareparts = await _sparepartEndpoint.GetByService(serviceList[i].NomorNota);
+                // TODO: Replace with actual values
+                List<SparepartModel> spareparts = new List<SparepartModel>
+                {
+                    new SparepartModel { Id = 1, NomorNota = serviceList[i].NomorNota, Nama = "Test1", Harga = 10000 },
+                    new SparepartModel { Id = 2, NomorNota = serviceList[i].NomorNota, Nama = "Test2", Harga = 100000 },
+                    new SparepartModel { Id = 3, NomorNota = serviceList[i].NomorNota, Nama = "Test3", Harga = 1000 },
+                    new SparepartModel { Id = 4, NomorNota = serviceList[i].NomorNota, Nama = "Test4", Harga = 100020 },
+                    new SparepartModel { Id = 5, NomorNota = serviceList[i].NomorNota, Nama = "Test5", Harga = 100 },
+                };
+
+                serviceList[i].Spareparts = spareparts;
+            }
 
             IsLoading = false;
             Services = new BindingList<ServiceModel>(serviceList);

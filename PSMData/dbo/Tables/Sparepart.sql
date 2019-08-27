@@ -1,0 +1,7 @@
+﻿CREATE TABLE [dbo].[Sparepart]
+(
+	[Id] INT NOT NULL PRIMARY KEY,
+	[NomorNota] INT NOT NULL,
+	[Nama] NVARCHAR(50) NOT NULL,
+	[Harga] DECIMAL(19, 4) NOT NULL
+)

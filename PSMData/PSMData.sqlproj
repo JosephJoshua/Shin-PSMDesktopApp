@@ -84,6 +84,10 @@
     <Build Include="dbo\Stored Procedures\spDeleteService.sql" />
     <Build Include="dbo\Stored Procedures\spGetAllDamages.sql" />
     <Build Include="dbo\Stored Procedures\spUpdateService.sql" />
+    <Build Include="dbo\Tables\Sparepart.sql" />
+    <Build Include="dbo\Stored Procedures\spInsertSparepart.sql" />
+    <Build Include="dbo\Stored Procedures\spGetSparepartsByService.sql" />
+    <Build Include="dbo\Stored Procedures\spDeleteSparepart.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PSMData.refactorlog" />
