@@ -58,6 +58,36 @@
                          ItemsSource="{Binding Path=Services}"
                          Visibility="{c:Binding Path=!IsLoading}">
 
+            <dxg:GridControl.DetailDescriptor>
+                <dxg:DataControlDetailDescriptor ItemsSourceBinding="{Binding Path=Spareparts}" ShowHeader="False">
+                    <dxg:GridControl x:Name="SparepartsGrid" SelectionMode="Row">
+                        <dxg:GridControl.Columns>
+                            <dxg:GridColumn FieldName="Id" Header="Id" Width="*" ReadOnly="True">
+                                <dxg:GridColumn.EditSettings>
+                                    <dxe:TextEditSettings HorizontalContentAlignment="Left" />
+                                </dxg:GridColumn.EditSettings>
+                            </dxg:GridColumn>
+
+                            <dxg:GridColumn FieldName="Nama" Header="Nama" Width="7*" ReadOnly="True" />
+                            <dxg:GridColumn FieldName="Harga" Header="Harga" Width="6*" ReadOnly="True" />
+                        </dxg:GridControl.Columns>
+
+                        <dxg:GridControl.TotalSummary>
+                            <dxg:GridSummaryItem SummaryType="Sum" FieldName="Harga" DisplayFormat="Sum: {0:c}" />
+                            <dxg:GridSummaryItem SummaryType="Count" FieldName="Id" DisplayFormat="Count: {0}" />
+                        </dxg:GridControl.TotalSummary>
+
+                        <dxg:GridControl.View>
+                            <dxg:TableView x:Name="SparepartsView"
+                                           DetailHeaderContent="Spareparts"
+                                           UseAnimationWhenExpanding="True"
+                                           ShowColumnHeaders="True"
+                                           ShowTotalSummary="True" />
+                        </dxg:GridControl.View>
+                    </dxg:GridControl>
+                </dxg:DataControlDetailDescriptor>
+            </dxg:GridControl.DetailDescriptor>
+
             <dxg:GridColumn Header="No. Nota" Binding="{Binding Path=NomorNota}">
                 <dxg:GridColumn.EditSettings>
                     <dxe:TextEditSettings HorizontalContentAlignment="Left" />
@@ -88,6 +118,13 @@
             <dxg:GridColumn Header="Laba/Rugi" Binding="{Binding Path=LabaRugi}" />
             <dxg:GridColumn Header="Tanggal Pengambilan" Binding="{Binding Path=TanggalPengambilan}" />
 
+            <dxg:GridControl.View>
+                <dxg:TableView x:Name="MasterView"
+                               DetailHeaderContent="Services"
+                               AllowScrollAnimation="True"
+                               AllowFixedGroups="True" />
+            </dxg:GridControl.View>
+
         </dxg:GridControl>
         
         <!-- Floating action buttons -->
@@ -104,6 +141,14 @@
                         IsEnabled="{Binding Path=CanAddService}"
                         cal:Message.Attach="[Event Click] = [Action AddService]">
                     <material:PackIcon Kind="Add" />
+                </Button>
+
+                <Button ToolTip="Add Sparepart"
+                        Background="{DynamicResource PrimaryHueMidBrush}"
+                        Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                        IsEnabled="{Binding Path=CanAddSparepart}"
+                        cal:Message.Attach="[Event Click] = [Action AddSparepart]">
+                    <material:PackIcon Kind="AddShoppingCart" />
                 </Button>
 
                 <Button ToolTip="Edit"

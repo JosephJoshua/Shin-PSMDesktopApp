@@ -54,9 +54,11 @@
     <Compile Include="Api\IDamageEndpoint.cs" />
     <Compile Include="Api\IMemberEndpoint.cs" />
     <Compile Include="Api\IServiceEndpoint.cs" />
+    <Compile Include="Api\ISparepartEndpoint.cs" />
     <Compile Include="Api\ServiceEndpoint.cs" />
     <Compile Include="Api\ITechnicianEndpoint.cs" />
     <Compile Include="Api\MemberEndpoint.cs" />
+    <Compile Include="Api\SparepartEndpoint.cs" />
     <Compile Include="Api\TechnicianEndpoint.cs" />
     <Compile Include="AppValues.cs" />
     <Compile Include="Helpers\IInternetConnectionHelper.cs" />
@@ -68,6 +70,7 @@
     <Compile Include="Models\MemberModel.cs" />
     <Compile Include="Models\ServiceModel.cs" />
     <Compile Include="Models\ServiceStatus.cs" />
+    <Compile Include="Models\SparepartModel.cs" />
     <Compile Include="Models\TechnicianModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

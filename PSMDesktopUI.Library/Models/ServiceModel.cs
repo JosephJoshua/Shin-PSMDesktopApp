@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace PSMDesktopUI.Library.Models
 {
@@ -44,12 +45,14 @@ namespace PSMDesktopUI.Library.Models
 
         public decimal TotalBiaya { get; set; }
 
-        public decimal HargaSparepart { get; set; } 
+        public decimal HargaSparepart { get; set; }
 
         public decimal Sisa { get; set; }
 
         public decimal LabaRugi { get; set; }
 
         public DateTime TanggalPengambilan { get; set; }
+
+        public ICollection<SparepartModel> Spareparts { get; set; }
     }
 }
