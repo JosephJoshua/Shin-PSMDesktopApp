@@ -10,7 +10,7 @@ namespace PSMDataManager.Controllers
     public class ServiceController : ApiController
     {
         [HttpGet]
-        public IEnumerable<ServiceModel> Get()
+        public List<ServiceModel> Get()
         {
             ServiceData data = new ServiceData();
             return data.GetServices();
@@ -46,15 +46,45 @@ namespace PSMDataManager.Controllers
         }
 
         [HttpPut]
-        public void Put(ServiceModel service)
+        public IHttpActionResult Put(ServiceModel service)
         {
+            if (service.NomorNota < 8880000)
+            {
+                return BadRequest("The field 'NomorNota' is not valid");
+            }
+
+            if (string.IsNullOrWhiteSpace(service.NamaPelanggan))
+            {
+                return BadRequest("The field 'NamaPelanggan' cannot be null");
+            }
+
+            if (string.IsNullOrWhiteSpace(service.TipeHp))
+            {
+                return BadRequest("The field 'TipeHp' cannot be null");
+            }
+
+            if (service.TanggalKonfirmasi == DateTime.MinValue)
+            {
+                service.TanggalKonfirmasi = new DateTime(1753, 1, 1, 0, 0, 0);
+            }
+
+            if (service.TanggalPengambilan == DateTime.MinValue)
+            {
+                service.TanggalPengambilan = new DateTime(1753, 1, 1, 0, 0, 0);
+            }
+
+            ServiceData data = new ServiceData();
+            data.UpdateService(service);
+
+            return Ok();
         }
 
         [HttpDelete]
-        public IHttpActionResult Delete(int id)
+        [Route("api/Service/{nomorNota}")]
+        public IHttpActionResult Delete(int nomorNota)
         {
             ServiceData data = new ServiceData();
-            data.DeleteService(id);
+            data.DeleteService(nomorNota);
 
             return Ok();
         }

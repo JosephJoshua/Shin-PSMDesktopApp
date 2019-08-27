@@ -130,7 +130,7 @@ namespace PSMDesktopUI.ViewModels
             await LoadServices();
         }
 
-        public async void AddService()
+        public async Task AddService()
         {
             AddServiceViewModel addServiceVM = IoC.Get<AddServiceViewModel>();
 
@@ -140,16 +140,23 @@ namespace PSMDesktopUI.ViewModels
             }
         }
 
-        public void EditService()
+        public async Task EditService()
         {
+            EditServiceViewModel editServiceVM = IoC.Get<EditServiceViewModel>();
+            editServiceVM.SetFieldValues(SelectedService);
 
+            if (_windowManager.ShowDialog(editServiceVM) == true)
+            {
+                await LoadServices();
+            }
         }
 
-        public async void DeleteService()
+        public async Task DeleteService()
         {
             if (DXMessageBox.Show("Are you sure you want to delete this service?", "Services", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 await _serviceEndpoint.Delete(SelectedService.NomorNota);
+                await LoadServices();
             }
         }
 

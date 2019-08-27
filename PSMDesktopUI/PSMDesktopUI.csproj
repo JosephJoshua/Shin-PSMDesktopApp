@@ -103,6 +103,7 @@
     <Compile Include="ViewModels\AddServiceViewModel.cs" />
     <Compile Include="ViewModels\AddTechnicianViewModel.cs" />
     <Compile Include="ViewModels\EditMemberViewModel.cs" />
+    <Compile Include="ViewModels\EditServiceViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\MembersViewModel.cs" />
     <Compile Include="ViewModels\ServicesViewModel.cs" />
@@ -119,6 +120,9 @@
     </Compile>
     <Compile Include="Views\EditMemberView.xaml.cs">
       <DependentUpon>EditMemberView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EditServiceView.xaml.cs">
+      <DependentUpon>EditServiceView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LoginView.xaml.cs">
       <DependentUpon>LoginView.xaml</DependentUpon>
@@ -195,6 +199,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\EditServiceView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\LoginView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -217,7 +225,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="EventModels\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

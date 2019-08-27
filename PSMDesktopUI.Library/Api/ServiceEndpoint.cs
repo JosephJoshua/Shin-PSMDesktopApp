@@ -41,9 +41,9 @@ namespace PSMDesktopUI.Library.Api
             await _apiHelper.ApiClient.PutAsJsonAsync("/api/Service", service).ConfigureAwait(false);
         }
 
-        public async Task Delete(int id)
+        public async Task Delete(int nomorNota)
         {
-            await _apiHelper.ApiClient.DeleteAsync("/api/Service/" + id).ConfigureAwait(false);
+            await _apiHelper.ApiClient.DeleteAsync("/api/Service/" + nomorNota).ConfigureAwait(false);
         }
     }
 }
