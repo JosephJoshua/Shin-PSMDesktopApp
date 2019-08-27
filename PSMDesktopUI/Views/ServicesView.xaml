@@ -60,7 +60,8 @@
 
             <dxg:GridControl.DetailDescriptor>
                 <dxg:DataControlDetailDescriptor ItemsSourceBinding="{Binding Path=Spareparts}" ShowHeader="False">
-                    <dxg:GridControl x:Name="SparepartsGrid" SelectionMode="Row">
+                    <dxg:GridControl x:Name="SparepartsGrid" SelectionMode="Row"
+                                     CurrentItem="{Binding Path=SelectedSparepart, Mode=OneWayToSource}">
                         <dxg:GridControl.Columns>
                             <dxg:GridColumn FieldName="Id" Header="Id" Width="*" ReadOnly="True">
                                 <dxg:GridColumn.EditSettings>
@@ -186,7 +187,8 @@
         <!-- Info box -->
         <StackPanel Grid.Column="1" Grid.Row="1"
                     Orientation="Vertical"
-                    Margin="10 10 0 0">
+                    Margin="10 10 0 0"
+                    Visibility="{c:Binding Path=ShowInfo, FalseToVisibility=Hidden}">
             <TextBlock Text="{Binding Path=SelectedService.NomorNota, StringFormat=No. Nota: {0}}" />
             <TextBlock Text="{Binding Path=SelectedService.Tanggal, StringFormat=Tanggal: {0}}" />
             <TextBlock Text="{Binding Path=SelectedService.NamaPelanggan, StringFormat=Nama Pelanggan: {0}}" />
@@ -202,15 +204,22 @@
             <TextBlock Text="{Binding Path=SelectedService.StatusServisan, StringFormat=Status Servisan: {0}}" />
             <TextBlock Text="{Binding Path=SelectedService.TanggalKonfirmasi, StringFormat=Tanggal Konfirmasi: {0}}" />
             <TextBlock Text="{Binding Path=SelectedService.IsiKonfirmasi, StringFormat=Isi Konfirmasi: {0}}" />
-            <TextBlock Text="{Binding Path=SelectedService.Biaya, StringFormat=Biaya: {0}}" />
+            <TextBlock Text="{Binding Path=SelectedService.Biaya, StringFormat=Biaya: {0:c}}" />
             <TextBlock Text="{Binding Path=SelectedService.Discount, StringFormat=Discount: {0}%}" />
-            <TextBlock Text="{Binding Path=SelectedService.Dp, StringFormat=Dp: {0}}" />
-            <TextBlock Text="{Binding Path=SelectedService.TambahanBiaya, StringFormat=TambahanBiaya: {0}}" />
-            <TextBlock Text="{Binding Path=SelectedService.TotalBiaya, StringFormat=Total Biaya: {0}}" />
-            <TextBlock Text="{Binding Path=SelectedService.HargaSparepart, StringFormat=Harga Sparepart: {0}}" />
-            <TextBlock Text="{Binding Path=SelectedService.Sisa, StringFormat=Sisa: {0}}" />
-            <TextBlock Text="{Binding Path=SelectedService.LabaRugi, StringFormat=Laba/Rugi: {0}}" />
+            <TextBlock Text="{Binding Path=SelectedService.Dp, StringFormat=Dp: {0:c}}" />
+            <TextBlock Text="{Binding Path=SelectedService.TambahanBiaya, StringFormat=TambahanBiaya: {0:c}}" />
+            <TextBlock Text="{Binding Path=SelectedService.TotalBiaya, StringFormat=Total Biaya: {0:c}}" />
+            <TextBlock Text="{Binding Path=SelectedService.HargaSparepart, StringFormat=Harga Sparepart: {0:c}}" />
+            <TextBlock Text="{Binding Path=SelectedService.Sisa, StringFormat=Sisa: {0:c}}" />
+            <TextBlock Text="{Binding Path=SelectedService.LabaRugi, StringFormat=Laba/Rugi: {0:c}}" />
             <TextBlock Text="{Binding Path=SelectedService.TanggalPengambilan, StringFormat=Tanggal Pengambilan: {0}}" />
         </StackPanel>
+
+        <TextBlock Grid.Column="1" Grid.Row="1"
+                   Visibility="{c:Binding Path=!ShowInfo}"
+                   FontSize="22"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Text="No service selected" />
     </Grid>
 </UserControl>
