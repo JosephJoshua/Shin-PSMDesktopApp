@@ -83,6 +83,7 @@
     <Build Include="dbo\Stored Procedures\spInsertService.sql" />
     <Build Include="dbo\Stored Procedures\spDeleteService.sql" />
     <Build Include="dbo\Stored Procedures\spGetAllDamages.sql" />
+    <Build Include="dbo\Stored Procedures\spUpdateService.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="PSMData.refactorlog" />

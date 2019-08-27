@@ -1,32 +1,24 @@
 ﻿using Caliburn.Micro;
 using PSMDesktopUI.Library.Api;
-using PSMDesktopUI.Library.Helpers;
 using PSMDesktopUI.Library.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace PSMDesktopUI.ViewModels
 {
-    public class AddServiceViewModel : Screen
+    public class EditServiceViewModel : Screen
     {
-        private readonly IInternetConnectionHelper _internetConnectionHelper;
-
-        private readonly IMemberEndpoint _memberEndpoint;
         private readonly IServiceEndpoint _serviceEndpoint;
         private readonly IDamageEndpoint _damageEndpoint;
         private readonly ITechnicianEndpoint _technicianEndpoint;
 
-        private bool _showTextFields = false;
-        private bool _showMemberGrid = false;
-        private bool _memberIsCustomer;
+        private int _damageId;
+        private int _technicianId;
 
-        private bool _isLoadingMembers = false;
-
-        private BindingList<MemberModel> _members;
-        private MemberModel _selectedMember;
-
+        private int _nomorNota;
         private string _namaPelanggan;
         private string _noHp;
         private string _tipeHp;
@@ -57,82 +49,15 @@ namespace PSMDesktopUI.ViewModels
         private DamageModel _selectedDamage;
         private ServiceStatus _selectedStatus;
 
-        public bool ShowTextFields
+        public int NomorNota
         {
-            get => _showTextFields;
+            get => _nomorNota;
 
             set
             {
-                _showTextFields = value;
-                NotifyOfPropertyChange(() => ShowTextFields);
+                _nomorNota = value;
+                NotifyOfPropertyChange(() => NomorNota);
             }
-        }
-
-        public bool ShowMemberGrid
-        {
-            get => _showMemberGrid;
-
-            set
-            {
-                _showMemberGrid = value;
-                NotifyOfPropertyChange(() => ShowMemberGrid);
-            }
-        }
-
-        public bool ShowMemberButtons
-        {
-            get => !ShowTextFields && !ShowMemberGrid;
-        }
-
-        public bool MemberIsCustomer
-        {
-            get => _memberIsCustomer;
-
-            set
-            {
-                _memberIsCustomer = value;
-                NotifyOfPropertyChange(() => MemberIsCustomer);
-            }
-        }
-
-        public bool IsLoadingMembers
-        {
-            get => _isLoadingMembers;
-
-            set
-            {
-                _isLoadingMembers = value;
-                NotifyOfPropertyChange(() => IsLoadingMembers);
-            }
-        }
-
-        public BindingList<MemberModel> Members
-        {
-            get => _members;
-            
-            set
-            {
-                _members = value;
-                NotifyOfPropertyChange(() => Members);
-            }
-        }
-
-        public MemberModel SelectedMember
-        {
-            get => _selectedMember;
-
-            set
-            {
-                _selectedMember = value;
-
-                NotifyOfPropertyChange(() => SelectedMember);
-                NotifyOfPropertyChange(() => HasSelectedMember);
-            }
-        }
-
-        public bool HasSelectedMember
-        {
-            get => SelectedMember != null;
         }
 
         public string NamaPelanggan
@@ -269,7 +194,7 @@ namespace PSMDesktopUI.ViewModels
         public double TambahanBiaya
         {
             get => _tambahanBiaya;
-            
+
             set
             {
                 _tambahanBiaya = value;
@@ -431,12 +356,8 @@ namespace PSMDesktopUI.ViewModels
             get => !string.IsNullOrWhiteSpace(NamaPelanggan) && !string.IsNullOrWhiteSpace(TipeHp);
         }
 
-        public AddServiceViewModel(IInternetConnectionHelper internetConnectionHelper, IMemberEndpoint memberEndpoint, 
-                                   ITechnicianEndpoint technicianEndpoint, IDamageEndpoint damageEndpoint, IServiceEndpoint serviceEndpoint)
+        public EditServiceViewModel(ITechnicianEndpoint technicianEndpoint, IDamageEndpoint damageEndpoint, IServiceEndpoint serviceEndpoint)
         {
-            _internetConnectionHelper = internetConnectionHelper;
-
-            _memberEndpoint = memberEndpoint;
             _serviceEndpoint = serviceEndpoint;
             _damageEndpoint = damageEndpoint;
             _technicianEndpoint = technicianEndpoint;
@@ -446,19 +367,7 @@ namespace PSMDesktopUI.ViewModels
         {
             base.OnViewLoaded(view);
 
-            await GetTechnicians();
-
-            if (Technicians.Count > 0)
-            {
-                SelectedTechnician = Technicians[0];
-            }
-
-            await GetDamages();
-
-            if (Damages.Count > 0)
-            {
-                SelectedDamage = Damages[0];
-            }
+            await LoadComboboxes();
         }
 
         public async Task GetTechnicians()
@@ -473,46 +382,15 @@ namespace PSMDesktopUI.ViewModels
             Damages = new BindingList<DamageModel>(damageList);
         }
 
-        public async Task SelectMember()
+        public async Task Save()
         {
-            ShowTextFields = false;
-            ShowMemberGrid = true;
-
-            NotifyOfPropertyChange(() => ShowMemberButtons);
-
-            await LoadMembers();
-        }
-
-        public void SelectNonMember()
-        {
-            ShowMemberGrid = false;
-            ShowTextFields = true;
-
-            NotifyOfPropertyChange(() => ShowMemberButtons);
-        }
-
-        public void ConfirmMember()
-        {
-            ShowMemberGrid = false;
-            ShowTextFields = true;
-
-            NotifyOfPropertyChange(() => ShowMemberButtons);
-
-            MemberIsCustomer = true;
-
-            NamaPelanggan = SelectedMember.Nama;
-            NoHp = SelectedMember.NoHp ?? "";
-        }
-
-        public async Task Add()
-        {
-            await AddService();
+            await UpdateService();
             TryClose(true);
         }
 
         public async Task Print()
         {
-            await AddService();
+            await UpdateService();
             TryClose(true);
         }
 
@@ -521,18 +399,68 @@ namespace PSMDesktopUI.ViewModels
             TryClose(false);
         }
 
-        public async Task LoadMembers()
+        public async Task LoadComboboxes()
         {
-            if (IsLoadingMembers || !_internetConnectionHelper.HasInternetConnection) return;
+            await GetTechnicians();
 
-            IsLoadingMembers = true;
-            List<MemberModel> memberList = await _memberEndpoint.GetAll();
+            if (Technicians.Count > 0)
+            {
+                SelectedTechnician = Technicians.Where((d) => d.Id == _technicianId).FirstOrDefault() ?? Technicians[0];
+            }
 
-            IsLoadingMembers = false;
-            Members = new BindingList<MemberModel>(memberList);
+            await GetDamages();
+
+            if (Damages.Count > 0)
+            {
+                SelectedDamage = Damages.Where((d) => d.Id == _damageId).FirstOrDefault() ?? Damages[0];
+            }
         }
 
-        public async Task AddService()
+        public void SetFieldValues(ServiceModel service)
+        {
+            NomorNota = service.NomorNota;
+            NamaPelanggan = service.NamaPelanggan;
+            NoHp = service.NoHp;
+            TipeHp = service.TipeHp;
+            Imei = service.Imei;
+            YangBelumDicek = service.YangBelumDicek;
+            Warna = service.Warna;
+            KataSandiPola = service.KataSandiPola;
+            SudahKonfirmasi = service.TanggalKonfirmasi == DateTime.MinValue;
+            TanggalKonfirmasi = service.TanggalKonfirmasi;
+            IsiKonfirmasi = service.IsiKonfirmasi;
+            Biaya = (double)service.Biaya;
+            Discount = service.Discount;
+            Dp = (double)service.Dp;
+            TambahanBiaya = (double)service.TambahanBiaya;
+
+            _damageId = service.DamageId;
+            _technicianId = service.TechnicianId;
+
+            SelectedStatus = Enum.GetValues(ServiceStatuses.GetType()).Cast<ServiceStatus>().Where((e) => e.Description() == service.StatusServisan).FirstOrDefault();
+
+            if (service.Kelengkapan.Contains("Battery"))
+            {
+                IsBatteryChecked = true;
+            }
+
+            if (service.Kelengkapan.Contains("SIM"))
+            {
+                IsSimChecked = true;
+            }
+
+            if (service.Kelengkapan.Contains("Memory"))
+            {
+                IsMemoryChecked = true;
+            }
+
+            if (service.Kelengkapan.Contains("Condom"))
+            {
+                IsCondomChecked = true;
+            }
+        }
+
+        public async Task UpdateService()
         {
             string kelengkapan = "";
 
@@ -560,6 +488,7 @@ namespace PSMDesktopUI.ViewModels
 
             ServiceModel service = new ServiceModel
             {
+                NomorNota = NomorNota,
                 NamaPelanggan = NamaPelanggan,
                 NoHp = NoHp,
                 TipeHp = TipeHp,
@@ -577,12 +506,10 @@ namespace PSMDesktopUI.ViewModels
                 Discount = Discount,
                 Dp = (decimal)Dp,
                 TambahanBiaya = (decimal)TambahanBiaya,
-                HargaSparepart = 0,
-                LabaRugi = 0,
                 TanggalPengambilan = sudahDiambil ? DateTime.Now : DateTime.MinValue,
             };
 
-            await _serviceEndpoint.Insert(service);
+            await _serviceEndpoint.Update(service);
         }
     }
 }
