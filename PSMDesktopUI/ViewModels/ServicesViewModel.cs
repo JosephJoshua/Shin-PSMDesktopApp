@@ -25,6 +25,8 @@ namespace PSMDesktopUI.ViewModels
         private BindingList<ServiceModel> _services;
         private ServiceModel _selectedService;
 
+        private SparepartModel _selectedSparepart;
+
         public delegate void OnRefreshEventHandler();
         public event OnRefreshEventHandler OnRefresh;
 
@@ -71,6 +73,7 @@ namespace PSMDesktopUI.ViewModels
                 NotifyOfPropertyChange(() => CanEditService);
                 NotifyOfPropertyChange(() => CanDeleteService);
                 NotifyOfPropertyChange(() => CanPrintService);
+                NotifyOfPropertyChange(() => ShowInfo);
             }
         }
 
@@ -94,6 +97,19 @@ namespace PSMDesktopUI.ViewModels
             }
         }
 
+        public SparepartModel SelectedSparepart
+        {
+            get => _selectedSparepart;
+
+            set
+            {
+                _selectedSparepart = value;
+
+                NotifyOfPropertyChange(() => SelectedSparepart);
+                NotifyOfPropertyChange(() => CanAddSparepart);
+            }
+        }
+
         public bool CanAddService
         {
             get => !IsLoading && _internetConnectionHelper.HasInternetConnection;
@@ -101,7 +117,7 @@ namespace PSMDesktopUI.ViewModels
 
         public bool CanAddSparepart
         {
-            get => !IsLoading && SelectedService != null && _internetConnectionHelper.HasInternetConnection;
+            get => !IsLoading && (SelectedService != null || SelectedSparepart != null) && _internetConnectionHelper.HasInternetConnection;
         }
 
         public bool CanEditService
@@ -117,6 +133,11 @@ namespace PSMDesktopUI.ViewModels
         public bool CanPrintService
         {
             get => !IsLoading && SelectedService != null;
+        }
+
+        public bool ShowInfo
+        {
+            get => SelectedService != null;
         }
 
         public ServicesViewModel(IWindowManager windowManager, IInternetConnectionHelper internetConnectionHelper, IServiceEndpoint serviceEndpoint, ITechnicianEndpoint technicianEndpoint,
@@ -151,7 +172,13 @@ namespace PSMDesktopUI.ViewModels
 
         public async Task AddSparepart()
         {
-            await Task.Delay(100);
+            AddSparepartViewModel addSparepartVM = IoC.Get<AddSparepartViewModel>();
+            addSparepartVM.SetNomorNota(SelectedService != null ? SelectedService.NomorNota : SelectedSparepart.NomorNota);
+
+            if (_windowManager.ShowDialog(addSparepartVM) == true)
+            {
+                await LoadServices();
+            }
         }
 
         public async Task EditService()

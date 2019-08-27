@@ -101,6 +101,7 @@
     <Compile Include="ValueConverters\EnumToCollectionConverter.cs" />
     <Compile Include="ViewModels\AddMemberViewModel.cs" />
     <Compile Include="ViewModels\AddServiceViewModel.cs" />
+    <Compile Include="ViewModels\AddSparepartViewModel.cs" />
     <Compile Include="ViewModels\AddTechnicianViewModel.cs" />
     <Compile Include="ViewModels\EditMemberViewModel.cs" />
     <Compile Include="ViewModels\EditServiceViewModel.cs" />
@@ -114,6 +115,9 @@
     </Compile>
     <Compile Include="Views\AddServiceView.xaml.cs">
       <DependentUpon>AddServiceView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AddSparepartView.xaml.cs">
+      <DependentUpon>AddSparepartView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\AddTechnicianView.xaml.cs">
       <DependentUpon>AddTechnicianView.xaml</DependentUpon>
@@ -188,6 +192,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\AddServiceView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AddSparepartView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
