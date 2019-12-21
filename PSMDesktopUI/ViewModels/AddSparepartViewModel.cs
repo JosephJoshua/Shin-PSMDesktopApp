@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using PSMDesktopUI.Library.Api;
 using PSMDesktopUI.Library.Models;
+using System;
 using System.Threading.Tasks;
 
 namespace PSMDesktopUI.ViewModels
@@ -63,6 +64,7 @@ namespace PSMDesktopUI.ViewModels
                 NomorNota = NomorNota,
                 Nama = Nama,
                 Harga = (decimal)Harga,
+                TanggalPembelian = DateTime.Today,
             };
 
             await _sparepartEndpoint.Insert(sparepart);

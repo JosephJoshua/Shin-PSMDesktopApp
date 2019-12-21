@@ -17,18 +17,23 @@ namespace PSMDataManager.Controllers
         }
 
         [HttpPost]
-        public void Post([FromBody]string value)
+        [Route("api/Damage")]
+        public IHttpActionResult Post([FromBody]DamageModel damage)
         {
-        }
+            DamageData data = new DamageData();
+            data.InsertDamage(damage);
 
-        [HttpPut]
-        public void Put(int id, [FromBody]string value)
-        {
+            return Ok();
         }
 
         [HttpDelete]
-        public void Delete(int id)
+        [Route("api/Damage/{id}")]
+        public IHttpActionResult Delete(int id)
         {
+            DamageData data = new DamageData();
+            data.DeleteDamage(id);
+
+            return Ok();
         }
     }
 }

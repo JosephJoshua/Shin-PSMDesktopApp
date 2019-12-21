@@ -9,6 +9,7 @@
     xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
     xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
     xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:converters="clr-namespace:PSMDesktopUI.ValueConverters"
     mc:Ignorable ="d"
     d:DesignHeight="450" d:DesignWidth="800"
     Loaded="View_Loaded">
@@ -21,12 +22,13 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="4*" />
+            <ColumnDefinition Width="3*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="35" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         
@@ -38,10 +40,30 @@
                    Foreground="White"
                    HorizontalAlignment="Center"
                    Margin="0 0 0 10" />
-        
+            
+        <!-- Search box -->
+        <Grid Grid.Column="0" Grid.Row="1" Height="30">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            
+            <dxe:TextEdit Grid.Column="0" Grid.Row="0"
+                          Margin="0 0 15 0"
+                          NullText="Search.."
+                          Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                          cal:Message.Attach="[Event KeyDown] = [Action Search($eventArgs)]"/>
+
+            <dxe:ComboBoxEdit Grid.Column="1" Grid.Row="0"
+                              ItemsSource="{Binding Path=SearchTypes, Converter={converters:EnumToCollectionConverter}, Mode=OneTime}"
+                              ValueMember="Key"
+                              DisplayMember="Value"
+                              EditValue="{Binding SelectedSearchType, UpdateSourceTrigger=PropertyChanged}" />
+        </Grid>
+
         <!-- Progress bar -->
         <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
-                     Grid.Column="0" Grid.Row="1"
+                     Grid.Column="0" Grid.Row="2"
                      Width="40"
                      Height="40"
                      HorizontalAlignment="Center"
@@ -51,7 +73,7 @@
                      Visibility="{c:Binding Path=IsLoading}" />
         
         <!-- Data grid -->
-        <dxg:GridControl x:Name="ServicesGrid" Grid.Column="0" Grid.Row="1"
+        <dxg:GridControl x:Name="ServicesGrid" Grid.Column="0" Grid.Row="2"
                          Margin="0 10 0 0"
                          SelectionMode="Row"
                          CurrentItem="{Binding Path=SelectedService, Mode=OneWayToSource}"
@@ -63,7 +85,7 @@
                     <dxg:GridControl x:Name="SparepartsGrid" SelectionMode="Row"
                                      CurrentItem="{Binding Path=SelectedSparepart, Mode=OneWayToSource}">
                         <dxg:GridControl.Columns>
-                            <dxg:GridColumn FieldName="Id" Header="Id" Width="*" ReadOnly="True">
+                            <dxg:GridColumn FieldName="Id" Header="Id" Width="2*" ReadOnly="True">
                                 <dxg:GridColumn.EditSettings>
                                     <dxe:TextEditSettings HorizontalContentAlignment="Left" />
                                 </dxg:GridColumn.EditSettings>
@@ -71,6 +93,7 @@
 
                             <dxg:GridColumn FieldName="Nama" Header="Nama" Width="7*" ReadOnly="True" />
                             <dxg:GridColumn FieldName="Harga" Header="Harga" Width="6*" ReadOnly="True" />
+                            <dxg:GridColumn FieldName="TanggalPembelian" Header="Tanggal Pembelian" Width="3*" ReadOnly="True" />
                         </dxg:GridControl.Columns>
 
                         <dxg:GridControl.TotalSummary>
@@ -106,6 +129,7 @@
             <dxg:GridColumn Header="Warna" Binding="{Binding Path=Warna}" />
             <dxg:GridColumn Header="Kata Sandi/Pola" Binding="{Binding Path=KataSandiPola}" />
             <dxg:GridColumn Header="Technician Id" Binding="{Binding Path=TechnicianId}" />
+            <dxg:GridColumn Header="Sales Id" Binding="{Binding Path=SalesId}" />
             <dxg:GridColumn Header="Status Servisan" Binding="{Binding Path=StatusServisan}" />
             <dxg:GridColumn Header="Tanggal Konfirmasi" Binding="{Binding Path=TanggalKonfirmasi}" />
             <dxg:GridColumn Header="Isi Konfirmasi" Binding="{Binding Path=IsiKonfirmasi}" />
@@ -131,6 +155,7 @@
         <!-- Floating action buttons -->
         <material:PopupBox Style="{StaticResource MaterialDesignMultiFloatingActionPopupBox}"
                            Grid.Column="0" Grid.Row="1"
+                           Grid.RowSpan="2"
                            HorizontalAlignment="Right"
                            VerticalAlignment="Bottom"
                            Margin="32">
@@ -168,6 +193,14 @@
                     <material:PackIcon Kind="Delete" />
                 </Button>
 
+                <Button ToolTip="Delete Sparepart"
+                        Background="{DynamicResource PrimaryHueMidBrush}"
+                        Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                        IsEnabled="{Binding Path=CanDeleteSparepart}"
+                        cal:Message.Attach="[Event Click] = [Action DeleteSparepart]">
+                    <material:PackIcon Kind="RemoveShoppingCart" />
+                </Button>
+
                 <Button ToolTip="Refresh"
                         Background="{DynamicResource PrimaryHueMidBrush}"
                         Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
@@ -186,38 +219,41 @@
         
         <!-- Info box -->
         <StackPanel Grid.Column="1" Grid.Row="1"
+                    Grid.RowSpan="2"
                     Orientation="Vertical"
                     Margin="10 10 0 0"
                     Visibility="{c:Binding Path=ShowInfo, FalseToVisibility=Hidden}">
-            <TextBlock Text="{Binding Path=SelectedService.NomorNota, StringFormat=No. Nota: {0}}" />
-            <TextBlock Text="{Binding Path=SelectedService.Tanggal, StringFormat=Tanggal: {0}}" />
-            <TextBlock Text="{Binding Path=SelectedService.NamaPelanggan, StringFormat=Nama Pelanggan: {0}}" />
-            <TextBlock Text="{Binding Path=SelectedService.NoHp, StringFormat=No Hp: {0}}" />
-            <TextBlock Text="{Binding Path=SelectedService.TipeHp, StringFormat=Tipe Hp: {0}}" />
-            <TextBlock Text="{Binding Path=SelectedService.Imei, StringFormat=Imei: {0}}" />
-            <TextBlock Text="{Binding Path=SelectedServiceDamage, StringFormat=Kerusakan: {0}}" />
-            <TextBlock Text="{Binding Path=SelectedService.YangBelumDicek, StringFormat=Yang Belum Dicek: {0}}" />
-            <TextBlock Text="{Binding Path=SelectedService.Kelengkapan, StringFormat=Kelengkapan: {0}}" />
-            <TextBlock Text="{Binding Path=SelectedService.Warna, StringFormat=Warna: {0}}" />
-            <TextBlock Text="{Binding Path=SelectedService.KataSandiPola, StringFormat=Kata Sandi/Pola: {0}}" />
-            <TextBlock Text="{Binding Path=SelectedServiceTechnician, StringFormat=Teknisi: {0}}" />
-            <TextBlock Text="{Binding Path=SelectedService.StatusServisan, StringFormat=Status Servisan: {0}}" />
-            <TextBlock Text="{Binding Path=SelectedService.TanggalKonfirmasi, StringFormat=Tanggal Konfirmasi: {0}}" />
-            <TextBlock Text="{Binding Path=SelectedService.IsiKonfirmasi, StringFormat=Isi Konfirmasi: {0}}" />
-            <TextBlock Text="{Binding Path=SelectedService.Biaya, StringFormat=Biaya: {0:c}}" />
-            <TextBlock Text="{Binding Path=SelectedService.Discount, StringFormat=Discount: {0}%}" />
-            <TextBlock Text="{Binding Path=SelectedService.Dp, StringFormat=Dp: {0:c}}" />
-            <TextBlock Text="{Binding Path=SelectedService.TambahanBiaya, StringFormat=TambahanBiaya: {0:c}}" />
-            <TextBlock Text="{Binding Path=SelectedService.TotalBiaya, StringFormat=Total Biaya: {0:c}}" />
-            <TextBlock Text="{Binding Path=SelectedService.HargaSparepart, StringFormat=Harga Sparepart: {0:c}}" />
-            <TextBlock Text="{Binding Path=SelectedService.Sisa, StringFormat=Sisa: {0:c}}" />
-            <TextBlock Text="{Binding Path=SelectedService.LabaRugi, StringFormat=Laba/Rugi: {0:c}}" />
-            <TextBlock Text="{Binding Path=SelectedService.TanggalPengambilan, StringFormat=Tanggal Pengambilan: {0}}" />
+            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.NomorNota, StringFormat=No. Nota: {0}}" />
+            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.Tanggal, StringFormat=Tanggal: {0}}" />
+            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.NamaPelanggan, StringFormat=Nama Pelanggan: {0}}" />
+            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.NoHp, StringFormat=No Hp: {0}}" />
+            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.TipeHp, StringFormat=Tipe Hp: {0}}" />
+            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.Imei, StringFormat=Imei: {0}}" />
+            <TextBlock FontSize="14" Text="{Binding Path=SelectedServiceDamage, StringFormat=Kerusakan: {0}}" />
+            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.YangBelumDicek, StringFormat=Yang Belum Dicek: {0}}" />
+            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.Kelengkapan, StringFormat=Kelengkapan: {0}}" />
+            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.Warna, StringFormat=Warna: {0}}" />
+            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.KataSandiPola, StringFormat=Kata Sandi/Pola: {0}}" />
+            <TextBlock FontSize="14" Text="{Binding Path=SelectedServiceTechnician, StringFormat=Teknisi: {0}}" />
+            <TextBlock FontSize="14" Text="{Binding Path=SelectedServiceSales, StringFormat=Sales: {0}}" />
+            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.StatusServisan, StringFormat=Status Servisan: {0}}" />
+            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.TanggalKonfirmasi, StringFormat=Tanggal Konfirmasi: {0}}" />
+            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.IsiKonfirmasi, StringFormat=Isi Konfirmasi: {0}}" />
+            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.Biaya, StringFormat=Biaya: {0}}" />
+            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.Discount, StringFormat=Discount: {0}%}" />
+            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.Dp, StringFormat=Dp: {0}}" />
+            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.TambahanBiaya, StringFormat=TambahanBiaya: {0}}" />
+            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.TotalBiaya, StringFormat=Total Biaya: {0}}" />
+            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.HargaSparepart, StringFormat=Harga Sparepart: {0}}" />
+            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.Sisa, StringFormat=Sisa: {0}}" />
+            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.LabaRugi, StringFormat=Laba/Rugi: {0}}" />
+            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.TanggalPengambilan, StringFormat=Tanggal Pengambilan: {0}}" />
         </StackPanel>
 
         <TextBlock Grid.Column="1" Grid.Row="1"
+                   Grid.RowSpan="2"
                    Visibility="{c:Binding Path=!ShowInfo}"
-                   FontSize="22"
+                   FontSize="18"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
                    Text="No service selected" />

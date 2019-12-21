@@ -14,18 +14,24 @@ namespace PSMDesktopUI.ViewModels
         private readonly IInternetConnectionHelper _internetConnectionHelper;
 
         private readonly IMemberEndpoint _memberEndpoint;
+        private readonly ISalesEndpoint _salesEndpoint;
         private readonly IServiceEndpoint _serviceEndpoint;
         private readonly IDamageEndpoint _damageEndpoint;
         private readonly ITechnicianEndpoint _technicianEndpoint;
 
         private bool _showTextFields = false;
         private bool _showMemberGrid = false;
+        private bool _showSalesGrid = true;
         private bool _memberIsCustomer;
 
-        private bool _isLoadingMembers = false;
+        private bool _isMemberLoading = false;
+        private bool _isSalesLoading = false;
 
         private BindingList<MemberModel> _members;
         private MemberModel _selectedMember;
+
+        private BindingList<SalesModel> _sales;
+        private SalesModel _selectedSales;
 
         private string _namaPelanggan;
         private string _noHp;
@@ -35,6 +41,7 @@ namespace PSMDesktopUI.ViewModels
         private string _warna;
         private string _kataSandiPola;
         private string _isiKonfirmasi;
+        private int _salesId;
 
         private double _biaya;
         private int _discount;
@@ -79,9 +86,20 @@ namespace PSMDesktopUI.ViewModels
             }
         }
 
+        public bool ShowSalesGrid
+        {
+            get => _showSalesGrid;
+
+            set
+            {
+                _showSalesGrid = value;
+                NotifyOfPropertyChange(() => ShowSalesGrid);
+            }
+        }
+
         public bool ShowMemberButtons
         {
-            get => !ShowTextFields && !ShowMemberGrid;
+            get => !ShowTextFields && !ShowMemberGrid && !ShowSalesGrid;
         }
 
         public bool MemberIsCustomer
@@ -95,14 +113,25 @@ namespace PSMDesktopUI.ViewModels
             }
         }
 
-        public bool IsLoadingMembers
+        public bool IsMemberLoading
         {
-            get => _isLoadingMembers;
+            get => _isMemberLoading;
 
             set
             {
-                _isLoadingMembers = value;
-                NotifyOfPropertyChange(() => IsLoadingMembers);
+                _isMemberLoading = value;
+                NotifyOfPropertyChange(() => IsMemberLoading);
+            }
+        }
+
+        public bool IsSalesLoading
+        {
+            get => _isSalesLoading;
+
+            set
+            {
+                _isSalesLoading = value;
+                NotifyOfPropertyChange(() => IsSalesLoading);
             }
         }
 
@@ -130,9 +159,37 @@ namespace PSMDesktopUI.ViewModels
             }
         }
 
+        public BindingList<SalesModel> Sales
+        {
+            get => _sales;
+
+            set
+            {
+                _sales = value;
+                NotifyOfPropertyChange(() => Sales);
+            }
+        }
+
+        public SalesModel SelectedSales
+        {
+            get => _selectedSales;
+
+            set
+            {
+                _selectedSales = value;
+                NotifyOfPropertyChange(() => SelectedSales);
+                NotifyOfPropertyChange(() => HasSelectedSales);
+            }
+        }
+
         public bool HasSelectedMember
         {
             get => SelectedMember != null;
+        }
+
+        public bool HasSelectedSales
+        {
+            get => SelectedSales != null;
         }
 
         public string NamaPelanggan
@@ -224,6 +281,17 @@ namespace PSMDesktopUI.ViewModels
             {
                 _isiKonfirmasi = value;
                 NotifyOfPropertyChange(() => IsiKonfirmasi);
+            }
+        }
+
+        public int SalesId
+        {
+            get => _salesId;
+
+            set
+            {
+                _salesId = value;
+                NotifyOfPropertyChange(() => SalesId);
             }
         }
 
@@ -431,12 +499,13 @@ namespace PSMDesktopUI.ViewModels
             get => !string.IsNullOrWhiteSpace(NamaPelanggan) && !string.IsNullOrWhiteSpace(TipeHp);
         }
 
-        public AddServiceViewModel(IInternetConnectionHelper internetConnectionHelper, IMemberEndpoint memberEndpoint, 
+        public AddServiceViewModel(IInternetConnectionHelper internetConnectionHelper, IMemberEndpoint memberEndpoint, ISalesEndpoint salesEndpoint,
                                    ITechnicianEndpoint technicianEndpoint, IDamageEndpoint damageEndpoint, IServiceEndpoint serviceEndpoint)
         {
             _internetConnectionHelper = internetConnectionHelper;
 
             _memberEndpoint = memberEndpoint;
+            _salesEndpoint = salesEndpoint;
             _serviceEndpoint = serviceEndpoint;
             _damageEndpoint = damageEndpoint;
             _technicianEndpoint = technicianEndpoint;
@@ -445,6 +514,8 @@ namespace PSMDesktopUI.ViewModels
         protected override async void OnViewLoaded(object view)
         {
             base.OnViewLoaded(view);
+
+            await LoadSales();
 
             await GetTechnicians();
 
@@ -459,6 +530,8 @@ namespace PSMDesktopUI.ViewModels
             {
                 SelectedDamage = Damages[0];
             }
+
+            NotifyOfPropertyChange(() => SelectedSales);
         }
 
         public async Task GetTechnicians()
@@ -504,13 +577,16 @@ namespace PSMDesktopUI.ViewModels
             NoHp = SelectedMember.NoHp ?? "";
         }
 
-        public async Task Add()
+        public void ConfirmSales()
         {
-            await AddService();
-            TryClose(true);
+            ShowSalesGrid = false;
+
+            NotifyOfPropertyChange(() => ShowMemberButtons);
+
+            SalesId = SelectedSales.Id;
         }
 
-        public async Task Print()
+        public async Task Add()
         {
             await AddService();
             TryClose(true);
@@ -523,16 +599,27 @@ namespace PSMDesktopUI.ViewModels
 
         public async Task LoadMembers()
         {
-            if (IsLoadingMembers || !_internetConnectionHelper.HasInternetConnection) return;
+            if (IsMemberLoading || !_internetConnectionHelper.HasInternetConnection) return;
 
-            IsLoadingMembers = true;
+            IsMemberLoading = true;
             List<MemberModel> memberList = await _memberEndpoint.GetAll();
 
-            IsLoadingMembers = false;
+            IsMemberLoading = false;
             Members = new BindingList<MemberModel>(memberList);
         }
 
-        public async Task AddService()
+        public async Task LoadSales()
+        {
+            if (IsSalesLoading || !_internetConnectionHelper.HasInternetConnection) return;
+
+            IsSalesLoading = true;
+            List<SalesModel> salesList = await _salesEndpoint.GetAll();
+
+            IsSalesLoading = false;
+            Sales = new BindingList<SalesModel>(salesList);
+        }
+
+        public async Task AddService(bool print = false)
         {
             string kelengkapan = "";
 
@@ -570,6 +657,7 @@ namespace PSMDesktopUI.ViewModels
                 Warna = Warna,
                 KataSandiPola = KataSandiPola,
                 TechnicianId = SelectedTechnician.Id,
+                SalesId = SalesId,
                 StatusServisan = SelectedStatus.Description(),
                 TanggalKonfirmasi = SudahKonfirmasi ? TanggalKonfirmasi : DateTime.MinValue,
                 IsiKonfirmasi = IsiKonfirmasi,

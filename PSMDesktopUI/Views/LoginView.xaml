@@ -2,6 +2,7 @@
     x:Class="PSMDesktopUI.Views.LoginView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="clr-namespace:CalcBinding;assembly=CalcBinding"
     xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
     xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
     xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
@@ -21,7 +22,7 @@
                                  FontSize="14" HorizontalAlignment="Center"
                                  Margin="0 0 15 0"
                                  Label="{Binding Path=ErrorMessage, Mode=OneWay}"
-                                 Visibility="{Binding Path=IsErrorMessageVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                 Visibility="{c:Binding Path=IsErrorMessageVisible}" />
 
                 <dxlc:LayoutItem Label="Username:" Margin="4">
                     <dxe:TextEdit x:Name="Username" Margin="10 0 0 0" Height="30"

@@ -17,6 +17,7 @@ namespace PSMDataManager.Controllers
         }
 
         [HttpPost]
+        [Route("api/Technician")]
         public IHttpActionResult Post(TechnicianModel technician)
         {
             TechnicianData data = new TechnicianData();
@@ -26,6 +27,7 @@ namespace PSMDataManager.Controllers
         }
 
         [HttpDelete]
+        [Route("api/Technician/{id}")]
         public IHttpActionResult Delete(int id)
         {
             TechnicianData data = new TechnicianData();

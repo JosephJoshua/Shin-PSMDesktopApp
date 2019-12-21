@@ -1,4 +1,5 @@
-﻿using PSMDesktopUI.Library.Models;
+﻿using PSMDesktopUI.Library.Helpers;
+using PSMDesktopUI.Library.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -10,24 +11,29 @@ namespace PSMDesktopUI.Library.Api
 {
     public class ApiHelper : IApiHelper
     {
+        public ILoggedInUserModel LoggedInUser { get; set; }
+
+        private readonly ISettingsHelper _settings;
+
         private HttpClient _apiClient { get; set; }
-        private ILoggedInUserModel _loggedInUser;
 
         public HttpClient ApiClient
         {
             get => _apiClient;
         }
 
-        public ApiHelper(ILoggedInUserModel loggedInUser)
+        public ApiHelper(ILoggedInUserModel loggedInUser, ISettingsHelper settings)
         {
+            _settings = settings;
+
             InitializeClient();
 
-            _loggedInUser = loggedInUser;
+            LoggedInUser = loggedInUser;
         }
 
         private void InitializeClient()
         {
-            string api = ConfigurationManager.AppSettings["api"];
+            string api = _settings.Get("apiUrl");
 
             _apiClient = new HttpClient
             {
@@ -75,11 +81,11 @@ namespace PSMDesktopUI.Library.Api
                 {
                     var result = await response.Content.ReadAsAsync<LoggedInUserModel>();
 
-                    _loggedInUser.Id = result.Id;
-                    _loggedInUser.Username = result.Username;
-                    _loggedInUser.EmailAddress = result.EmailAddress;
-                    _loggedInUser.Role = result.Role;
-                    _loggedInUser.Token = token;
+                    LoggedInUser.Id = result.Id;
+                    LoggedInUser.Username = result.Username;
+                    LoggedInUser.EmailAddress = result.EmailAddress;
+                    LoggedInUser.Role = result.Role;
+                    LoggedInUser.Token = token;
                 }
                 else
                 {

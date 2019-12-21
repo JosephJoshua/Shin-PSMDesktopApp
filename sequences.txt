@@ -1,0 +1,41 @@
+create sequence [dbo].[memberIdSequence]
+as int
+start with 1
+increment by 1
+no maxvalue
+no cache;
+
+create sequence [dbo].[technicianIdSequence]
+as int
+start with 1
+increment by 1
+no maxvalue
+no cache;
+
+create sequence [dbo].[salesIdSequence]
+as int
+start with 1
+increment by 1
+no maxvalue
+no cache;
+
+create sequence [dbo].[sparepartIdSequence]
+as int
+start with 1
+increment by 1
+no maxvalue
+no cache;
+
+create sequence [dbo].[damageIdSequence]
+as int
+start with 1
+increment by 1
+no maxvalue
+no cache;
+
+create sequence [dbo].[serviceIdSequence]
+as int
+start with 8880000
+increment by 1
+no maxvalue
+no cache;

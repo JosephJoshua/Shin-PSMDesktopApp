@@ -8,6 +8,14 @@ namespace PSMDataManager.Controllers
     public class SparepartController : ApiController
     {
         [HttpGet]
+        [Route("api/Sparepart")]
+        public List<SparepartModel> Get()
+        {
+            SparepartData data = new SparepartData();
+            return data.GetSpareparts();
+        }
+
+        [HttpGet]
         [Route("api/Sparepart/{nomorNota}")]
         public List<SparepartModel> GetByService(int nomorNota)
         {
@@ -16,6 +24,7 @@ namespace PSMDataManager.Controllers
         }
 
         [HttpPost]
+        [Route("api/Sparepart")]
         public IHttpActionResult Post(SparepartModel sparepart)
         {
             SparepartData data = new SparepartData();
@@ -25,6 +34,7 @@ namespace PSMDataManager.Controllers
         }
 
         [HttpDelete]
+        [Route("api/Sparepart/{id}")]
         public IHttpActionResult Delete(int id)
         {
             SparepartData data = new SparepartData();

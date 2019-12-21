@@ -18,5 +18,8 @@ namespace PSMDesktopUI.Library.Models
 
         [Description("Tidak jadi (Sudah diambil)")]
         TidakJadiSudahDiambil,
+
+        [Description("Pending")]
+        Pending,
     }
 }

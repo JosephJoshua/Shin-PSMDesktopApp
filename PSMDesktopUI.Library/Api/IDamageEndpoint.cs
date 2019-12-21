@@ -7,5 +7,9 @@ namespace PSMDesktopUI.Library.Api
     public interface IDamageEndpoint
     {
         Task<List<DamageModel>> GetAll();
+
+        Task Insert(DamageModel damage);
+
+        Task Delete(int id);
     }
 }

@@ -15,6 +15,22 @@ namespace PSMDesktopUI.Library.Api
             _apiHelper = apiHelper;
         }
 
+        public async Task<List<SparepartModel>> GetAll()
+        {
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/Sparepart").ConfigureAwait(false))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsAsync<List<SparepartModel>>();
+                    return result;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
         public async Task<List<SparepartModel>> GetByService(int nomorNota)
         {
             using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/Sparepart/" + nomorNota).ConfigureAwait(false))
@@ -38,7 +54,7 @@ namespace PSMDesktopUI.Library.Api
 
         public async Task Delete(int id)
         {
-            await _apiHelper.ApiClient.DeleteAsync("/api/Sparepart").ConfigureAwait(false);
+            await _apiHelper.ApiClient.DeleteAsync("/api/Sparepart/" + id).ConfigureAwait(false);
         }
     }
 }
