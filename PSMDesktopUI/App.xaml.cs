@@ -1,17 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Windows;
-using DevExpress.Xpf.Core;
+﻿using System.Windows;
+using System.Windows.Threading;
 
 namespace PSMDesktopUI
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App : Application
     {
+        public App()
+        {
+            Dispatcher.UnhandledException += OnDispatcherUnhandledException;
+        }
+
+        private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            #if DEBUG
+
+            e.Handled = false;
+
+            #else
+
+            e.Handled = true;
+
+            string errorMessage = "";
+
+            if (e.Exception.InnerException == null)
+            {
+                errorMessage = string.Format("An application error has occured: {0}", e.Exception.ToString());
+            }
+            else
+            {
+                errorMessage = string.Format("An application error has occured: {0} Inner exception: {1}", e.Exception.ToString(), e.Exception.InnerException.ToString());
+            }
+
+            MessageBox.Show(errorMessage, "Application error", MessageBoxButton.OK, MessageBoxImage.Error);
+
+            #endif
+        }
     }
 }

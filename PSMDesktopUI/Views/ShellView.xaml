@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
     mc:Ignorable="d"
     Style="{StaticResource WindowStyle}"
     ShowIcon="False"
@@ -12,10 +13,32 @@
     WindowStartupLocation="CenterScreen"
     WindowState="Maximized"
     Title="Service Manager"
-    Height="450" Width="800">
+    Height="450" Width="800"
+    Closing="Window_Closing">
 
     <Grid>
-        <TabControl Name="Items" SelectedIndex="0" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="40" />
+        </Grid.RowDefinitions>
+        
+        <TabControl Grid.Column="0" Grid.Row="0"
+                    Name="Items" SelectedIndex="0" />
+
+        <TextBlock Grid.Column="0" Grid.Row="1"
+                   Margin="20 5 0 0"
+                   VerticalAlignment="Center"
+                   Text="{Binding Path=InternetConnectionMessage}" />
+        
+        <Button x:Name="Recalculate"
+                    Grid.Column="0" Grid.Row="1"
+                    Style="{StaticResource MaterialDesignFlatButton}"
+                    Foreground="White"
+                    FontWeight="Normal"
+                    Margin="0 2 10 0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Content="Recalculate" />
     </Grid>
     
 </dx:ThemedWindow>

@@ -38,7 +38,7 @@ namespace PSMDesktopUI.ViewModels
         private bool _isMemoryChecked = false;
         private bool _isCondomChecked = false;
 
-        private DateTime _tanggalKonfirmasi = DateTime.Now;
+        private DateTime _tanggalKonfirmasi;
         private bool _sudahKonfirmasi = false;
 
         private BindingList<TechnicianModel> _technicians;
@@ -426,7 +426,7 @@ namespace PSMDesktopUI.ViewModels
             YangBelumDicek = service.YangBelumDicek;
             Warna = service.Warna;
             KataSandiPola = service.KataSandiPola;
-            SudahKonfirmasi = service.TanggalKonfirmasi == DateTime.MinValue;
+            SudahKonfirmasi = service.TanggalKonfirmasi != DateTime.MinValue;
             TanggalKonfirmasi = service.TanggalKonfirmasi;
             IsiKonfirmasi = service.IsiKonfirmasi;
             Biaya = (double)service.Biaya;

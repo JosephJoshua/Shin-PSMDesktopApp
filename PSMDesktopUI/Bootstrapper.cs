@@ -27,14 +27,16 @@ namespace PSMDesktopUI
                 .PerRequest<ITechnicianEndpoint, TechnicianEndpoint>()
                 .PerRequest<IServiceEndpoint, ServiceEndpoint>()
                 .PerRequest<ISparepartEndpoint, SparepartEndpoint>()
-                .PerRequest<IDamageEndpoint, DamageEndpoint>();
+                .PerRequest<IDamageEndpoint, DamageEndpoint>()
+                .PerRequest<ISalesEndpoint, SalesEndpoint>();
 
             _container
                 .Singleton<IWindowManager, WindowManager>()
                 .Singleton<IEventAggregator, EventAggregator>()
                 .Singleton<ILoggedInUserModel, LoggedInUserModel>()
                 .Singleton<IApiHelper, ApiHelper>()
-                .Singleton<IInternetConnectionHelper, InternetConnectionHelper>();
+                .Singleton<IInternetConnectionHelper, InternetConnectionHelper>()
+                .Singleton<ISettingsHelper, SettingsHelper>();
 
             GetType().Assembly.GetTypes()
                 .Where(type => type.IsClass)

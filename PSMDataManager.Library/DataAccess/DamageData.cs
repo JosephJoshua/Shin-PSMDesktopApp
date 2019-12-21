@@ -13,5 +13,21 @@ namespace PSMDataManager.Library.DataAccess
             var data = sql.LoadData<DamageModel, dynamic>("dbo.spGetAllDamages", new { }, "PSMData");
             return data;
         }
+
+        public void InsertDamage(DamageModel damage)
+        {
+            SqlDataAccess sql = new SqlDataAccess();
+            var p = new { damage.Kerusakan };
+
+            sql.SaveData<dynamic>("dbo.spInsertDamage", p, "PSMData");
+        }
+
+        public void DeleteDamage(int id)
+        {
+            SqlDataAccess sql = new SqlDataAccess();
+            var p = new { id };
+
+            sql.SaveData<dynamic>("dbo.spDeleteDamage", p, "PSMData");
+        }
     }
 }

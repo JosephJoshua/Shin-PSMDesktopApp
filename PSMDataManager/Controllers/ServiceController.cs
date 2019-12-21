@@ -48,21 +48,6 @@ namespace PSMDataManager.Controllers
         [HttpPut]
         public IHttpActionResult Put(ServiceModel service)
         {
-            if (service.NomorNota < 8880000)
-            {
-                return BadRequest("The field 'NomorNota' is not valid");
-            }
-
-            if (string.IsNullOrWhiteSpace(service.NamaPelanggan))
-            {
-                return BadRequest("The field 'NamaPelanggan' cannot be null");
-            }
-
-            if (string.IsNullOrWhiteSpace(service.TipeHp))
-            {
-                return BadRequest("The field 'TipeHp' cannot be null");
-            }
-
             if (service.TanggalKonfirmasi == DateTime.MinValue)
             {
                 service.TanggalKonfirmasi = new DateTime(1753, 1, 1, 0, 0, 0);

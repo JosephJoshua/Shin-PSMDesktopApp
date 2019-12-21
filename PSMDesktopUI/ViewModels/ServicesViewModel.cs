@@ -8,6 +8,8 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Linq;
+using System.Windows.Input;
+using System.Globalization;
 
 namespace PSMDesktopUI.ViewModels
 {
@@ -17,6 +19,7 @@ namespace PSMDesktopUI.ViewModels
         private readonly IInternetConnectionHelper _internetConnectionHelper;
         private readonly IServiceEndpoint _serviceEndpoint;
         private readonly ITechnicianEndpoint _technicianEndpoint;
+        private readonly ISalesEndpoint _salesEndpoint;
         private readonly IDamageEndpoint _damageEndpoint;
         private readonly ISparepartEndpoint _sparepartEndpoint;
 
@@ -26,6 +29,10 @@ namespace PSMDesktopUI.ViewModels
         private ServiceModel _selectedService;
 
         private SparepartModel _selectedSparepart;
+
+        private string _searchText;
+        private SearchType _searchTypes;
+        private SearchType _selectedSearchType;
 
         public delegate void OnRefreshEventHandler();
         public event OnRefreshEventHandler OnRefresh;
@@ -69,6 +76,7 @@ namespace PSMDesktopUI.ViewModels
                 NotifyOfPropertyChange(() => SelectedService);
                 NotifyOfPropertyChange(() => SelectedServiceTechnician);
                 NotifyOfPropertyChange(() => SelectedServiceDamage);
+                NotifyOfPropertyChange(() => SelectedServiceSales);
                 NotifyOfPropertyChange(() => CanAddSparepart);
                 NotifyOfPropertyChange(() => CanEditService);
                 NotifyOfPropertyChange(() => CanDeleteService);
@@ -84,6 +92,16 @@ namespace PSMDesktopUI.ViewModels
                 if (SelectedService == null) return null;
 
                 return _technicianEndpoint.GetAll().Result.Where((t) => t.Id == SelectedService.TechnicianId).FirstOrDefault().Nama;
+            }
+        }
+
+        public string SelectedServiceSales
+        {
+            get
+            {
+                if (SelectedService == null) return null;
+
+                return _salesEndpoint.GetAll().Result.Where((t) => t.Id == SelectedService.SalesId).FirstOrDefault().Nama;
             }
         }
 
@@ -107,6 +125,40 @@ namespace PSMDesktopUI.ViewModels
 
                 NotifyOfPropertyChange(() => SelectedSparepart);
                 NotifyOfPropertyChange(() => CanAddSparepart);
+                NotifyOfPropertyChange(() => CanDeleteSparepart);
+            }
+        }
+
+        public string SearchText
+        {
+            get => _searchText;
+
+            set
+            {
+                _searchText = value;
+                NotifyOfPropertyChange(() => SearchText);
+            }
+        }
+
+        public SearchType SearchTypes
+        {
+            get => _searchTypes;
+
+            set
+            {
+                _searchTypes = value;
+                NotifyOfPropertyChange(() => SearchTypes);
+            }
+        }
+
+        public SearchType SelectedSearchType
+        {
+            get => _selectedSearchType;
+
+            set
+            {
+                _selectedSearchType = value;
+                NotifyOfPropertyChange(() => SelectedSearchType);
             }
         }
 
@@ -129,6 +181,11 @@ namespace PSMDesktopUI.ViewModels
         {
             get => !IsLoading && SelectedService != null && _internetConnectionHelper.HasInternetConnection;
         }
+
+        public bool CanDeleteSparepart
+        {
+            get => !IsLoading && SelectedSparepart != null && _internetConnectionHelper.HasInternetConnection;
+        }
         
         public bool CanPrintService
         {
@@ -141,7 +198,7 @@ namespace PSMDesktopUI.ViewModels
         }
 
         public ServicesViewModel(IWindowManager windowManager, IInternetConnectionHelper internetConnectionHelper, IServiceEndpoint serviceEndpoint, ITechnicianEndpoint technicianEndpoint,
-                                 IDamageEndpoint damageEndpoint, ISparepartEndpoint sparepartEndpoint)
+                                 ISalesEndpoint salesEndpoint, IDamageEndpoint damageEndpoint, ISparepartEndpoint sparepartEndpoint)
         {
             DisplayName = "Services";
 
@@ -149,6 +206,7 @@ namespace PSMDesktopUI.ViewModels
             _internetConnectionHelper = internetConnectionHelper;
             _serviceEndpoint = serviceEndpoint;
             _technicianEndpoint = technicianEndpoint;
+            _salesEndpoint = salesEndpoint;
             _damageEndpoint = damageEndpoint;
             _sparepartEndpoint = sparepartEndpoint;
         }
@@ -158,6 +216,14 @@ namespace PSMDesktopUI.ViewModels
             base.OnViewLoaded(view);
 
             await LoadServices();
+        }
+
+        public async Task Search(KeyEventArgs args)
+        {
+            if ((args.Key == Key.Enter || args.Key == Key.Return) && !IsLoading)
+            {
+                await LoadServices();
+            }
         }
 
         public async Task AddService()
@@ -172,11 +238,14 @@ namespace PSMDesktopUI.ViewModels
 
         public async Task AddSparepart()
         {
+            int nomorNota = SelectedService != null ? SelectedService.NomorNota : SelectedSparepart.NomorNota;
+
             AddSparepartViewModel addSparepartVM = IoC.Get<AddSparepartViewModel>();
-            addSparepartVM.SetNomorNota(SelectedService != null ? SelectedService.NomorNota : SelectedSparepart.NomorNota);
+            addSparepartVM.SetNomorNota(nomorNota);
 
             if (_windowManager.ShowDialog(addSparepartVM) == true)
             {
+                await UpdateHargaSparepart(nomorNota);
                 await LoadServices();
             }
         }
@@ -201,26 +270,50 @@ namespace PSMDesktopUI.ViewModels
             }
         }
 
+        public async Task DeleteSparepart()
+        {
+            if (DXMessageBox.Show("Are you sure you want to delete this sparepart?", "Services", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                await _sparepartEndpoint.Delete(SelectedSparepart.Id);
+                await UpdateHargaSparepart(SelectedSparepart.NomorNota);
+                await LoadServices();
+            }
+        }
+
         public async Task LoadServices()
         {
             if (IsLoading || !_internetConnectionHelper.HasInternetConnection) return;
 
             IsLoading = true;
+
             List<ServiceModel> serviceList = await _serviceEndpoint.GetAll();
+            if (!string.IsNullOrWhiteSpace(SearchText))
+            {
+                string searchText = SearchText.ToLower();
+
+                switch (SelectedSearchType)
+                {
+                    case SearchType.NomorNota:
+                        serviceList = serviceList.Where((s) => s.NomorNota.ToString().ToLower().Contains(searchText)).ToList();
+                        break;
+
+                    case SearchType.NamaPelanggan:
+                        serviceList = serviceList.Where((s) => s.NamaPelanggan.ToLower().Contains(searchText)).ToList();
+                        break;
+
+                    case SearchType.NomorHp:
+                        serviceList = serviceList.Where((s) => s.NoHp.ToLower().Contains(searchText)).ToList();
+                        break;
+
+                    case SearchType.Status:
+                        serviceList = serviceList.Where((s) => s.StatusServisan.ToString().ToLower().Contains(searchText)).ToList();
+                        break;
+                }
+            }
 
             for (int i = 0; i < serviceList.Count; i++)
             {
-                // List<SparepartModel> spareparts = await _sparepartEndpoint.GetByService(serviceList[i].NomorNota);
-                // TODO: Replace with actual values
-                List<SparepartModel> spareparts = new List<SparepartModel>
-                {
-                    new SparepartModel { Id = 1, NomorNota = serviceList[i].NomorNota, Nama = "Test1", Harga = 10000 },
-                    new SparepartModel { Id = 2, NomorNota = serviceList[i].NomorNota, Nama = "Test2", Harga = 100000 },
-                    new SparepartModel { Id = 3, NomorNota = serviceList[i].NomorNota, Nama = "Test3", Harga = 1000 },
-                    new SparepartModel { Id = 4, NomorNota = serviceList[i].NomorNota, Nama = "Test4", Harga = 100020 },
-                    new SparepartModel { Id = 5, NomorNota = serviceList[i].NomorNota, Nama = "Test5", Harga = 100 },
-                };
-
+                List<SparepartModel> spareparts = await _sparepartEndpoint.GetByService(serviceList[i].NomorNota);
                 serviceList[i].Spareparts = spareparts;
             }
 
@@ -230,9 +323,70 @@ namespace PSMDesktopUI.ViewModels
             OnRefresh?.Invoke();
         }
 
-        public void PrintService()
+        public async Task PrintService()
         {
+            if (SelectedService == null) return;
 
+            string kerusakan = (await _damageEndpoint.GetAll()).Find(d => d.Id == SelectedService.DamageId).Kerusakan;
+            string kelengkapan = SelectedService.Kelengkapan.Trim().Replace(" ", ", ").ToLower();
+            kelengkapan = kelengkapan[0].ToString().ToUpper() + kelengkapan.Substring(1);
+
+            ServiceInvoicePreviewViewModel invoicePreviewVM = IoC.Get<ServiceInvoicePreviewViewModel>();
+            invoicePreviewVM.SetInvoiceModel(new ServiceInvoiceModel
+            {
+                NomorNota = SelectedService.NomorNota.ToString(),
+                NamaPelanggan = SelectedService.NamaPelanggan,
+                NoHp = SelectedService.NoHp,
+                TipeHp = SelectedService.TipeHp,
+                Imei = SelectedService.Imei,
+                Kerusakan = kerusakan,
+                TotalBiaya = SelectedService.TotalBiaya,
+                Dp = SelectedService.Dp,
+                Sisa = SelectedService.Sisa,
+                Kelengkapan = kelengkapan,
+                YangBelumDicek = SelectedService.YangBelumDicek,
+                Tanggal = SelectedService.Tanggal.ToString("f", DateTimeFormatInfo.InvariantInfo),
+            });
+
+            _windowManager.ShowDialog(invoicePreviewVM);
+        }
+
+        public async Task UpdateHargaSparepart(int nomorNota)
+        {
+            ServiceModel service = (await _serviceEndpoint.GetAll()).Where((s) => s.NomorNota == nomorNota).FirstOrDefault();
+
+            decimal hargaSparepart = 0;
+
+            foreach (SparepartModel s in await _sparepartEndpoint.GetByService(nomorNota))
+            {
+                hargaSparepart += s.Harga;
+            }
+
+            ServiceModel newService = new ServiceModel
+            {
+                NomorNota = service.NomorNota,
+                NamaPelanggan = service.NamaPelanggan,
+                NoHp = service.NoHp,
+                TipeHp = service.TipeHp,
+                Imei = service.Imei,
+                DamageId = service.DamageId,
+                YangBelumDicek = service.YangBelumDicek,
+                Kelengkapan = service.Kelengkapan,
+                Warna = service.Warna,
+                KataSandiPola = service.KataSandiPola,
+                TechnicianId = service.TechnicianId,
+                StatusServisan = service.StatusServisan,
+                TanggalKonfirmasi = service.TanggalKonfirmasi,
+                IsiKonfirmasi = service.IsiKonfirmasi,
+                Biaya = service.Biaya,
+                Discount = service.Discount,
+                Dp = service.Dp,
+                TambahanBiaya = service.TambahanBiaya,
+                HargaSparepart = hargaSparepart,
+                TanggalPengambilan = service.TanggalPengambilan,
+            };
+
+            await _serviceEndpoint.Update(newService);
         }
     }
 }

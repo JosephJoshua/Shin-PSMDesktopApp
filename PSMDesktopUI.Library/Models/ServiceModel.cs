@@ -29,6 +29,8 @@ namespace PSMDesktopUI.Library.Models
 
         public int TechnicianId { get; set; }
 
+        public int SalesId { get; set; }
+
         public string StatusServisan { get; set; }
 
         public DateTime TanggalKonfirmasi { get; set; }

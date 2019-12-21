@@ -1,0 +1,2 @@
+apiUrl: http://localhost:3030
+reportPath: Reports/ServiceInvoice.rpt

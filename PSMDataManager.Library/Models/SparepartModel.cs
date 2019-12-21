@@ -1,4 +1,6 @@
-﻿namespace PSMDataManager.Library.Models
+﻿using System;
+
+namespace PSMDataManager.Library.Models
 {
     public class SparepartModel
     {
@@ -9,5 +11,7 @@
         public string Nama { get; set; }
 
         public decimal Harga { get; set; }
+
+        public DateTime TanggalPembelian { get; set; }
     }
 }

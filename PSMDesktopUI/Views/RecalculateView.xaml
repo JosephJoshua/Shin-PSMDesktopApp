@@ -1,0 +1,19 @@
+﻿<dx:ThemedWindow
+    x:Class="PSMDesktopUI.Views.RecalculateView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    Style="{StaticResource WindowStyle}"
+    ShowTitle="False"
+    ShowIcon="False"
+    ShowInTaskbar="False"
+    ResizeMode="NoResize"
+    WindowStartupLocation="CenterOwner"
+    Height="100" Width="425">
+
+    <Grid>
+        <TextBlock Margin="20 10 20 10"
+                   FontSize="16"
+                   Text="{Binding Path=CurrentAction}" />
+    </Grid>
+</dx:ThemedWindow>

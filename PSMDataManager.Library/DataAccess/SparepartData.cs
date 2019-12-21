@@ -6,6 +6,14 @@ namespace PSMDataManager.Library.DataAccess
 {
     public class SparepartData
     {
+        public List<SparepartModel> GetSpareparts()
+        {
+            SqlDataAccess sql = new SqlDataAccess();
+
+            var data = sql.LoadData<SparepartModel, dynamic>("dbo.spGetAllSpareparts", new { }, "PSMData");
+            return data;
+        }
+
         public List<SparepartModel> GetSparepartsByService(int nomorNota)
         {
             SqlDataAccess sql = new SqlDataAccess();
@@ -18,7 +26,7 @@ namespace PSMDataManager.Library.DataAccess
         public void InsertSparepart(SparepartModel sparepart)
         {
             SqlDataAccess sql = new SqlDataAccess();
-            var p = new { sparepart.NomorNota, sparepart.Nama, sparepart.Harga };
+            var p = new { sparepart.NomorNota, sparepart.Nama, sparepart.Harga, sparepart.TanggalPembelian };
 
             sql.SaveData<dynamic>("dbo.spInsertSparepart", p, "PSMData");
         }

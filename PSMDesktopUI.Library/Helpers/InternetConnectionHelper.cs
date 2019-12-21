@@ -6,7 +6,6 @@ namespace PSMDesktopUI.Library.Helpers
 {
     public class InternetConnectionHelper : IInternetConnectionHelper
     {
-
         private bool _hasInternetConnection;
 
         public event EventHandler InternetConnectionAvailabilityChanged;

@@ -18,6 +18,58 @@
     Height="530" Width="1025">
 
     <Grid>
+        <!-- Sales table grid -->
+        <Grid Visibility="{c:Binding Path=ShowSalesGrid}" Panel.ZIndex="11">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!-- Progress bar -->
+            <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
+                         Grid.Column="0" Grid.Row="1"
+                         Grid.ColumnSpan="2"
+                         Width="40"
+                         Height="40"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"
+                         Value="0"  
+                         IsIndeterminate="True"
+                         Visibility="{c:Binding Path=IsSalesLoading}" />
+
+            <!-- Sales data grid -->
+            <dxg:GridControl Grid.Column="0" Grid.Row="1"
+                             Grid.ColumnSpan="2"
+                             Margin="0 10 0 0"
+                             SelectionMode="Row"
+                             CurrentItem="{Binding Path=SelectedSales}"
+                             ItemsSource="{Binding Path=Sales}"
+                             Visibility="{c:Binding Path=!IsSalesLoading}">
+
+                <dxg:GridColumn Header="Id" Width="*" Binding="{Binding Path=Id}">
+                    <dxg:GridColumn.EditSettings>
+                        <dxe:TextEditSettings HorizontalContentAlignment="Left" />
+                    </dxg:GridColumn.EditSettings>
+                </dxg:GridColumn>
+
+                <dxg:GridColumn Header="Nama" Width="3*" Binding="{Binding Path=Nama}" />
+
+            </dxg:GridControl>
+
+            <!-- OK button -->
+            <Button Grid.Column="0" Grid.Row="1"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    Margin="20"
+                    ToolTip="OK"
+                    Background="{DynamicResource PrimaryHueMidBrush}"
+                    Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                    IsEnabled="{Binding Path=HasSelectedSales}"
+                    cal:Message.Attach="[Event Click] = [Action ConfirmSales]"
+                    Content="OK" />
+
+        </Grid>
+
         <!-- Member/Non-member buttons -->
         <Grid Width="260" Height="50" Panel.ZIndex="10" Visibility="{c:Binding Path=ShowMemberButtons}">
             <Grid.ColumnDefinitions>
@@ -54,16 +106,16 @@
                          VerticalAlignment="Center"
                          Value="0"  
                          IsIndeterminate="True"
-                         Visibility="{c:Binding Path=IsLoading}" />
+                         Visibility="{c:Binding Path=IsMemberLoading}" />
 
-            <!-- Data grid -->
+            <!-- Member data grid -->
             <dxg:GridControl Grid.Column="0" Grid.Row="1"
                              Grid.ColumnSpan="2"
                              Margin="0 10 0 0"
                              SelectionMode="Row"
                              CurrentItem="{Binding Path=SelectedMember}"
                              ItemsSource="{Binding Path=Members}"
-                             Visibility="{c:Binding Path=!IsLoading}">
+                             Visibility="{c:Binding Path=!IsMemberLoading}">
 
                 <dxg:GridColumn Header="Id" Width="*" Binding="{Binding Path=Id}">
                     <dxg:GridColumn.EditSettings>
@@ -81,18 +133,18 @@
                 <dxg:GridColumn Header="Tipe HP 5" Width="2*" Binding="{Binding Path=TipeHp5}" />
 
             </dxg:GridControl>
-            
+
             <!-- OK button -->
-            <Button Grid.Column="0" Grid.Row="1"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Bottom"
-                    Margin="20"
-                    ToolTip="OK"
-                    Background="{DynamicResource PrimaryHueMidBrush}"
-                    Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
-                    IsEnabled="{Binding Path=HasSelectedMember}"
-                    cal:Message.Attach="[Event Click] = [Action ConfirmMember]"
-                    Content="OK" />
+            <dx:SimpleButton Grid.Column="0" Grid.Row="1"
+                             HorizontalAlignment="Right"
+                             VerticalAlignment="Bottom"
+                             Margin="20"
+                             ToolTip="OK"
+                             Background="{DynamicResource PrimaryHueMidBrush}"
+                             Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                             IsEnabled="{Binding Path=HasSelectedMember}"
+                             cal:Message.Attach="[Event Click] = [Action ConfirmMember]"
+                             Content="OK" /> 
 
         </Grid>
 
@@ -243,11 +295,6 @@
             <dxlc:LayoutGroup Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 10 0 0">
                 <dx:SimpleButton x:Name="Add"
                                  Content="Add" Height="35" MinWidth="100"
-                                 FontSize="15" Margin="0 0 5 0"
-                                 Visibility="{c:Binding Path=ShowTextFields}" />
-
-                <dx:SimpleButton x:Name="Print"
-                                 Content="Print" Height="35" MinWidth="100"
                                  FontSize="15" Margin="0 0 5 0"
                                  Visibility="{c:Binding Path=ShowTextFields}" />
 

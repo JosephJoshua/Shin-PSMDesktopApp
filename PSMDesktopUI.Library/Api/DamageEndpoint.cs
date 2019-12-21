@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
+using System.Web.Script.Serialization;
 
 namespace PSMDesktopUI.Library.Api
 {
@@ -29,6 +31,16 @@ namespace PSMDesktopUI.Library.Api
                     throw new Exception(response.ReasonPhrase);
                 }
             }
+        }
+
+        public async Task Insert(DamageModel damage)
+        {
+            await _apiHelper.ApiClient.PostAsJsonAsync("/api/Damage", damage).ConfigureAwait(false);
+        }
+
+        public async Task Delete(int id)
+        {
+            await _apiHelper.ApiClient.DeleteAsync("/api/Damage/" + id).ConfigureAwait(false);
         }
     }
 }
