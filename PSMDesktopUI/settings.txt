@@ -1,2 +1,2 @@
-apiUrl: http://localhost:61177
+apiUrl: http://192.168.5.37:8080
 reportPath: Reports/ServiceInvoice.rpt

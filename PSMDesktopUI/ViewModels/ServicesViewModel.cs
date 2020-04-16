@@ -327,9 +327,9 @@ namespace PSMDesktopUI.ViewModels
                 }
             }
 
-            IsLoading = false;
             Services = new BindableCollection<ServiceModel>(serviceList);
-            
+            IsLoading = false;
+
             OnRefresh?.Invoke();
         }
 
