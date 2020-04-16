@@ -23,7 +23,7 @@ namespace PSMDesktopUI.ViewModels
         private DateTime _startDate = DateTime.Today;
         private DateTime _endDate = DateTime.Today;
 
-        public BindingList<SparepartModel> Spareparts
+        public BindableCollection<SparepartModel> Spareparts
         {
             get => _spareparts;
 
