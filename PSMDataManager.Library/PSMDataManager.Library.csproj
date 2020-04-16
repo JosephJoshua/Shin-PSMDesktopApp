@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DapperConfig.cs" />
     <Compile Include="DataAccess\DamageData.cs" />
     <Compile Include="DataAccess\MemberData.cs" />
     <Compile Include="DataAccess\SalesData.cs" />

@@ -18,7 +18,7 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="5*" />
+            <ColumnDefinition Width="3*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
@@ -48,6 +48,9 @@
         <dxe:DateEdit Grid.Column="1" Grid.Row="1"
                       MinWidth="150"
                       VerticalAlignment="Center"
+                      MaskType="DateTime"
+                      Mask="dd/MM/yyyy"
+                      MaskUseAsDisplayFormat="True"
                       DateTime="{Binding StartDate}" />
 
         <TextBlock Grid.Column="2" Grid.Row="1"
@@ -60,6 +63,9 @@
         <dxe:DateEdit Grid.Column="3" Grid.Row="1"
                       MinWidth="150"
                       VerticalAlignment="Center"
+                      MaskType="DateTime"
+                      Mask="dd/MM/yyyy"
+                      MaskUseAsDisplayFormat="True"
                       DateTime="{Binding EndDate}" />
 
         <!-- Data grid -->
@@ -122,7 +128,15 @@
                     Margin="10 10 0 10"
                     VerticalAlignment="Bottom"
                     Visibility="{c:Binding Path=ShowInfo, FalseToVisibility=Hidden}">
-            <TextBlock FontSize="16" Text="{Binding Path=TotalRevenue, StringFormat=Total: Rp{0}}" />
+            <TextBlock FontSize="16" Text="{Binding Path=TotalRevenue, StringFormat=Total biaya: Rp{0:N0}}"
+                       TextWrapping="Wrap" />
+            
+            <TextBlock FontSize="16" Text="{Binding Path=TotalCost, StringFormat=Total pengeluaran: Rp{0:N0}}"
+                       TextWrapping="Wrap" Margin="0 5 0 0" />
+            
+            <TextBlock FontSize="16" Text="{Binding Path=TotalProfit, StringFormat=Total laba/rugi: Rp{0:N0}}"
+                       TextWrapping="Wrap" Margin="0 5 0 0" />
+            
             <dx:SimpleButton x:Name="ExportToExcel" 
                              Content="Export" FontSize="16"
                              HorizontalAlignment="Left"

@@ -13,6 +13,9 @@ namespace PSMDesktopUI.Library.Models
         [Description("Nomor Hp")]
         NomorHp,
 
+        [Description("Tipe Hp")]
+        TipeHp,
+
         [Description("Status")]
         Status,
     }

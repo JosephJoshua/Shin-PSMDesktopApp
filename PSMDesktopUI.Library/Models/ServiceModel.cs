@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace PSMDesktopUI.Library.Models
 {
-    public class ServiceModel
+    public class ServiceModel : INotifyPropertyChanged
     {
         public int NomorNota { get; set; }
 
@@ -18,6 +19,8 @@ namespace PSMDesktopUI.Library.Models
         public string Imei { get; set; }
 
         public int DamageId { get; set; }
+
+        public string KondisiHp { get; set; }
 
         public string YangBelumDicek { get; set; }
 
@@ -55,6 +58,23 @@ namespace PSMDesktopUI.Library.Models
 
         public DateTime TanggalPengambilan { get; set; }
 
-        public ICollection<SparepartModel> Spareparts { get; set; }
+        public ICollection<SparepartModel> Spareparts
+        {
+            get => _spareparts;
+            set
+            {
+                _spareparts = value;
+                NotifyPropertyChanged(nameof(Spareparts));
+            }
+        }
+
+        private ICollection<SparepartModel> _spareparts;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged(string property)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
+        }
     }
 }

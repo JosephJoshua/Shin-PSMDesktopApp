@@ -1,7 +1,6 @@
 ﻿using Caliburn.Micro;
 using DevExpress.Xpf.Core;
 using PSMDesktopUI.Library.Api;
-using PSMDesktopUI.Library.Helpers;
 using PSMDesktopUI.Library.Models;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,12 +12,11 @@ namespace PSMDesktopUI.ViewModels
     public sealed class DamagesViewModel : Screen
     {
         private readonly IWindowManager _windowManager;
-        private readonly IInternetConnectionHelper _internetConnectionHelper;
         private readonly IDamageEndpoint _damageEndpoint;
 
         private bool _isLoading = false;
 
-        private BindingList<DamageModel> _damages;
+        private BindableCollection<DamageModel> _damages;
         private DamageModel _selectedDamage;
 
         public bool IsLoading
@@ -35,7 +33,7 @@ namespace PSMDesktopUI.ViewModels
             }
         }
 
-        public BindingList<DamageModel> Damages
+        public BindableCollection<DamageModel> Damages
         {
             get => _damages;
 
@@ -62,20 +60,19 @@ namespace PSMDesktopUI.ViewModels
 
         public bool CanAddDamage
         {
-            get => !IsLoading && _internetConnectionHelper.HasInternetConnection;
+            get => !IsLoading;
         }
 
         public bool CanDeleteDamage
         {
-            get => !IsLoading && SelectedDamage != null && _internetConnectionHelper.HasInternetConnection;
+            get => !IsLoading && SelectedDamage != null;
         }
 
-        public DamagesViewModel(IWindowManager windowManager, IInternetConnectionHelper internetConnectionHelper, IDamageEndpoint damageEndpoint)
+        public DamagesViewModel(IWindowManager windowManager, IDamageEndpoint damageEndpoint)
         {
             DisplayName = "Damages";
 
             _windowManager = windowManager;
-            _internetConnectionHelper = internetConnectionHelper;
             _damageEndpoint = damageEndpoint;
         }
 
@@ -104,13 +101,13 @@ namespace PSMDesktopUI.ViewModels
 
         public async Task LoadDamages()
         {
-            if (IsLoading || !_internetConnectionHelper.HasInternetConnection) return;
+            if (IsLoading) return;
 
             IsLoading = true;
             List<DamageModel> damageList = await _damageEndpoint.GetAll();
 
             IsLoading = false;
-            Damages = new BindingList<DamageModel>(damageList);
+            Damages = new BindableCollection<DamageModel>(damageList);
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Caliburn.Micro;
 using DevExpress.Xpf.Core;
 using PSMDesktopUI.Library.Api;
-using PSMDesktopUI.Library.Helpers;
 using PSMDesktopUI.Library.Models;
 using System;
 using System.Collections.Generic;
@@ -16,17 +15,16 @@ namespace PSMDesktopUI.ViewModels
 {
     public sealed class ProfitReportViewModel : Screen
     {
-        private readonly IInternetConnectionHelper _internetConnectionHelper;
         private readonly IServiceEndpoint _serviceEndpoint;
         private readonly IDamageEndpoint _damageEndpoint;
 
         private bool _isLoading = false;
-        private BindingList<ProfitResultModel> _profitResults;
+        private BindableCollection<ProfitResultModel> _profitResults;
 
         private DateTime _startDate = DateTime.Today;
         private DateTime _endDate = DateTime.Today;
 
-        public BindingList<ProfitResultModel> ProfitResults
+        public BindableCollection<ProfitResultModel> ProfitResults
         {
             get => _profitResults;
 
@@ -36,6 +34,8 @@ namespace PSMDesktopUI.ViewModels
 
                 NotifyOfPropertyChange(() => ProfitResults);
                 NotifyOfPropertyChange(() => TotalRevenue);
+                NotifyOfPropertyChange(() => TotalCost);
+                NotifyOfPropertyChange(() => TotalProfit);
                 NotifyOfPropertyChange(() => ShowInfo);
             }
         }
@@ -81,19 +81,28 @@ namespace PSMDesktopUI.ViewModels
         {
             get => ProfitResults != null && ProfitResults.Count > 0;
         }
-
+        
         public decimal TotalRevenue
+        {
+            get => ProfitResults.Sum(t => t.Biaya);
+        }
+
+        public decimal TotalCost
+        {
+            get => ProfitResults.Sum(t => t.HargaSparepart);
+        }
+
+        public decimal TotalProfit
         {
             get => ProfitResults.Sum(t => t.LabaRugi);
         }
 
-        public ProfitReportViewModel(IInternetConnectionHelper internetConnectionHelper, IServiceEndpoint serviceEndpoint, IDamageEndpoint damageEndpoint)
+        public ProfitReportViewModel(IServiceEndpoint serviceEndpoint, IDamageEndpoint damageEndpoint)
         {
             DisplayName = "Profit Report";
 
             _serviceEndpoint = serviceEndpoint;
             _damageEndpoint = damageEndpoint;
-            _internetConnectionHelper = internetConnectionHelper;
         }
 
         protected override async void OnViewLoaded(object view)
@@ -139,15 +148,27 @@ namespace PSMDesktopUI.ViewModels
                 xlWorksheet.Cells[i + 2, 6] = ProfitResults[i].HargaSparepart;
                 xlWorksheet.Cells[i + 2, 7] = ProfitResults[i].LabaRugi;
 
-                ((Excel.Range)xlWorksheet.Cells[i + 2, 5]).NumberFormat = "Rp#,##0.00";
-                ((Excel.Range)xlWorksheet.Cells[i + 2, 6]).NumberFormat = "Rp#,##0.00";
+                ((Excel.Range)xlWorksheet.Cells[i + 2, 5]).NumberFormat = "Rp#,##0";
+                ((Excel.Range)xlWorksheet.Cells[i + 2, 6]).NumberFormat = "Rp#,##0";
             }
 
             // Total revenue
-            xlWorksheet.Cells[ProfitResults.Count + 2, 1] = "Total:";
+            xlWorksheet.Cells[ProfitResults.Count + 2, 1] = "Total biaya:";
             xlWorksheet.Cells[ProfitResults.Count + 2, 7] = TotalRevenue.ToString();
 
-            ((Excel.Range)xlWorksheet.Cells[ProfitResults.Count + 2, 7]).NumberFormat = "Rp#,##0.00";
+            ((Excel.Range)xlWorksheet.Cells[ProfitResults.Count + 2, 7]).NumberFormat = "Rp#,##0";
+
+            // Total cost
+            xlWorksheet.Cells[ProfitResults.Count + 3, 1] = "Total harga sparepart:";
+            xlWorksheet.Cells[ProfitResults.Count + 3, 7] = TotalCost.ToString();
+
+            ((Excel.Range)xlWorksheet.Cells[ProfitResults.Count + 3, 7]).NumberFormat = "Rp#,##0";
+
+            // Total profit
+            xlWorksheet.Cells[ProfitResults.Count + 4, 1] = "Total laba/rugi:";
+            xlWorksheet.Cells[ProfitResults.Count + 4, 7] = TotalProfit.ToString();
+
+            ((Excel.Range)xlWorksheet.Cells[ProfitResults.Count + 4, 7]).NumberFormat = "Rp#,##0";
 
             xlWorksheet.Columns.AutoFit();
 
@@ -167,7 +188,7 @@ namespace PSMDesktopUI.ViewModels
 
         public async Task LoadResults()
         {
-            if (IsLoading || !_internetConnectionHelper.HasInternetConnection) return;
+            if (IsLoading) return;
 
             IsLoading = true;
 
@@ -190,14 +211,14 @@ namespace PSMDesktopUI.ViewModels
 
             foreach (ProfitResultModel result in resultList)
             {
-                if (result.TanggalPengambilan >= StartDate && result.TanggalPengambilan <= EndDate)
+                if (result.TanggalPengambilan.Date >= StartDate.Date && result.TanggalPengambilan.Date <= EndDate.Date)
                 {
                     filteredResultList.Add(result);
                 }
             }
 
             IsLoading = false;
-            ProfitResults = new BindingList<ProfitResultModel>(filteredResultList);
+            ProfitResults = new BindableCollection<ProfitResultModel>(filteredResultList);
         }
     }
 }

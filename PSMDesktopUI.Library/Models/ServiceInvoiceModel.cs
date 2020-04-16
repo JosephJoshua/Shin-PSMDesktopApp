@@ -24,6 +24,8 @@ namespace PSMDesktopUI.Library.Models
 
         public string Kelengkapan { get; set; }
 
+        public string KondisiHp { get; set; }
+
         public string YangBelumDicek { get; set; }
 
         public string Tanggal { get; set; }

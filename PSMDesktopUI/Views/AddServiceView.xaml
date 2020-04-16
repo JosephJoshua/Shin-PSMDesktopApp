@@ -57,16 +57,18 @@
             </dxg:GridControl>
 
             <!-- OK button -->
-            <Button Grid.Column="0" Grid.Row="1"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Bottom"
-                    Margin="20"
-                    ToolTip="OK"
-                    Background="{DynamicResource PrimaryHueMidBrush}"
-                    Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
-                    IsEnabled="{Binding Path=HasSelectedSales}"
-                    cal:Message.Attach="[Event Click] = [Action ConfirmSales]"
-                    Content="OK" />
+            <dx:SimpleButton Grid.Column="0" Grid.Row="1"
+                             HorizontalAlignment="Right"
+                             VerticalAlignment="Bottom"
+                             Margin="20"
+                             Padding="5"
+                             MinWidth="70"
+                             ToolTip="OK"
+                             Background="{DynamicResource PrimaryHueMidBrush}"
+                             Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                             IsEnabled="{Binding Path=HasSelectedSales}"
+                             cal:Message.Attach="[Event Click] = [Action ConfirmSales]"
+                             Content="OK" />
 
         </Grid>
 
@@ -139,6 +141,8 @@
                              HorizontalAlignment="Right"
                              VerticalAlignment="Bottom"
                              Margin="20"
+                             Padding="5"
+                             MinWidth="70"
                              ToolTip="OK"
                              Background="{DynamicResource PrimaryHueMidBrush}"
                              Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
@@ -154,22 +158,26 @@
                 <dxlc:LayoutGroup Orientation="Vertical" ItemSpace="4">
                     <dxlc:LayoutItem Label="Nama Pelanggan:" Margin="4">
                         <dxe:TextEdit x:Name="NamaPelanggan" Margin="10 0 0 0" Height="30"
+                                      AllowNullInput="False"
                                       IsReadOnly="{Binding Path=MemberIsCustomer}"
                                       Text="{Binding Path=NamaPelanggan, UpdateSourceTrigger=PropertyChanged}" />
                     </dxlc:LayoutItem>
 
                     <dxlc:LayoutItem Label="No Hp:" Margin="4">
                         <dxe:TextEdit x:Name="NoHp" Margin="10 0 0 0" Height="30"
+                                      AllowNullInput="False"
                                       Text="{Binding Path=NoHp, UpdateSourceTrigger=PropertyChanged}" />
                     </dxlc:LayoutItem>
 
                     <dxlc:LayoutItem Label="Tipe Hp:" Margin="4">
                         <dxe:TextEdit x:Name="TipeHp" Margin="10 0 0 0" Height="30"
+                                      AllowNullInput="False"
                                       Text="{Binding Path=TipeHp, UpdateSourceTrigger=PropertyChanged}" />
                     </dxlc:LayoutItem>
 
                     <dxlc:LayoutItem Label="Imei:" Margin="4">
                         <dxe:TextEdit x:Name="Imei" Margin="10 0 0 0" Height="30"
+                                      AllowNullInput="False"
                                       Text="{Binding Path=Imei, UpdateSourceTrigger=PropertyChanged}" />
                     </dxlc:LayoutItem>
 
@@ -183,6 +191,7 @@
 
                     <dxlc:LayoutItem Label="Yang Belum Dicek:" Margin="4">
                         <dxe:TextEdit x:Name="YangBelumDicek" Margin="10 0 0 0" Height="30"
+                                      AllowNullInput="False"
                                       Text="{Binding Path=YangBelumDicek, UpdateSourceTrigger=PropertyChanged}" />
                     </dxlc:LayoutItem>
 
@@ -206,11 +215,13 @@
 
                     <dxlc:LayoutItem Label="Warna:" Margin="4">
                         <dxe:TextEdit x:Name="Warna" Margin="10 0 0 0" Height="30"
+                                      AllowNullInput="False"
                                       Text="{Binding Path=Warna, UpdateSourceTrigger=PropertyChanged}" />
                     </dxlc:LayoutItem>
 
                     <dxlc:LayoutItem Label="Kata Sandi/Pola:" Margin="4">
                         <dxe:TextEdit x:Name="KataSandiPola" Margin="10 0 0 0" Height="30"
+                                      AllowNullInput="False"
                                       Text="{Binding Path=KataSandiPola, UpdateSourceTrigger=PropertyChanged}" />
                     </dxlc:LayoutItem>
 
@@ -224,6 +235,12 @@
                 </dxlc:LayoutGroup>
 
                 <dxlc:LayoutGroup Orientation="Vertical" ItemSpace="4">
+                    <dxlc:LayoutItem Label="Kondisi Hp:" Margin="4">
+                        <dxe:TextEdit x:Name="KondisiHp" Margin="10 0 0 0" Height="30"
+                                      AllowNullInput="False"
+                                      Text="{Binding Path=KondisiHp, UpdateSourceTrigger=PropertyChanged}" />
+                    </dxlc:LayoutItem>
+                    
                     <dxlc:LayoutItem Label="Status:" Margin="4">
                         <dxe:ComboBoxEdit 
                             Height="30" Margin="10 0 0 0"
@@ -248,6 +265,7 @@
 
                     <dxlc:LayoutItem Label="Isi Konfirmasi:" Margin="4">
                         <dxe:TextEdit x:Name="IsiKonfirmasi" Margin="10 0 0 0" Height="30"
+                                      AllowNullInput="False"
                                       IsEnabled="{Binding Path=SudahKonfirmasi, Mode=OneWay}"
                                       Text="{Binding Path=IsiKonfirmasi, UpdateSourceTrigger=PropertyChanged}" />
                     </dxlc:LayoutItem>
@@ -282,12 +300,6 @@
                         <dxe:TextEdit x:Name="Sisa" Margin="10 0 0 0" Height="30"
                                       IsReadOnly="True"
                                       Text="{Binding Path=Sisa, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
-                    </dxlc:LayoutItem>
-
-                    <dxlc:LayoutItem Label="Laba/Rugi:" Margin="4">
-                        <dxe:TextEdit x:Name="LabaRugi" Margin="10 0 0 0" Height="30"
-                                      IsReadOnly="True"
-                                      Text="{Binding Path=LabaRugi, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
                     </dxlc:LayoutItem>
                 </dxlc:LayoutGroup>
             </dxlc:LayoutGroup>
