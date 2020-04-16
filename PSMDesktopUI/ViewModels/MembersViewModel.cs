@@ -1,10 +1,8 @@
 ﻿using Caliburn.Micro;
 using DevExpress.Xpf.Core;
 using PSMDesktopUI.Library.Api;
-using PSMDesktopUI.Library.Helpers;
 using PSMDesktopUI.Library.Models;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -13,12 +11,11 @@ namespace PSMDesktopUI.ViewModels
     public sealed class MembersViewModel : Screen
     {
         private readonly IWindowManager _windowManager;
-        private readonly IInternetConnectionHelper _internetConnectionHelper;
         private readonly IMemberEndpoint _memberEndpoint;
 
         private bool _isLoading = false;
 
-        private BindingList<MemberModel> _members;
+        private BindableCollection<MemberModel> _members;
         private MemberModel _selectedMember;
 
         public bool IsLoading
@@ -36,7 +33,7 @@ namespace PSMDesktopUI.ViewModels
             }
         }
 
-        public BindingList<MemberModel> Members
+        public BindableCollection<MemberModel> Members
         {
             get => _members;
 
@@ -63,25 +60,24 @@ namespace PSMDesktopUI.ViewModels
 
         public bool CanAddMember
         {
-            get => !IsLoading && _internetConnectionHelper.HasInternetConnection;
+            get => !IsLoading;
         }
 
         public bool CanEditMember
         {
-            get => !IsLoading && SelectedMember != null && _internetConnectionHelper.HasInternetConnection;
+            get => !IsLoading && SelectedMember != null;
         }
 
         public bool CanDeleteMember
         {
-            get => !IsLoading && SelectedMember != null && _internetConnectionHelper.HasInternetConnection;
+            get => !IsLoading && SelectedMember != null;
         }
 
-        public MembersViewModel(IWindowManager windowManager, IInternetConnectionHelper internetConnectionHelper, IMemberEndpoint memberEndpoint)
+        public MembersViewModel(IWindowManager windowManager, IMemberEndpoint memberEndpoint)
         {
             DisplayName = "Members";
 
             _windowManager = windowManager;
-            _internetConnectionHelper = internetConnectionHelper;
             _memberEndpoint = memberEndpoint;
         }
 
@@ -124,13 +120,13 @@ namespace PSMDesktopUI.ViewModels
 
         public async Task LoadMembers()
         {
-            if (IsLoading || !_internetConnectionHelper.HasInternetConnection) return;
+            if (IsLoading) return;
 
             IsLoading = true;
             List<MemberModel> memberList = await _memberEndpoint.GetAll();
 
             IsLoading = false;
-            Members = new BindingList<MemberModel>(memberList);
+            Members = new BindableCollection<MemberModel>(memberList);
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Caliburn.Micro;
 using DevExpress.Xpf.Core;
 using PSMDesktopUI.Library.Api;
-using PSMDesktopUI.Library.Helpers;
 using PSMDesktopUI.Library.Models;
 using System;
 using System.Collections.Generic;
@@ -17,10 +16,9 @@ namespace PSMDesktopUI.ViewModels
     public sealed class SparepartReportViewModel : Screen
     {
         private readonly ISparepartEndpoint _sparepartEndpoint;
-        private readonly IInternetConnectionHelper _internetConnectionHelper;
 
         private bool _isLoading = false;
-        private BindingList<SparepartModel> _spareparts;
+        private BindableCollection<SparepartModel> _spareparts;
 
         private DateTime _startDate = DateTime.Today;
         private DateTime _endDate = DateTime.Today;
@@ -86,12 +84,11 @@ namespace PSMDesktopUI.ViewModels
             get => Spareparts.Sum(t => t.Harga);
         }
 
-        public SparepartReportViewModel(ISparepartEndpoint sparepartEndpoint, IInternetConnectionHelper internetConnectionHelper)
+        public SparepartReportViewModel(ISparepartEndpoint sparepartEndpoint)
         {
             DisplayName = "Sparepart Report";
 
             _sparepartEndpoint = sparepartEndpoint;
-            _internetConnectionHelper = internetConnectionHelper;
         }
 
         protected override async void OnViewLoaded(object view)
@@ -160,7 +157,7 @@ namespace PSMDesktopUI.ViewModels
 
         public async Task LoadSpareparts()
         {
-            if (IsLoading || !_internetConnectionHelper.HasInternetConnection) return;
+            if (IsLoading) return;
 
             IsLoading = true;
             List<SparepartModel> sparepartList = await _sparepartEndpoint.GetAll();
@@ -168,14 +165,14 @@ namespace PSMDesktopUI.ViewModels
 
             foreach (SparepartModel sparepart in sparepartList)
             {
-                if (sparepart.TanggalPembelian >= StartDate && sparepart.TanggalPembelian <= EndDate)
+                if (sparepart.TanggalPembelian.Date >= StartDate.Date && sparepart.TanggalPembelian.Date <= EndDate.Date)
                 {
                     filteredList.Add(sparepart);
                 }
             }
 
             IsLoading = false;
-            Spareparts = new BindingList<SparepartModel>(filteredList);
+            Spareparts = new BindableCollection<SparepartModel>(filteredList);
         }
     }
 }

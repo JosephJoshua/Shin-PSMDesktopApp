@@ -16,7 +16,6 @@ namespace PSMDesktopUI.ViewModels
         private string _errorMessage;
 
         private readonly IApiHelper _apiHelper;
-        private readonly IInternetConnectionHelper _internetConnectionHelper;
 
         public string Username
         {
@@ -67,19 +66,13 @@ namespace PSMDesktopUI.ViewModels
             get => !string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password);
         }
 
-        public LoginViewModel(IApiHelper apiHelper, IInternetConnectionHelper internetConnectionHelper)
+        public LoginViewModel(IApiHelper apiHelper)
         {
             _apiHelper = apiHelper;
-            _internetConnectionHelper = internetConnectionHelper;
         }
 
         public async Task Login()
         {
-            if (!_internetConnectionHelper.HasInternetConnection)
-            {
-                ErrorMessage = "No internet connection";
-            }
-
             Application.Current.Dispatcher.Invoke(() => Mouse.OverrideCursor = Cursors.Wait);
 
             try

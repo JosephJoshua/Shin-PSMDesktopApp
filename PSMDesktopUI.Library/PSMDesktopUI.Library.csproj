@@ -64,8 +64,6 @@
     <Compile Include="Api\SparepartEndpoint.cs" />
     <Compile Include="Api\TechnicianEndpoint.cs" />
     <Compile Include="AppValues.cs" />
-    <Compile Include="Helpers\IInternetConnectionHelper.cs" />
-    <Compile Include="Helpers\InternetConnectionHelper.cs" />
     <Compile Include="Helpers\ISettingsHelper.cs" />
     <Compile Include="Helpers\SettingsHelper.cs" />
     <Compile Include="Models\AuthenticatedUser.cs" />

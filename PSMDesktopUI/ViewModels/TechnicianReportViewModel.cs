@@ -1,7 +1,6 @@
 ﻿using Caliburn.Micro;
 using DevExpress.Xpf.Core;
 using PSMDesktopUI.Library.Api;
-using PSMDesktopUI.Library.Helpers;
 using PSMDesktopUI.Library.Models;
 using System;
 using System.Collections.Generic;
@@ -16,15 +15,14 @@ namespace PSMDesktopUI.ViewModels
 {
     public sealed class TechnicianReportViewModel : Screen
     {
-        private readonly IInternetConnectionHelper _internetConnectionHelper;
         private readonly IServiceEndpoint _serviceEndpoint;
         private readonly IDamageEndpoint _damageEndpoint;
         private readonly ITechnicianEndpoint _technicianEndpoint;
 
         private bool _isLoading = false;
-        private BindingList<TechnicianResultModel> _technicianResults;
+        private BindableCollection<TechnicianResultModel> _technicianResults;
 
-        private BindingList<TechnicianModel> _technicians;
+        private BindableCollection<TechnicianModel> _technicians;
         private TechnicianModel _selectedTechnician;
 
         private DateTime _startDate = DateTime.Today;
@@ -32,7 +30,7 @@ namespace PSMDesktopUI.ViewModels
 
         private int _technicianRate;
 
-        public BindingList<TechnicianResultModel> TechnicianResults
+        public BindableCollection<TechnicianResultModel> TechnicianResults
         {
             get => _technicianResults;
 
@@ -43,6 +41,8 @@ namespace PSMDesktopUI.ViewModels
                 NotifyOfPropertyChange(() => TechnicianResults);
                 NotifyOfPropertyChange(() => ShowInfo);
                 NotifyOfPropertyChange(() => TotalRevenue);
+                NotifyOfPropertyChange(() => TotalCost);
+                NotifyOfPropertyChange(() => TotalProfit);
                 NotifyOfPropertyChange(() => Proceeds);;
             }
         }
@@ -84,7 +84,7 @@ namespace PSMDesktopUI.ViewModels
             }
         }
         
-        public BindingList<TechnicianModel> Technicians
+        public BindableCollection<TechnicianModel> Technicians
         {
             get => _technicians;
 
@@ -119,7 +119,7 @@ namespace PSMDesktopUI.ViewModels
                 _technicianRate = value;
 
                 NotifyOfPropertyChange(() => TechnicianRate);
-                NotifyOfPropertyChange(() => TotalRevenue);
+                NotifyOfPropertyChange(() => TotalProfit);
                 NotifyOfPropertyChange(() => Proceeds);
             }
         }
@@ -131,6 +131,16 @@ namespace PSMDesktopUI.ViewModels
 
         public decimal TotalRevenue
         {
+            get => TechnicianResults.Sum(t => t.Biaya);
+        }
+
+        public decimal TotalCost
+        {
+            get => TechnicianResults.Sum(t => t.HargaSparepart);
+        }
+
+        public decimal TotalProfit
+        {
             get => TechnicianResults.Sum(t => t.LabaRugi);
         }
 
@@ -138,12 +148,12 @@ namespace PSMDesktopUI.ViewModels
         {
             get
             {
-                decimal proceeds = ((decimal)TechnicianRate / 100) * TotalRevenue;
+                decimal proceeds = ((decimal)TechnicianRate / 100) * TotalProfit;
                 return proceeds;
             }
         }
 
-        public TechnicianReportViewModel(IInternetConnectionHelper internetConnectionHelper, IServiceEndpoint serviceEndpoint, IDamageEndpoint damageEndpoint,
+        public TechnicianReportViewModel(IServiceEndpoint serviceEndpoint, IDamageEndpoint damageEndpoint,
                 ITechnicianEndpoint technicianEndpoint)
         {
             DisplayName = "Technician Report";
@@ -151,7 +161,6 @@ namespace PSMDesktopUI.ViewModels
             _serviceEndpoint = serviceEndpoint;
             _damageEndpoint = damageEndpoint;
             _technicianEndpoint = technicianEndpoint;
-            _internetConnectionHelper = internetConnectionHelper;
         }
 
         protected override async void OnViewLoaded(object view)
@@ -205,10 +214,22 @@ namespace PSMDesktopUI.ViewModels
             }
 
             // Total revenue
-            xlWorksheet.Cells[TechnicianResults.Count + 2, 1] = "Total:";
+            xlWorksheet.Cells[TechnicianResults.Count + 2, 1] = "Total biaya:";
             xlWorksheet.Cells[TechnicianResults.Count + 2, 8] = TotalRevenue.ToString();
 
             ((Excel.Range)xlWorksheet.Cells[TechnicianResults.Count + 2, 8]).NumberFormat = "Rp#,##0.00";
+
+            // Total cost
+            xlWorksheet.Cells[TechnicianResults.Count + 3, 1] = "Total harga sparepart:";
+            xlWorksheet.Cells[TechnicianResults.Count + 3, 8] = TotalCost.ToString();
+
+            ((Excel.Range)xlWorksheet.Cells[TechnicianResults.Count + 3, 8]).NumberFormat = "Rp#,##0.00";
+
+            // Total profit
+            xlWorksheet.Cells[TechnicianResults.Count + 4, 1] = "Total laba/rugi:";
+            xlWorksheet.Cells[TechnicianResults.Count + 4, 8] = TotalProfit.ToString();
+
+            ((Excel.Range)xlWorksheet.Cells[TechnicianResults.Count + 4, 8]).NumberFormat = "Rp#,##0.00";
 
             // Proceeds
             xlWorksheet.Cells[TechnicianResults.Count + 3, 1] = "Proceeds:";
@@ -219,8 +240,6 @@ namespace PSMDesktopUI.ViewModels
             // Rate
             xlWorksheet.Cells[TechnicianResults.Count + 4, 1] = "Rate:";
             xlWorksheet.Cells[TechnicianResults.Count + 4, 8] = TechnicianRate + "%";
-
-            ((Excel.Range)xlWorksheet.Cells[TechnicianResults.Count + 4, 8]).NumberFormat = "Rp#,##0.00";
 
             xlWorksheet.Columns.AutoFit();
 
@@ -241,12 +260,12 @@ namespace PSMDesktopUI.ViewModels
         public async Task LoadTechnicians()
         {
             List<TechnicianModel> technicianList = await _technicianEndpoint.GetAll();
-            Technicians = new BindingList<TechnicianModel>(technicianList);
+            Technicians = new BindableCollection<TechnicianModel>(technicianList);
         }
 
         public async Task LoadResults()
         {
-            if (IsLoading || !_internetConnectionHelper.HasInternetConnection || SelectedTechnician == null) return;
+            if (IsLoading || SelectedTechnician == null) return;
 
             IsLoading = true;
 
@@ -270,14 +289,14 @@ namespace PSMDesktopUI.ViewModels
 
             foreach (TechnicianResultModel result in resultList)
             {
-                if (result.TanggalPengambilan >= StartDate && result.TanggalPengambilan <= EndDate)
+                if (result.TanggalPengambilan.Date >= StartDate.Date && result.TanggalPengambilan.Date <= EndDate.Date)
                 {
                     filteredResultList.Add(result);
                 }
             }
 
             IsLoading = false;
-            TechnicianResults = new BindingList<TechnicianResultModel>(filteredResultList);
+            TechnicianResults = new BindableCollection<TechnicianResultModel>(filteredResultList);
         }
     }
 }

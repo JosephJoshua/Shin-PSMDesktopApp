@@ -1,7 +1,6 @@
 ﻿using Caliburn.Micro;
 using DevExpress.Xpf.Core;
 using PSMDesktopUI.Library.Api;
-using PSMDesktopUI.Library.Helpers;
 using PSMDesktopUI.Library.Models;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,12 +12,11 @@ namespace PSMDesktopUI.ViewModels
     public sealed class SalesViewModel : Screen
     {
         private readonly IWindowManager _windowManager;
-        private readonly IInternetConnectionHelper _internetConnectionHelper;
         private readonly ISalesEndpoint _salesEndpoint;
 
         private bool _isLoading = false;
 
-        private BindingList<SalesModel> _sales;
+        private BindableCollection<SalesModel> _sales;
         private SalesModel _selectedSales;
 
         public bool IsLoading
@@ -35,7 +33,7 @@ namespace PSMDesktopUI.ViewModels
             }
         }
 
-        public BindingList<SalesModel> Sales
+        public BindableCollection<SalesModel> Sales
         {
             get => _sales;
 
@@ -62,20 +60,19 @@ namespace PSMDesktopUI.ViewModels
 
         public bool CanAddSales
         {
-            get => !IsLoading && _internetConnectionHelper.HasInternetConnection;
+            get => !IsLoading;
         }
 
         public bool CanDeleteSales
         {
-            get => !IsLoading && SelectedSales != null && _internetConnectionHelper.HasInternetConnection;
+            get => !IsLoading && SelectedSales != null;
         }
 
-        public SalesViewModel(IWindowManager windowManager, IInternetConnectionHelper internetConnectionHelper, ISalesEndpoint salesEndpoint)
+        public SalesViewModel(IWindowManager windowManager, ISalesEndpoint salesEndpoint)
         {
             DisplayName = "Sales";
 
             _windowManager = windowManager;
-            _internetConnectionHelper = internetConnectionHelper;
             _salesEndpoint = salesEndpoint;
         }
 
@@ -104,13 +101,13 @@ namespace PSMDesktopUI.ViewModels
 
         public async Task LoadSales()
         {
-            if (IsLoading || !_internetConnectionHelper.HasInternetConnection) return;
+            if (IsLoading) return;
 
             IsLoading = true;
             List<SalesModel> salesList = await _salesEndpoint.GetAll();
 
             IsLoading = false;
-            Sales = new BindingList<SalesModel>(salesList);
+            Sales = new BindableCollection<SalesModel>(salesList);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Caliburn.Micro;
+using DevExpress.Xpf.Core;
 using PSMDesktopUI.Library.Api;
-using PSMDesktopUI.Library.Helpers;
 using PSMDesktopUI.Library.Models;
 using System;
 using System.Collections.Generic;
@@ -11,8 +11,6 @@ namespace PSMDesktopUI.ViewModels
 {
     public class AddServiceViewModel : Screen
     {
-        private readonly IInternetConnectionHelper _internetConnectionHelper;
-
         private readonly IMemberEndpoint _memberEndpoint;
         private readonly ISalesEndpoint _salesEndpoint;
         private readonly IServiceEndpoint _serviceEndpoint;
@@ -40,6 +38,7 @@ namespace PSMDesktopUI.ViewModels
         private string _yangBelumDicek;
         private string _warna;
         private string _kataSandiPola;
+        private string _kondisiHp;
         private string _isiKonfirmasi;
         private int _salesId;
 
@@ -273,6 +272,17 @@ namespace PSMDesktopUI.ViewModels
             }
         }
 
+        public string KondisiHp
+        {
+            get => _kondisiHp;
+
+            set
+            {
+                _kondisiHp = value;
+                NotifyOfPropertyChange(() => KondisiHp);
+            }
+        }
+
         public string IsiKonfirmasi
         {
             get => _isiKonfirmasi;
@@ -305,6 +315,7 @@ namespace PSMDesktopUI.ViewModels
 
                 NotifyOfPropertyChange(() => Biaya);
                 NotifyOfPropertyChange(() => TotalBiaya);
+                NotifyOfPropertyChange(() => Sisa);
             }
         }
 
@@ -318,6 +329,7 @@ namespace PSMDesktopUI.ViewModels
 
                 NotifyOfPropertyChange(() => Discount);
                 NotifyOfPropertyChange(() => TotalBiaya);
+                NotifyOfPropertyChange(() => Sisa);
             }
         }
 
@@ -344,6 +356,7 @@ namespace PSMDesktopUI.ViewModels
 
                 NotifyOfPropertyChange(() => TambahanBiaya);
                 NotifyOfPropertyChange(() => TotalBiaya);
+                NotifyOfPropertyChange(() => Sisa);
             }
         }
 
@@ -499,11 +512,9 @@ namespace PSMDesktopUI.ViewModels
             get => !string.IsNullOrWhiteSpace(NamaPelanggan) && !string.IsNullOrWhiteSpace(TipeHp);
         }
 
-        public AddServiceViewModel(IInternetConnectionHelper internetConnectionHelper, IMemberEndpoint memberEndpoint, ISalesEndpoint salesEndpoint,
+        public AddServiceViewModel(IMemberEndpoint memberEndpoint, ISalesEndpoint salesEndpoint,
                                    ITechnicianEndpoint technicianEndpoint, IDamageEndpoint damageEndpoint, IServiceEndpoint serviceEndpoint)
         {
-            _internetConnectionHelper = internetConnectionHelper;
-
             _memberEndpoint = memberEndpoint;
             _salesEndpoint = salesEndpoint;
             _serviceEndpoint = serviceEndpoint;
@@ -588,8 +599,10 @@ namespace PSMDesktopUI.ViewModels
 
         public async Task Add()
         {
-            await AddService();
-            TryClose(true);
+            if (await AddService())
+            {
+                TryClose(true);
+            }
         }
 
         public void Cancel()
@@ -599,7 +612,7 @@ namespace PSMDesktopUI.ViewModels
 
         public async Task LoadMembers()
         {
-            if (IsMemberLoading || !_internetConnectionHelper.HasInternetConnection) return;
+            if (IsMemberLoading) return;
 
             IsMemberLoading = true;
             List<MemberModel> memberList = await _memberEndpoint.GetAll();
@@ -610,7 +623,7 @@ namespace PSMDesktopUI.ViewModels
 
         public async Task LoadSales()
         {
-            if (IsSalesLoading || !_internetConnectionHelper.HasInternetConnection) return;
+            if (IsSalesLoading) return;
 
             IsSalesLoading = true;
             List<SalesModel> salesList = await _salesEndpoint.GetAll();
@@ -619,8 +632,14 @@ namespace PSMDesktopUI.ViewModels
             Sales = new BindingList<SalesModel>(salesList);
         }
 
-        public async Task AddService(bool print = false)
+        public async Task<bool> AddService()
         {
+            if ((SelectedStatus == ServiceStatus.TidakJadiSudahDiambil || SelectedStatus == ServiceStatus.TidakJadiBelumDiambil) && Biaya != 0)
+            {
+                DXMessageBox.Show("'Biaya' must be 0 if the service is cancelled. Please set 'Biaya' to be 0", "Add service");
+                return false;
+            }
+
             string kelengkapan = "";
 
             if (IsBatteryChecked)
@@ -652,6 +671,7 @@ namespace PSMDesktopUI.ViewModels
                 TipeHp = TipeHp,
                 Imei = Imei,
                 DamageId = SelectedDamage.Id,
+                KondisiHp = KondisiHp,
                 YangBelumDicek = YangBelumDicek,
                 Kelengkapan = kelengkapan,
                 Warna = Warna,
@@ -671,6 +691,7 @@ namespace PSMDesktopUI.ViewModels
             };
 
             await _serviceEndpoint.Insert(service);
+            return true;
         }
     }
 }

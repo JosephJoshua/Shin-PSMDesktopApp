@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using DevExpress.Xpf.Core;
 using PSMDesktopUI.Library.Api;
 using PSMDesktopUI.Library.Models;
 using System;
@@ -26,6 +27,7 @@ namespace PSMDesktopUI.ViewModels
         private string _yangBelumDicek;
         private string _warna;
         private string _kataSandiPola;
+        private string _kondisiHp;
         private string _isiKonfirmasi;
 
         private double _biaya;
@@ -141,6 +143,17 @@ namespace PSMDesktopUI.ViewModels
             }
         }
 
+        public string KondisiHp
+        {
+            get => _kondisiHp;
+
+            set
+            {
+                _kondisiHp = value;
+                NotifyOfPropertyChange(() => KondisiHp);
+            }
+        }
+
         public string IsiKonfirmasi
         {
             get => _isiKonfirmasi;
@@ -162,6 +175,7 @@ namespace PSMDesktopUI.ViewModels
 
                 NotifyOfPropertyChange(() => Biaya);
                 NotifyOfPropertyChange(() => TotalBiaya);
+                NotifyOfPropertyChange(() => Sisa);
             }
         }
 
@@ -175,6 +189,7 @@ namespace PSMDesktopUI.ViewModels
 
                 NotifyOfPropertyChange(() => Discount);
                 NotifyOfPropertyChange(() => TotalBiaya);
+                NotifyOfPropertyChange(() => Sisa);
             }
         }
 
@@ -201,6 +216,7 @@ namespace PSMDesktopUI.ViewModels
 
                 NotifyOfPropertyChange(() => TambahanBiaya);
                 NotifyOfPropertyChange(() => TotalBiaya);
+                NotifyOfPropertyChange(() => Sisa);
             }
         }
 
@@ -384,8 +400,10 @@ namespace PSMDesktopUI.ViewModels
 
         public async Task Save()
         {
-            await UpdateService();
-            TryClose(true);
+            if (await UpdateService())
+            {
+                TryClose(true);
+            }
         }
 
         public async Task Print()
@@ -423,10 +441,11 @@ namespace PSMDesktopUI.ViewModels
             NoHp = service.NoHp;
             TipeHp = service.TipeHp;
             Imei = service.Imei;
+            KondisiHp = service.KondisiHp;
             YangBelumDicek = service.YangBelumDicek;
             Warna = service.Warna;
             KataSandiPola = service.KataSandiPola;
-            SudahKonfirmasi = service.TanggalKonfirmasi != DateTime.MinValue;
+            SudahKonfirmasi = service.TanggalKonfirmasi != new DateTime(1753, 1, 1, 0, 0, 0);
             TanggalKonfirmasi = service.TanggalKonfirmasi;
             IsiKonfirmasi = service.IsiKonfirmasi;
             Biaya = (double)service.Biaya;
@@ -460,8 +479,14 @@ namespace PSMDesktopUI.ViewModels
             }
         }
 
-        public async Task UpdateService()
+        public async Task<bool> UpdateService()
         {
+            if ((SelectedStatus == ServiceStatus.TidakJadiBelumDiambil || SelectedStatus == ServiceStatus.TidakJadiSudahDiambil) && Biaya != 0)
+            {
+                DXMessageBox.Show("'Biaya' must be 0 if the service is cancelled. Please set 'Biaya' to be 0", "Edit service");
+                return false;
+            }
+
             string kelengkapan = "";
 
             if (IsBatteryChecked)
@@ -494,6 +519,7 @@ namespace PSMDesktopUI.ViewModels
                 TipeHp = TipeHp,
                 Imei = Imei,
                 DamageId = SelectedDamage.Id,
+                KondisiHp = KondisiHp,
                 YangBelumDicek = YangBelumDicek,
                 Kelengkapan = kelengkapan,
                 Warna = Warna,
@@ -510,6 +536,7 @@ namespace PSMDesktopUI.ViewModels
             };
 
             await _serviceEndpoint.Update(service);
+            return true;
         }
     }
 }

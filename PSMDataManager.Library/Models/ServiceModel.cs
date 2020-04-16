@@ -18,6 +18,8 @@ namespace PSMDataManager.Library.Models
 
         public int DamageId { get; set; }
 
+        public string KondisiHp { get; set; }
+
         public string YangBelumDicek { get; set; }
 
         public string Kelengkapan { get; set; }

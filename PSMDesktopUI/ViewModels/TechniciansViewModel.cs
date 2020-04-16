@@ -1,7 +1,6 @@
 ﻿using Caliburn.Micro;
 using DevExpress.Xpf.Core;
 using PSMDesktopUI.Library.Api;
-using PSMDesktopUI.Library.Helpers;
 using PSMDesktopUI.Library.Models;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,12 +12,11 @@ namespace PSMDesktopUI.ViewModels
     public sealed class TechniciansViewModel : Screen
     {
         private readonly IWindowManager _windowManager;
-        private readonly IInternetConnectionHelper _internetConnectionHelper;
         private readonly ITechnicianEndpoint _technicianEndpoint;
 
         private bool _isLoading = false;
 
-        private BindingList<TechnicianModel> _technicians;
+        private BindableCollection<TechnicianModel> _technicians;
         private TechnicianModel _selectedTechnician;
 
         public bool IsLoading
@@ -35,7 +33,7 @@ namespace PSMDesktopUI.ViewModels
             }
         }
 
-        public BindingList<TechnicianModel> Technicians
+        public BindableCollection<TechnicianModel> Technicians
         {
             get => _technicians;
 
@@ -62,20 +60,19 @@ namespace PSMDesktopUI.ViewModels
 
         public bool CanAddTechnician
         {
-            get => !IsLoading && _internetConnectionHelper.HasInternetConnection;
+            get => !IsLoading;
         }
 
         public bool CanDeleteTechnician
         {
-            get => !IsLoading && SelectedTechnician != null && _internetConnectionHelper.HasInternetConnection;
+            get => !IsLoading && SelectedTechnician != null;
         }
 
-        public TechniciansViewModel(IInternetConnectionHelper internetConnectionHelper, IWindowManager windowManager, ITechnicianEndpoint technicianEndpoint)
+        public TechniciansViewModel(IWindowManager windowManager, ITechnicianEndpoint technicianEndpoint)
         {
             DisplayName = "Technicians";
 
             _windowManager = windowManager;
-            _internetConnectionHelper = internetConnectionHelper;
             _technicianEndpoint = technicianEndpoint;
         }
 
@@ -105,13 +102,13 @@ namespace PSMDesktopUI.ViewModels
 
         public async Task LoadTechnicians()
         {
-            if (IsLoading || !_internetConnectionHelper.HasInternetConnection) return;
+            if (IsLoading) return;
 
             IsLoading = true;
             List<TechnicianModel> technicianList = await _technicianEndpoint.GetAll();
 
             IsLoading = false;
-            Technicians = new BindingList<TechnicianModel>(technicianList);
+            Technicians = new BindableCollection<TechnicianModel>(technicianList);
         }
     }
 }
