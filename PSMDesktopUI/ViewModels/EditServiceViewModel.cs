@@ -12,11 +12,13 @@ namespace PSMDesktopUI.ViewModels
 {
     public class EditServiceViewModel : Screen
     {
+        private readonly IWindowManager _windowManager;
+
         private readonly IServiceEndpoint _serviceEndpoint;
         private readonly IDamageEndpoint _damageEndpoint;
         private readonly ITechnicianEndpoint _technicianEndpoint;
 
-        private int _damageId;
+        private int _damageId = -1;
         private int _technicianId;
 
         private int _nomorNota;
@@ -24,6 +26,7 @@ namespace PSMDesktopUI.ViewModels
         private string _noHp;
         private string _tipeHp;
         private string _imei;
+        private string _damage;
         private string _yangBelumDicek;
         private string _warna;
         private string _kataSandiPola;
@@ -44,11 +47,9 @@ namespace PSMDesktopUI.ViewModels
         private bool _sudahKonfirmasi = false;
 
         private BindingList<TechnicianModel> _technicians;
-        private BindingList<DamageModel> _damages;
         private ServiceStatus _serviceStatuses;
 
         private TechnicianModel _selectedTechnician;
-        private DamageModel _selectedDamage;
         private ServiceStatus _selectedStatus;
 
         public int NomorNota
@@ -71,7 +72,7 @@ namespace PSMDesktopUI.ViewModels
                 _namaPelanggan = value;
 
                 NotifyOfPropertyChange(() => NamaPelanggan);
-                NotifyOfPropertyChange(() => CanAdd);
+                NotifyOfPropertyChange(() => CanSave);
             }
         }
 
@@ -95,7 +96,7 @@ namespace PSMDesktopUI.ViewModels
                 _tipeHp = value;
 
                 NotifyOfPropertyChange(() => TipeHp);
-                NotifyOfPropertyChange(() => CanAdd);
+                NotifyOfPropertyChange(() => CanSave);
             }
         }
 
@@ -107,6 +108,19 @@ namespace PSMDesktopUI.ViewModels
             {
                 _imei = value;
                 NotifyOfPropertyChange(() => Imei);
+            }
+        }
+
+        public string Damage
+        {
+            get => _damage;
+
+            set
+            {
+                _damage = value;
+
+                NotifyOfPropertyChange(() => Damage);
+                NotifyOfPropertyChange(() => CanSave);
             }
         }
 
@@ -162,6 +176,17 @@ namespace PSMDesktopUI.ViewModels
             {
                 _isiKonfirmasi = value;
                 NotifyOfPropertyChange(() => IsiKonfirmasi);
+            }
+        }
+
+        public int DamageId
+        {
+            get => _damageId;
+
+            set
+            {
+                _damageId = value;
+                NotifyOfPropertyChange(() => DamageId);
             }
         }
 
@@ -307,17 +332,6 @@ namespace PSMDesktopUI.ViewModels
             }
         }
 
-        public BindingList<DamageModel> Damages
-        {
-            get => _damages;
-
-            set
-            {
-                _damages = value;
-                NotifyOfPropertyChange(() => Damages);
-            }
-        }
-
         public ServiceStatus ServiceStatuses
         {
             get => _serviceStatuses;
@@ -340,17 +354,6 @@ namespace PSMDesktopUI.ViewModels
             }
         }
 
-        public DamageModel SelectedDamage
-        {
-            get => _selectedDamage;
-
-            set
-            {
-                _selectedDamage = value;
-                NotifyOfPropertyChange(() => SelectedDamage);
-            }
-        }
-
         public ServiceStatus SelectedStatus
         {
             get => _selectedStatus;
@@ -362,18 +365,15 @@ namespace PSMDesktopUI.ViewModels
             }
         }
 
-        public bool CanAdd
+        public bool CanSave
         {
-            get => !string.IsNullOrWhiteSpace(NamaPelanggan) && !string.IsNullOrWhiteSpace(TipeHp);
+            get => !string.IsNullOrWhiteSpace(NamaPelanggan) && !string.IsNullOrWhiteSpace(TipeHp) && !string.IsNullOrWhiteSpace(Damage);
         }
 
-        public bool CanPrint
+        public EditServiceViewModel(IWindowManager windowManager, ITechnicianEndpoint technicianEndpoint,
+                                    IDamageEndpoint damageEndpoint, IServiceEndpoint serviceEndpoint)
         {
-            get => !string.IsNullOrWhiteSpace(NamaPelanggan) && !string.IsNullOrWhiteSpace(TipeHp);
-        }
-
-        public EditServiceViewModel(ITechnicianEndpoint technicianEndpoint, IDamageEndpoint damageEndpoint, IServiceEndpoint serviceEndpoint)
-        {
+            _windowManager = windowManager;
             _serviceEndpoint = serviceEndpoint;
             _damageEndpoint = damageEndpoint;
             _technicianEndpoint = technicianEndpoint;
@@ -392,10 +392,17 @@ namespace PSMDesktopUI.ViewModels
             Technicians = new BindingList<TechnicianModel>(technicianList);
         }
 
-        public async Task GetDamages()
+        public void SelectDamage()
         {
-            List<DamageModel> damageList = await _damageEndpoint.GetAll();
-            Damages = new BindingList<DamageModel>(damageList);
+            SelectDamageViewModel selectDamageVM = IoC.Get<SelectDamageViewModel>();
+
+            if (_windowManager.ShowDialog(selectDamageVM) == true)
+            {
+                DamageModel selectedDamage = selectDamageVM.SelectedDamage;
+
+                Damage = selectedDamage.Kerusakan;
+                DamageId = selectedDamage.Id;
+            }
         }
 
         public async Task Save()
@@ -425,16 +432,9 @@ namespace PSMDesktopUI.ViewModels
             {
                 SelectedTechnician = Technicians.Where((d) => d.Id == _technicianId).FirstOrDefault() ?? Technicians[0];
             }
-
-            await GetDamages();
-
-            if (Damages.Count > 0)
-            {
-                SelectedDamage = Damages.Where((d) => d.Id == _damageId).FirstOrDefault() ?? Damages[0];
-            }
         }
 
-        public void SetFieldValues(ServiceModel service)
+        public async Task SetFieldValues(ServiceModel service)
         {
             NomorNota = service.NomorNota;
             NamaPelanggan = service.NamaPelanggan;
@@ -452,8 +452,11 @@ namespace PSMDesktopUI.ViewModels
             Discount = service.Discount;
             Dp = (double)service.Dp;
             TambahanBiaya = (double)service.TambahanBiaya;
+            DamageId = service.DamageId;
 
-            _damageId = service.DamageId;
+            // Get damage from id
+            Damage = (await _damageEndpoint.GetAll()).Where(d => d.Id == DamageId).FirstOrDefault().Kerusakan;
+
             _technicianId = service.TechnicianId;
 
             SelectedStatus = Enum.GetValues(ServiceStatuses.GetType()).Cast<ServiceStatus>().Where((e) => e.Description() == service.StatusServisan).FirstOrDefault();
@@ -518,7 +521,7 @@ namespace PSMDesktopUI.ViewModels
                 NoHp = NoHp,
                 TipeHp = TipeHp,
                 Imei = Imei,
-                DamageId = SelectedDamage.Id,
+                DamageId = DamageId,
                 KondisiHp = KondisiHp,
                 YangBelumDicek = YangBelumDicek,
                 Kelengkapan = kelengkapan,

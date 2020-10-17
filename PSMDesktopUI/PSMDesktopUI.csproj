@@ -181,11 +181,13 @@
     <Compile Include="ViewModels\AddServiceViewModel.cs" />
     <Compile Include="ViewModels\AddSparepartViewModel.cs" />
     <Compile Include="ViewModels\AddTechnicianViewModel.cs" />
+    <Compile Include="ViewModels\CSPasswordViewModel.cs" />
     <Compile Include="ViewModels\DamagesViewModel.cs" />
     <Compile Include="ViewModels\EditMemberViewModel.cs" />
     <Compile Include="ViewModels\EditServiceViewModel.cs" />
     <Compile Include="ViewModels\ProfitReportViewModel.cs" />
     <Compile Include="ViewModels\SalesViewModel.cs" />
+    <Compile Include="ViewModels\SelectDamageViewModel.cs" />
     <Compile Include="ViewModels\ServiceInvoicePreviewViewModel.cs" />
     <Compile Include="ViewModels\SparepartReportViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
@@ -213,6 +215,9 @@
     <Compile Include="Views\AddTechnicianView.xaml.cs">
       <DependentUpon>AddTechnicianView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\CSPasswordView.xaml.cs">
+      <DependentUpon>CSPasswordView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\DamagesView.xaml.cs">
       <DependentUpon>DamagesView.xaml</DependentUpon>
     </Compile>
@@ -236,6 +241,9 @@
     </Compile>
     <Compile Include="Views\SalesView.xaml.cs">
       <DependentUpon>SalesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SelectDamageView.xaml.cs">
+      <DependentUpon>SelectDamageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ServiceInvoicePreviewView.xaml.cs">
       <DependentUpon>ServiceInvoicePreviewView.xaml</DependentUpon>
@@ -327,6 +335,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\CSPasswordView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\DamagesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -356,6 +368,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SalesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SelectDamageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

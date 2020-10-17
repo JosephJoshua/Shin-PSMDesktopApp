@@ -109,6 +109,13 @@
             </dxg:GridColumn>
 
             <dxg:GridColumn Header="Tanggal Pembelian" Width="2*" Binding="{Binding Path=TanggalPembelian}" />
+
+            <dxg:GridControl.View>
+                <dxg:TableView AllowScrollAnimation="True"
+                               AllowFixedGroups="True"
+                               AllowEditing="False" />
+            </dxg:GridControl.View>
+
         </dxg:GridControl>
 
         <!-- Refresh button -->

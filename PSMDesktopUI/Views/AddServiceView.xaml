@@ -42,17 +42,24 @@
                              Grid.ColumnSpan="2"
                              Margin="0 10 0 0"
                              SelectionMode="Row"
+                             ItemsSourceChanged="SalesGrid_ItemsSourceChanged"
                              CurrentItem="{Binding Path=SelectedSales}"
                              ItemsSource="{Binding Path=Sales}"
                              Visibility="{c:Binding Path=!IsSalesLoading}">
 
-                <dxg:GridColumn Header="Id" Width="*" Binding="{Binding Path=Id}">
+                <dxg:GridColumn Header="Id" Width="*" FieldName="Id">
                     <dxg:GridColumn.EditSettings>
                         <dxe:TextEditSettings HorizontalContentAlignment="Left" />
                     </dxg:GridColumn.EditSettings>
                 </dxg:GridColumn>
 
-                <dxg:GridColumn Header="Nama" Width="3*" Binding="{Binding Path=Nama}" />
+                <dxg:GridColumn Header="Nama" Width="3*" FieldName="Nama" />
+
+                <dxg:GridControl.View>
+                    <dxg:TableView AllowScrollAnimation="True"
+                                   AllowFixedGroups="True"
+                                   AllowEditing="False" />
+                </dxg:GridControl.View>
 
             </dxg:GridControl>
 
@@ -115,24 +122,31 @@
                              Grid.ColumnSpan="2"
                              Margin="0 10 0 0"
                              SelectionMode="Row"
+                             ItemsSourceChanged="MemberGrid_ItemsSourceChanged"
                              CurrentItem="{Binding Path=SelectedMember}"
                              ItemsSource="{Binding Path=Members}"
                              Visibility="{c:Binding Path=!IsMemberLoading}">
 
-                <dxg:GridColumn Header="Id" Width="*" Binding="{Binding Path=Id}">
+                <dxg:GridColumn Header="Id" Width="*" FieldName="Id">
                     <dxg:GridColumn.EditSettings>
                         <dxe:TextEditSettings HorizontalContentAlignment="Left" />
                     </dxg:GridColumn.EditSettings>
                 </dxg:GridColumn>
 
-                <dxg:GridColumn Header="Nama" Width="3*" Binding="{Binding Path=Nama}" />
-                <dxg:GridColumn Header="No HP" Width="2*" Binding="{Binding Path=NoHp}" />
-                <dxg:GridColumn Header="Alamat" Width="2*" Binding="{Binding Path=Alamat}" />
-                <dxg:GridColumn Header="Tipe HP 1" Width="2*" Binding="{Binding Path=TipeHp1}" />
-                <dxg:GridColumn Header="Tipe HP 2" Width="2*" Binding="{Binding Path=TipeHp2}" />
-                <dxg:GridColumn Header="Tipe HP 3" Width="2*" Binding="{Binding Path=TipeHp3}" />
-                <dxg:GridColumn Header="Tipe HP 4" Width="2*" Binding="{Binding Path=TipeHp4}" />
-                <dxg:GridColumn Header="Tipe HP 5" Width="2*" Binding="{Binding Path=TipeHp5}" />
+                <dxg:GridColumn Header="Nama" Width="3*" FieldName="Nama" />
+                <dxg:GridColumn Header="No HP" Width="2*" FieldName="NoHp" />
+                <dxg:GridColumn Header="Alamat" Width="2*" FieldName="Alamat" />
+                <dxg:GridColumn Header="Tipe HP 1" Width="2*" FieldName="TipeHp1" />
+                <dxg:GridColumn Header="Tipe HP 2" Width="2*" FieldName="TipeHp2" />
+                <dxg:GridColumn Header="Tipe HP 3" Width="2*" FieldName="TipeHp3" />
+                <dxg:GridColumn Header="Tipe HP 4" Width="2*" FieldName="TipeHp4" />
+                <dxg:GridColumn Header="Tipe HP 5" Width="2*" FieldName="TipeHp5" />
+
+                <dxg:GridControl.View>
+                    <dxg:TableView AllowScrollAnimation="True"
+                                   AllowFixedGroups="True"
+                                   AllowEditing="False" />
+                </dxg:GridControl.View>
 
             </dxg:GridControl>
 
@@ -182,11 +196,17 @@
                     </dxlc:LayoutItem>
 
                     <dxlc:LayoutItem Label="Kerusakan:" Margin="4">
-                        <dxe:ComboBoxEdit 
-                            Height="30" Margin="10 0 0 0"
-                            ItemsSource="{Binding Path=Damages, Mode=OneWay}"
-                            DisplayMember="Kerusakan"
-                            EditValue="{Binding SelectedDamage, UpdateSourceTrigger=PropertyChanged}" />
+                        <dxlc:LayoutGroup Orientation="Horizontal" Margin="10 0 0 0" Height="30">
+                            <dxe:TextEdit x:Name="Damage"
+                                          Height="30" Margin="5 0 0 0"
+                                          Text="{Binding Path=Damage}"
+                                          IsReadOnly="True" />
+
+                            <dx:SimpleButton FontSize="15"
+                                             MaxWidth="35"
+                                             Content="..."
+                                             cal:Message.Attach="[Event Click] = [Action SelectDamage]" />
+                        </dxlc:LayoutGroup>
                     </dxlc:LayoutItem>
 
                     <dxlc:LayoutItem Label="Yang Belum Dicek:" Margin="4">
@@ -228,6 +248,8 @@
                     <dxlc:LayoutItem Label="Teknisi:" Margin="4">
                         <dxe:ComboBoxEdit 
                             Height="30" Margin="10 0 0 0"
+                            AutoComplete="True"
+                            IncrementalFiltering="True"
                             ItemsSource="{Binding Path=Technicians, Mode=OneWay}"
                             DisplayMember="Nama"
                             EditValue="{Binding SelectedTechnician, UpdateSourceTrigger=PropertyChanged}" />

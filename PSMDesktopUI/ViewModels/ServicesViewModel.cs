@@ -1,10 +1,8 @@
 ﻿using Caliburn.Micro;
 using DevExpress.Xpf.Core;
 using PSMDesktopUI.Library.Api;
-using PSMDesktopUI.Library.Helpers;
 using PSMDesktopUI.Library.Models;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Linq;
@@ -17,6 +15,8 @@ namespace PSMDesktopUI.ViewModels
     public sealed class ServicesViewModel : Screen
     {
         private readonly IWindowManager _windowManager;
+        private readonly IApiHelper _apiHelper;
+
         private readonly IServiceEndpoint _serviceEndpoint;
         private readonly ITechnicianEndpoint _technicianEndpoint;
         private readonly ISalesEndpoint _salesEndpoint;
@@ -197,12 +197,19 @@ namespace PSMDesktopUI.ViewModels
             get => SelectedService != null;
         }
 
-        public ServicesViewModel(IWindowManager windowManager, IServiceEndpoint serviceEndpoint, ITechnicianEndpoint technicianEndpoint,
-                                 ISalesEndpoint salesEndpoint, IDamageEndpoint damageEndpoint, ISparepartEndpoint sparepartEndpoint)
+        public bool IsCustomerService
+        {
+            get => _apiHelper.LoggedInUser.Role.ToLower() == "Customer Service".ToLower();
+        }
+
+        public ServicesViewModel(IApiHelper apiHelper, IWindowManager windowManager, IServiceEndpoint serviceEndpoint,
+                                 ITechnicianEndpoint technicianEndpoint, ISalesEndpoint salesEndpoint,
+                                 IDamageEndpoint damageEndpoint, ISparepartEndpoint sparepartEndpoint)
         {
             DisplayName = "Services";
 
             _windowManager = windowManager;
+            _apiHelper = apiHelper;
             _serviceEndpoint = serviceEndpoint;
             _technicianEndpoint = technicianEndpoint;
             _salesEndpoint = salesEndpoint;
@@ -261,6 +268,8 @@ namespace PSMDesktopUI.ViewModels
 
         public async Task EditService()
         {
+            if (IsCustomerService && !AskForCSPassword()) return;
+
             ServiceModel service = SelectedService;
 
             EditServiceViewModel editServiceVM = IoC.Get<EditServiceViewModel>();
@@ -275,6 +284,8 @@ namespace PSMDesktopUI.ViewModels
 
         public async Task DeleteService()
         {
+            if (IsCustomerService && !AskForCSPassword()) return;
+
             if (DXMessageBox.Show("Are you sure you want to delete this service?", "Services", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 await _serviceEndpoint.Delete(SelectedService.NomorNota);
@@ -348,7 +359,7 @@ namespace PSMDesktopUI.ViewModels
                 NamaPelanggan = SelectedService.NamaPelanggan,
                 NoHp = SelectedService.NoHp,
                 TipeHp = SelectedService.TipeHp,
-                Imei = SelectedService.Imei,
+                Imei = SelectedService.Imei ?? "",
                 Kerusakan = kerusakan,
                 TotalBiaya = SelectedService.TotalBiaya,
                 Dp = SelectedService.Dp,
@@ -402,6 +413,11 @@ namespace PSMDesktopUI.ViewModels
             };
 
             await _serviceEndpoint.Update(newService);
+        }
+
+        private bool AskForCSPassword()
+        {
+            return _windowManager.ShowDialog(IoC.Get<CSPasswordViewModel>()) == true;
         }
     }
 }

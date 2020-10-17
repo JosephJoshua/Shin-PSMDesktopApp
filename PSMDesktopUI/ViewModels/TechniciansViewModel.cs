@@ -3,9 +3,10 @@ using DevExpress.Xpf.Core;
 using PSMDesktopUI.Library.Api;
 using PSMDesktopUI.Library.Models;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace PSMDesktopUI.ViewModels
 {
@@ -18,6 +19,8 @@ namespace PSMDesktopUI.ViewModels
 
         private BindableCollection<TechnicianModel> _technicians;
         private TechnicianModel _selectedTechnician;
+
+        private string _searchText;
 
         public bool IsLoading
         {
@@ -58,6 +61,17 @@ namespace PSMDesktopUI.ViewModels
             }
         }
 
+        public string SearchText
+        {
+            get => _searchText;
+
+            set
+            {
+                _searchText = value;
+                NotifyOfPropertyChange(() => SearchText);
+            }
+        }
+
         public bool CanAddTechnician
         {
             get => !IsLoading;
@@ -83,6 +97,14 @@ namespace PSMDesktopUI.ViewModels
             await LoadTechnicians();
         }
 
+        public async Task Search(KeyEventArgs args)
+        {
+            if ((args.Key == Key.Enter || args.Key == Key.Return) && !IsLoading)
+            {
+                await LoadTechnicians();
+            }
+        }
+
         public async Task AddTechnician()
         {
             if (_windowManager.ShowDialog(IoC.Get<AddTechnicianViewModel>()) == true)
@@ -106,6 +128,11 @@ namespace PSMDesktopUI.ViewModels
 
             IsLoading = true;
             List<TechnicianModel> technicianList = await _technicianEndpoint.GetAll();
+
+            if (!string.IsNullOrWhiteSpace(SearchText))
+            {
+                technicianList = technicianList.Where(t => t.Nama.ToLower().Contains(SearchText.ToLower())).ToList();
+            }
 
             IsLoading = false;
             Technicians = new BindableCollection<TechnicianModel>(technicianList);
