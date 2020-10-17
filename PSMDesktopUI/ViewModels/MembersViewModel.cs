@@ -3,8 +3,10 @@ using DevExpress.Xpf.Core;
 using PSMDesktopUI.Library.Api;
 using PSMDesktopUI.Library.Models;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace PSMDesktopUI.ViewModels
 {
@@ -17,6 +19,8 @@ namespace PSMDesktopUI.ViewModels
 
         private BindableCollection<MemberModel> _members;
         private MemberModel _selectedMember;
+
+        private string _searchText;
 
         public bool IsLoading
         {
@@ -58,6 +62,17 @@ namespace PSMDesktopUI.ViewModels
             }
         }
 
+        public string SearchText
+        {
+            get => _searchText;
+
+            set
+            {
+                _searchText = value;
+                NotifyOfPropertyChange(() => SearchText);
+            }
+        }
+
         public bool CanAddMember
         {
             get => !IsLoading;
@@ -86,6 +101,14 @@ namespace PSMDesktopUI.ViewModels
             base.OnViewLoaded(view);
 
             await LoadMembers();
+        }
+
+        public async Task Search(KeyEventArgs args)
+        {
+            if ((args.Key == Key.Enter || args.Key == Key.Return) && !IsLoading)
+            {
+                await LoadMembers();
+            }
         }
 
         public async Task AddMember()
@@ -123,7 +146,13 @@ namespace PSMDesktopUI.ViewModels
             if (IsLoading) return;
 
             IsLoading = true;
+
             List<MemberModel> memberList = await _memberEndpoint.GetAll();
+
+            if (!string.IsNullOrWhiteSpace(SearchText))
+            {
+                memberList = memberList.Where(m => m.Nama.ToLower().Contains(SearchText.ToLower())).ToList();
+            }
 
             IsLoading = false;
             Members = new BindableCollection<MemberModel>(memberList);

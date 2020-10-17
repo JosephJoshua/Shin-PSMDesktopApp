@@ -103,6 +103,12 @@
                     <dxe:TextEditSettings HorizontalContentAlignment="Left" />
                 </dxg:GridColumn.EditSettings>
             </dxg:GridColumn>
+
+            <dxg:GridControl.View>
+                <dxg:TableView AllowScrollAnimation="True"
+                               AllowFixedGroups="True"
+                               AllowEditing="False" />
+            </dxg:GridControl.View>
         </dxg:GridControl>
 
         <!-- Refresh button -->

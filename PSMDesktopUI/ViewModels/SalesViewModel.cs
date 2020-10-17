@@ -3,9 +3,10 @@ using DevExpress.Xpf.Core;
 using PSMDesktopUI.Library.Api;
 using PSMDesktopUI.Library.Models;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace PSMDesktopUI.ViewModels
 {
@@ -18,6 +19,8 @@ namespace PSMDesktopUI.ViewModels
 
         private BindableCollection<SalesModel> _sales;
         private SalesModel _selectedSales;
+
+        private string _searchText;
 
         public bool IsLoading
         {
@@ -58,6 +61,17 @@ namespace PSMDesktopUI.ViewModels
             }
         }
 
+        public string SearchText
+        {
+            get => _searchText;
+            
+            set
+            {
+                _searchText = value;
+                NotifyOfPropertyChange(() => SearchText);
+            }
+        }
+
         public bool CanAddSales
         {
             get => !IsLoading;
@@ -80,6 +94,14 @@ namespace PSMDesktopUI.ViewModels
         {
             base.OnViewLoaded(view);
             await LoadSales();
+        }
+
+        public async Task Search(KeyEventArgs args)
+        {
+            if ((args.Key == Key.Enter || args.Key == Key.Return) && !IsLoading)
+            {
+                await LoadSales();
+            }
         }
 
         public async Task AddSales()
@@ -105,6 +127,11 @@ namespace PSMDesktopUI.ViewModels
 
             IsLoading = true;
             List<SalesModel> salesList = await _salesEndpoint.GetAll();
+
+            if (!string.IsNullOrWhiteSpace(SearchText))
+            {
+                salesList = salesList.Where(s => s.Nama.ToLower().Contains(SearchText.ToLower())).ToList();
+            }
 
             IsLoading = false;
             Sales = new BindableCollection<SalesModel>(salesList);
