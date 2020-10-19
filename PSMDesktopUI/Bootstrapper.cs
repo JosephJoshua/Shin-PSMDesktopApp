@@ -35,7 +35,8 @@ namespace PSMDesktopUI
                 .Singleton<IEventAggregator, EventAggregator>()
                 .Singleton<ILoggedInUserModel, LoggedInUserModel>()
                 .Singleton<IApiHelper, ApiHelper>()
-                .Singleton<ISettingsHelper, SettingsHelper>();
+                .Singleton<ISettingsHelper, SettingsHelper>()
+                .Singleton<IStringEncryptionHelper, StringEncryptionHelper>();
 
             GetType().Assembly.GetTypes()
                 .Where(type => type.IsClass)

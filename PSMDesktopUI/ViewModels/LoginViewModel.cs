@@ -52,11 +52,11 @@ namespace PSMDesktopUI.ViewModels
                 _errorMessage = value;
 
                 NotifyOfPropertyChange(() => ErrorMessage);
-                NotifyOfPropertyChange(() => IsErrorMessageVisibile);
+                NotifyOfPropertyChange(() => IsErrorMessageVisible);
             }
         }
 
-        public bool IsErrorMessageVisibile
+        public bool IsErrorMessageVisible
         {
             get => !string.IsNullOrEmpty(ErrorMessage);
         }
