@@ -318,6 +318,11 @@ namespace PSMDesktopUI.ViewModels
             {
                 _sudahKonfirmasi = value;
                 NotifyOfPropertyChange(() => SudahKonfirmasi);
+
+                if (SudahKonfirmasi && TanggalKonfirmasi.Year == 1753)
+                {
+                    TanggalKonfirmasi = DateTime.Now;
+                }
             }
         }
 
@@ -363,6 +368,11 @@ namespace PSMDesktopUI.ViewModels
                 _selectedStatus = value;
                 NotifyOfPropertyChange(() => SelectedStatus);
             }
+        }
+
+        public bool CustomerIsMember
+        {
+            get => NamaPelanggan.StartsWith("M-");
         }
 
         public bool CanSave

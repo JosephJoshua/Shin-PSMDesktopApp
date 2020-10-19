@@ -44,6 +44,7 @@
 
         <!-- Damages grid -->
         <dxg:GridControl Grid.Column="0" Grid.Row="1"
+                         Margin="0 5 0 0"
                          SelectionMode="Row"
                          ItemsSourceChanged="GridControl_ItemsSourceChanged"    
                          CurrentItem="{Binding Path=SelectedDamage}"

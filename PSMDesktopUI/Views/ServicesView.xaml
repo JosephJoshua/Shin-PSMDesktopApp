@@ -197,6 +197,14 @@
                     <material:PackIcon Kind="Edit" />
                 </Button>
 
+                <Button ToolTip="Edit Status"
+                        Background="{DynamicResource PrimaryHueMidBrush}"
+                        Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                        IsEnabled="{Binding Path=CanEditService}"
+                        cal:Message.Attach="[Event Click] = [Action EditStatus]">
+                    <material:PackIcon Kind="Check" />
+                </Button>
+
                 <Button ToolTip="Delete"
                         Background="{DynamicResource PrimaryHueMidBrush}"
                         Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"

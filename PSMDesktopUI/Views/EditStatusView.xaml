@@ -1,0 +1,63 @@
+﻿<dx:ThemedWindow 
+    x:Class="PSMDesktopUI.Views.EditStatusView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:converters="clr-namespace:PSMDesktopUI.ValueConverters"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cal="http://www.caliburnproject.org"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+    Style="{StaticResource WindowStyle}"
+    ShowIcon="False"
+    ShowInTaskbar="False"
+    ResizeMode="NoResize"
+    WindowStartupLocation="CenterOwner"
+    Title="{Binding NomorNota}"
+    TitleAlignment="Center"
+    Height="245" Width="500">
+    
+    <Grid>
+        <dxlc:LayoutControl Orientation="Vertical" dxe:ValidationService.IsValidationContainer="True">
+            <dxlc:LayoutGroup Orientation="Vertical">
+                <dxlc:LayoutItem Label="Status:" Margin="4">
+                    <dxe:ComboBoxEdit 
+                        Height="30" Margin="10 0 0 0"
+                        ItemsSource="{Binding Path=ServiceStatuses, Converter={converters:EnumToCollectionConverter}, Mode=OneTime}"
+                        ValueMember="Key"
+                        DisplayMember="Value"
+                        EditValue="{Binding SelectedStatus, UpdateSourceTrigger=PropertyChanged}" />
+                </dxlc:LayoutItem>
+
+                <dxlc:LayoutItem Label="Tanggal Konfirmasi" Margin="4">
+                    <dxlc:LayoutGroup Orientation="Horizontal" Margin="10 0 0 0" Height="30"
+                                  ItemSpace="8">
+                        <dxe:DateEdit Mask="g"
+                                  MaskUseAsDisplayFormat="True"
+                                  IsEnabled="{Binding Path=SudahKonfirmasi, Mode=OneWay}"
+                                  EditValue="{Binding Path=TanggalKonfirmasi, UpdateSourceTrigger=PropertyChanged}" />
+
+                        <dxe:CheckEdit Width="15"
+                                   IsChecked="{Binding Path=SudahKonfirmasi, UpdateSourceTrigger=PropertyChanged}" />
+                    </dxlc:LayoutGroup>
+                </dxlc:LayoutItem>
+
+                <dxlc:LayoutItem Label="Isi Konfirmasi:" Margin="4">
+                    <dxe:TextEdit x:Name="IsiKonfirmasi" Margin="10 0 0 0" Height="30"
+                              AllowNullInput="False"
+                              IsEnabled="{Binding Path=SudahKonfirmasi, Mode=OneWay}"
+                              Text="{Binding Path=IsiKonfirmasi, UpdateSourceTrigger=PropertyChanged}" />
+                </dxlc:LayoutItem>
+            </dxlc:LayoutGroup>
+
+            <dxlc:LayoutGroup Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 10 0 0">
+                <dx:SimpleButton x:Name="Save"
+                                 Content="Save" Height="35" MinWidth="100"
+                                 FontSize="15" Margin="0 0 5 0" />
+
+                <dx:SimpleButton x:Name="Cancel"
+                                 Content="Cancel" Height="35" MinWidth="100"
+                                 FontSize="15" Margin="0 0 5 0" />
+            </dxlc:LayoutGroup>
+        </dxlc:LayoutControl>
+    </Grid>
+</dx:ThemedWindow>
