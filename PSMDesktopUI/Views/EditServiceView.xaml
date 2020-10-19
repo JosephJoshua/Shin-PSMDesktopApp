@@ -23,7 +23,7 @@
                     <dxlc:LayoutItem Label="Nama Pelanggan:" Margin="4">
                         <dxe:TextEdit x:Name="NamaPelanggan" Margin="10 0 0 0" Height="30"
                                       AllowNullInput="False"
-                                      IsReadOnly="{Binding Path=MemberIsCustomer}"
+                                      IsReadOnly="{Binding Path=CustomerIsMember}"
                                       Text="{Binding Path=NamaPelanggan, UpdateSourceTrigger=PropertyChanged}" />
                     </dxlc:LayoutItem>
 
@@ -48,7 +48,7 @@
                     <dxlc:LayoutItem Label="Kerusakan:" Margin="4">
                         <dxlc:LayoutGroup Orientation="Horizontal" Margin="10 0 0 0" Height="30">
                             <dxe:TextEdit x:Name="Damage"
-                                          Margin="5 0 0 0"
+                                          Margin="0 0 0 5"
                                           Text="{Binding Path=Damage}"
                                           IsReadOnly="True"
                                           Height="30" />

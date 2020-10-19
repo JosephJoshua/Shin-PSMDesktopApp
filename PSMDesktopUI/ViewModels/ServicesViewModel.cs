@@ -273,11 +273,24 @@ namespace PSMDesktopUI.ViewModels
             ServiceModel service = SelectedService;
 
             EditServiceViewModel editServiceVM = IoC.Get<EditServiceViewModel>();
-            editServiceVM.SetFieldValues(service);
+            await editServiceVM.SetFieldValues(service);
 
             if (_windowManager.ShowDialog(editServiceVM) == true)
             {
                 await SyncServiceValues(service.NomorNota);
+                await LoadServices();
+            }
+        }
+
+        public async Task EditStatus()
+        {
+            ServiceModel service = SelectedService;
+
+            EditStatusViewModel editStatusVM = IoC.Get<EditStatusViewModel>();
+            editStatusVM.SetFieldValues(service);
+
+            if (_windowManager.ShowDialog(editStatusVM) == true)
+            {
                 await LoadServices();
             }
         }
