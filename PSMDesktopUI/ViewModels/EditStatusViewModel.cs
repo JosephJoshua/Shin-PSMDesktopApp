@@ -10,6 +10,7 @@ namespace PSMDesktopUI.ViewModels
 {
     public class EditStatusViewModel : Screen
     {
+        private readonly IWindowManager _windowManager;
         private readonly IServiceEndpoint _serviceEndpoint;
 
         private ServiceModel _oldService;
@@ -50,6 +51,11 @@ namespace PSMDesktopUI.ViewModels
 
             set
             {
+                if (value == ServiceStatus.TidakJadiBelumDiambil || value == ServiceStatus.TidakJadiSudahDiambil)
+                {
+                    if (!AskForCSPassword()) return;
+                }
+
                 _selectedStatus = value;
                 NotifyOfPropertyChange(() => SelectedStatus);
             }
@@ -93,8 +99,9 @@ namespace PSMDesktopUI.ViewModels
             }
         }
 
-        public EditStatusViewModel(IServiceEndpoint serviceEndpoint)
+        public EditStatusViewModel(IWindowManager windowManager, IServiceEndpoint serviceEndpoint)
         {
+            _windowManager = windowManager;
             _serviceEndpoint = serviceEndpoint;
         }
 
@@ -140,6 +147,11 @@ namespace PSMDesktopUI.ViewModels
         public void Cancel()
         {
             TryClose(false);
+        }
+
+        private bool AskForCSPassword()
+        {
+            return _windowManager.ShowDialog(IoC.Get<CSPasswordViewModel>()) == true;
         }
     }
 }
