@@ -68,13 +68,15 @@ namespace PSMDesktopUI.ViewModels
             }
             else
             {
+                string role = _apiHelper.LoggedInUser.Role.ToLower();
+
                 _loggedIn = true;
 
-                if (_apiHelper.LoggedInUser.Role.ToLower() == "Customer Service".ToLower())
+                if (role == "Customer Service".ToLower())
                 {
                     Items.Add(_servicesViewModel);
                 }
-                else if (_apiHelper.LoggedInUser.Role.ToLower() == "Admin".ToLower())
+                else if (role == "Admin".ToLower())
                 {
                     Items.Add(_membersViewModel);
                     Items.Add(_techniciansViewModel);
@@ -84,6 +86,11 @@ namespace PSMDesktopUI.ViewModels
                     Items.Add(_sparepartReportViewModel);
                     Items.Add(_profitReportViewModel);
                     Items.Add(_technicianReportViewModel);
+                }
+                else if (role == "Buyer".ToLower())
+                {
+                    Items.Add(_servicesViewModel);
+                    Items.Add(_sparepartReportViewModel);
                 }
             }
         }
