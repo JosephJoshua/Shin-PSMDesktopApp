@@ -278,7 +278,7 @@ namespace PSMDesktopUI.ViewModels
                     NomorNota = s.NomorNota,
                     TanggalPengambilan = s.TanggalPengambilan,
                     TipeHp = s.TipeHp,
-                    Biaya = s.Biaya,
+                    Biaya = s.TotalBiaya,
                     HargaSparepart = s.HargaSparepart,
                     LabaRugi = s.LabaRugi,
                     Kerusakan = damageList.Find(d => d.Id == s.DamageId).Kerusakan,
