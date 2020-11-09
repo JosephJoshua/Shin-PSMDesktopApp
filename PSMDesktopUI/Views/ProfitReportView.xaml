@@ -88,19 +88,19 @@
             
             <dxg:GridColumn Header="Biaya" Width="3*" Binding="{Binding Path=Biaya}">
                 <dxg:GridColumn.EditSettings>
-                    <dxe:TextEditSettings HorizontalContentAlignment="Left" />
+                    <dxe:TextEditSettings HorizontalContentAlignment="Left" DisplayFormat="C0" />
                 </dxg:GridColumn.EditSettings>
             </dxg:GridColumn>
 
             <dxg:GridColumn Header="Harga Sparepart" Width="3*" Binding="{Binding Path=HargaSparepart}">
                 <dxg:GridColumn.EditSettings>
-                    <dxe:TextEditSettings HorizontalContentAlignment="Left" />
+                    <dxe:TextEditSettings HorizontalContentAlignment="Left" DisplayFormat="C0" />
                 </dxg:GridColumn.EditSettings>
             </dxg:GridColumn>
 
             <dxg:GridColumn Header="Laba/Rugi" Width="3*" Binding="{Binding Path=LabaRugi}">
                 <dxg:GridColumn.EditSettings>
-                    <dxe:TextEditSettings HorizontalContentAlignment="Left" />
+                    <dxe:TextEditSettings HorizontalContentAlignment="Left" DisplayFormat="C0" />
                 </dxg:GridColumn.EditSettings>
             </dxg:GridColumn>
 
