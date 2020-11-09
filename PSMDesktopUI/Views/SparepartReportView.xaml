@@ -104,7 +104,7 @@
 
             <dxg:GridColumn Header="Harga" Width="4*" Binding="{Binding Path=Harga}">
                 <dxg:GridColumn.EditSettings>
-                    <dxe:TextEditSettings HorizontalContentAlignment="Left" />
+                    <dxe:TextEditSettings HorizontalContentAlignment="Left" DisplayFormat="C0" />
                 </dxg:GridColumn.EditSettings>
             </dxg:GridColumn>
 
