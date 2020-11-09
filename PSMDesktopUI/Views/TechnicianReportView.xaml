@@ -77,6 +77,18 @@
                           DisplayMember="Nama"
                           EditValue="{Binding SelectedTechnician, UpdateSourceTrigger=PropertyChanged}" />
 
+        <!-- Progress bar -->
+        <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
+                     Grid.Column="0" Grid.Row="2"
+                     Grid.ColumnSpan="6"
+                     Width="40"
+                     Height="40"
+                     HorizontalAlignment="Center"
+                     VerticalAlignment="Center"
+                     Value="0"
+                     IsIndeterminate="True"
+                     Visibility="{c:Binding Path=IsLoading}" />
+
         <!-- Data grid -->
         <dxg:GridControl Grid.Column="0" Grid.Row="2"
                          Grid.ColumnSpan="6"
