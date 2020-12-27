@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using DevExpress.Xpf.Core;
 using PSMDesktopUI.Library.Api;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -11,10 +12,8 @@ namespace PSMDesktopUI.ViewModels
         private readonly IApiHelper _apiHelper;
         private readonly IWindowManager _windowManager;
 
-        private readonly MembersViewModel _membersViewModel;
         private readonly TechniciansViewModel _techniciansViewModel;
         private readonly SalesViewModel _salesViewModel;
-        private readonly DamagesViewModel _damagesViewModel;
         private readonly ServicesViewModel _servicesViewModel;
         private readonly SparepartReportViewModel _sparepartReportViewModel;
         private readonly ProfitReportViewModel _profitReportViewModel;
@@ -23,18 +22,15 @@ namespace PSMDesktopUI.ViewModels
         private bool _loggedIn = false;
         
         public ShellViewModel(IApiHelper apiHelper, IWindowManager windowManager,
-            MembersViewModel membersViewModel, TechniciansViewModel techniciansViewModel, SalesViewModel salesViewModel,
-            DamagesViewModel damagesViewModel, ServicesViewModel servicesViewModel,
-            SparepartReportViewModel sparepartReportViewModel, ProfitReportViewModel profitReportViewModel,
-            TechnicianReportViewModel technicianReportViewModel)
+            TechniciansViewModel techniciansViewModel, SalesViewModel salesViewModel,
+            ServicesViewModel servicesViewModel, SparepartReportViewModel sparepartReportViewModel, 
+            ProfitReportViewModel profitReportViewModel, TechnicianReportViewModel technicianReportViewModel)
         {
             _apiHelper = apiHelper;
             _windowManager = windowManager;
 
-            _membersViewModel = membersViewModel;
             _techniciansViewModel = techniciansViewModel;
             _salesViewModel = salesViewModel;
-            _damagesViewModel = damagesViewModel;
             _servicesViewModel = servicesViewModel;
             _sparepartReportViewModel = sparepartReportViewModel;
             _profitReportViewModel = profitReportViewModel;
@@ -46,13 +42,19 @@ namespace PSMDesktopUI.ViewModels
             _windowManager.ShowDialog(IoC.Get<RecalculateViewModel>());
         }
 
-        public void OnClose()
+        public void OnClose(CancelEventArgs args)
         {
             if (!_loggedIn) return;
 
-            if (DXMessageBox.Show("Do you want to recalculate automatic values?", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            MessageBoxResult result = DXMessageBox.Show("Do you want to recalculate automatic values?", "", MessageBoxButton.YesNoCancel);
+
+            if (result == MessageBoxResult.Yes)
             {
                 Recalculate();
+            }
+            else if (result == MessageBoxResult.Cancel)
+            {
+                args.Cancel = true;
             }
         }
 
@@ -78,10 +80,8 @@ namespace PSMDesktopUI.ViewModels
                 }
                 else if (role == "Admin".ToLower())
                 {
-                    Items.Add(_membersViewModel);
                     Items.Add(_techniciansViewModel);
                     Items.Add(_salesViewModel);
-                    Items.Add(_damagesViewModel);
                     Items.Add(_servicesViewModel);
                     Items.Add(_sparepartReportViewModel);
                     Items.Add(_profitReportViewModel);

@@ -31,6 +31,22 @@ namespace PSMDesktopUI.Library.Api
             }
         }
 
+        public async Task<ServiceModel> GetByNomorNota(int nomorNota)
+        {
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/Service/" + nomorNota).ConfigureAwait(false))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    ServiceModel result = await response.Content.ReadAsAsync<ServiceModel>();
+                    return result;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
         public async Task Insert(ServiceModel service)
         {
             await _apiHelper.ApiClient.PostAsJsonAsync("/api/Service", service).ConfigureAwait(false);

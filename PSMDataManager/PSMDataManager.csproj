@@ -236,9 +236,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\DamageController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\MemberController.cs" />
     <Compile Include="Controllers\SalesController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
     <Compile Include="Controllers\SparepartController.cs" />
@@ -347,7 +345,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PSMDataManager.Library\PSMDataManager.Library.csproj">
-      <Project>{0ACF3383-2C08-4203-B76B-0E378E62A442}</Project>
+      <Project>{0acf3383-2c08-4203-b76b-0e378e62a442}</Project>
       <Name>PSMDataManager.Library</Name>
     </ProjectReference>
   </ItemGroup>

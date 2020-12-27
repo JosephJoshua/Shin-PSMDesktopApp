@@ -1,6 +1,7 @@
 ﻿using PSMDataManager.Library.Internal.DataAccess;
 using PSMDataManager.Library.Models;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PSMDataManager.Library.DataAccess
 {
@@ -12,6 +13,14 @@ namespace PSMDataManager.Library.DataAccess
 
             var data = sql.LoadData<TechnicianModel, dynamic>("dbo.spGetAllTechnicians", new { }, "PSMData");
             return data;
+        }
+
+        public TechnicianModel GetTechnicianById(int id)
+        {
+            SqlDataAccess sql = new SqlDataAccess();
+            TechnicianModel technician = sql.LoadData<TechnicianModel, dynamic>("dbo.spGetTechnicianById", new { Id = id }, "PSMData").FirstOrDefault();
+
+            return technician;
         }
 
         public void InsertTechnician(TechnicianModel technician)

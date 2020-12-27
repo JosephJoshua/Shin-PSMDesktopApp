@@ -4,7 +4,6 @@ using PSMDesktopUI.Library.Api;
 using PSMDesktopUI.Library.Models;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -16,7 +15,6 @@ namespace PSMDesktopUI.ViewModels
     public sealed class ProfitReportViewModel : Screen
     {
         private readonly IServiceEndpoint _serviceEndpoint;
-        private readonly IDamageEndpoint _damageEndpoint;
 
         private bool _isLoading = false;
         private BindableCollection<ProfitResultModel> _profitResults;
@@ -97,18 +95,16 @@ namespace PSMDesktopUI.ViewModels
             get => ProfitResults.Sum(t => t.LabaRugi);
         }
 
-        public ProfitReportViewModel(IServiceEndpoint serviceEndpoint, IDamageEndpoint damageEndpoint)
+        public ProfitReportViewModel(IServiceEndpoint serviceEndpoint)
         {
             DisplayName = "Profit Report";
-
             _serviceEndpoint = serviceEndpoint;
-            _damageEndpoint = damageEndpoint;
         }
 
-        protected override async void OnViewLoaded(object view)
+        protected override void OnViewLoaded(object view)
         {
             base.OnViewLoaded(view);
-            await LoadResults();
+            LoadResults();
         }
 
         public void ExportToExcel()
@@ -186,15 +182,14 @@ namespace PSMDesktopUI.ViewModels
             Marshal.ReleaseComObject(xlApp);
         }
 
-        public async Task LoadResults()
+        public async void LoadResults()
         {
             if (IsLoading) return;
 
             IsLoading = true;
 
-            List<DamageModel> damageList = await _damageEndpoint.GetAll();
-            List<ProfitResultModel> resultList = (await _serviceEndpoint.GetAll()).Where((s) => s.StatusServisan.ToLower() == "Jadi (Sudah diambil)".ToLower() ||
-                s.StatusServisan.ToLower() == "Tidak Jadi (Sudah diambil)".ToLower())
+            List<ProfitResultModel> resultList = (await _serviceEndpoint.GetAll()).Where((s) => s.StatusServisan == "Jadi (Sudah diambil)" ||
+                s.StatusServisan == "Tidak Jadi (Sudah diambil)")
                 .Select(s =>
                     new ProfitResultModel
                     {
@@ -204,7 +199,7 @@ namespace PSMDesktopUI.ViewModels
                         Biaya = s.TotalBiaya,
                         HargaSparepart = s.HargaSparepart,
                         LabaRugi = s.LabaRugi,
-                        Kerusakan = damageList.Find(d => d.Id == s.DamageId).Kerusakan
+                        Kerusakan = s.Kerusakan,
                     }).ToList();
 
             List<ProfitResultModel> filteredResultList = new List<ProfitResultModel>();

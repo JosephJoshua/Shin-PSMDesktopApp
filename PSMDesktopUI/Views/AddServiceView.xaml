@@ -79,93 +79,6 @@
 
         </Grid>
 
-        <!-- Member/Non-member buttons -->
-        <Grid Width="260" Height="50" Panel.ZIndex="10" Visibility="{c:Binding Path=ShowMemberButtons}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="10" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-
-            <dx:SimpleButton Grid.Column="0" Grid.Row="0"
-                             x:Name="SelectMember"
-                             Content="Member" Height="35" MinWidth="100"
-                             FontSize="15" Margin="0 0 5 0" />
-
-            <dx:SimpleButton Grid.Column="2" Grid.Row="0"
-                             x:Name="SelectNonMember"
-                             Content="Non-member" Height="35" MinWidth="100"
-                             FontSize="15" Margin="0 0 5 0" />
-        </Grid>
-        
-        <!-- Member table grid -->
-        <Grid Visibility="{c:Binding Path=ShowMemberGrid}" Panel.ZIndex="11">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-
-            <!-- Progress bar -->
-            <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
-                         Grid.Column="0" Grid.Row="1"
-                         Grid.ColumnSpan="2"
-                         Width="40"
-                         Height="40"
-                         HorizontalAlignment="Center"
-                         VerticalAlignment="Center"
-                         Value="0"  
-                         IsIndeterminate="True"
-                         Visibility="{c:Binding Path=IsMemberLoading}" />
-
-            <!-- Member data grid -->
-            <dxg:GridControl Grid.Column="0" Grid.Row="1"
-                             Grid.ColumnSpan="2"
-                             Margin="0 10 0 0"
-                             SelectionMode="Row"
-                             ItemsSourceChanged="MemberGrid_ItemsSourceChanged"
-                             CurrentItem="{Binding Path=SelectedMember}"
-                             ItemsSource="{Binding Path=Members}"
-                             Visibility="{c:Binding Path=!IsMemberLoading}">
-
-                <dxg:GridColumn Header="Id" Width="*" FieldName="Id">
-                    <dxg:GridColumn.EditSettings>
-                        <dxe:TextEditSettings HorizontalContentAlignment="Left" />
-                    </dxg:GridColumn.EditSettings>
-                </dxg:GridColumn>
-
-                <dxg:GridColumn Header="Nama" Width="3*" FieldName="Nama" />
-                <dxg:GridColumn Header="No HP" Width="2*" FieldName="NoHp" />
-                <dxg:GridColumn Header="Alamat" Width="2*" FieldName="Alamat" />
-                <dxg:GridColumn Header="Tipe HP 1" Width="2*" FieldName="TipeHp1" />
-                <dxg:GridColumn Header="Tipe HP 2" Width="2*" FieldName="TipeHp2" />
-                <dxg:GridColumn Header="Tipe HP 3" Width="2*" FieldName="TipeHp3" />
-                <dxg:GridColumn Header="Tipe HP 4" Width="2*" FieldName="TipeHp4" />
-                <dxg:GridColumn Header="Tipe HP 5" Width="2*" FieldName="TipeHp5" />
-
-                <dxg:GridControl.View>
-                    <dxg:TableView AllowScrollAnimation="True"
-                                   AllowFixedGroups="True"
-                                   AllowEditing="False" />
-                </dxg:GridControl.View>
-
-            </dxg:GridControl>
-
-            <!-- OK button -->
-            <dx:SimpleButton Grid.Column="0" Grid.Row="1"
-                             HorizontalAlignment="Right"
-                             VerticalAlignment="Bottom"
-                             Margin="20"
-                             Padding="5"
-                             MinWidth="70"
-                             ToolTip="OK"
-                             Background="{DynamicResource PrimaryHueMidBrush}"
-                             Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
-                             IsEnabled="{Binding Path=HasSelectedMember}"
-                             cal:Message.Attach="[Event Click] = [Action ConfirmMember]"
-                             Content="OK" /> 
-
-        </Grid>
-
         <!-- Input text fields -->
         <dxlc:LayoutControl Orientation="Vertical" dxe:ValidationService.IsValidationContainer="True">
             <dxlc:LayoutGroup Orientation="Horizontal" Visibility="{c:Binding Path=ShowTextFields, FalseToVisibility=Hidden}">
@@ -173,7 +86,6 @@
                     <dxlc:LayoutItem Label="Nama Pelanggan:" Margin="4">
                         <dxe:TextEdit x:Name="NamaPelanggan" Margin="10 0 0 0" Height="30"
                                       AllowNullInput="False"
-                                      IsReadOnly="{Binding Path=MemberIsCustomer}"
                                       Text="{Binding Path=NamaPelanggan, UpdateSourceTrigger=PropertyChanged}" />
                     </dxlc:LayoutItem>
 
@@ -196,17 +108,9 @@
                     </dxlc:LayoutItem>
 
                     <dxlc:LayoutItem Label="Kerusakan:" Margin="4">
-                        <dxlc:LayoutGroup Orientation="Horizontal" Margin="10 0 0 0" Height="30">
-                            <dxe:TextEdit x:Name="Damage"
-                                          Height="30" Margin="0 0 0 5"
-                                          Text="{Binding Path=Damage}"
-                                          IsReadOnly="True" />
-
-                            <dx:SimpleButton FontSize="15"
-                                             MaxWidth="35"
-                                             Content="..."
-                                             cal:Message.Attach="[Event Click] = [Action SelectDamage]" />
-                        </dxlc:LayoutGroup>
+                        <dxe:TextEdit x:Name="Kerusakan"
+                                      Height="30" Margin="10 0 0 5"
+                                      Text="{Binding Path=Kerusakan}" />
                     </dxlc:LayoutItem>
 
                     <dxlc:LayoutItem Label="Yang Belum Dicek:" Margin="4">

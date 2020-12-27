@@ -16,7 +16,6 @@ namespace PSMDesktopUI.ViewModels
     public sealed class TechnicianReportViewModel : Screen
     {
         private readonly IServiceEndpoint _serviceEndpoint;
-        private readonly IDamageEndpoint _damageEndpoint;
         private readonly ITechnicianEndpoint _technicianEndpoint;
 
         private bool _isLoading = false;
@@ -153,21 +152,20 @@ namespace PSMDesktopUI.ViewModels
             }
         }
 
-        public TechnicianReportViewModel(IServiceEndpoint serviceEndpoint, IDamageEndpoint damageEndpoint,
-                ITechnicianEndpoint technicianEndpoint)
+        public TechnicianReportViewModel(IServiceEndpoint serviceEndpoint, ITechnicianEndpoint technicianEndpoint)
         {
             DisplayName = "Technician Report";
-
+            
             _serviceEndpoint = serviceEndpoint;
-            _damageEndpoint = damageEndpoint;
             _technicianEndpoint = technicianEndpoint;
         }
 
         protected override async void OnViewLoaded(object view)
         {
             base.OnViewLoaded(view);
+
             await LoadTechnicians();
-            await LoadResults();
+            LoadResults();
         }
 
         public void ExportToExcel()
@@ -263,16 +261,14 @@ namespace PSMDesktopUI.ViewModels
             Technicians = new BindableCollection<TechnicianModel>(technicianList);
         }
 
-        public async Task LoadResults()
+        public async void LoadResults()
         {
             if (IsLoading || SelectedTechnician == null) return;
 
             IsLoading = true;
 
-            List<DamageModel> damageList = await _damageEndpoint.GetAll();
-
             List<TechnicianResultModel> resultList = (await _serviceEndpoint.GetAll()).Where((s) => s.TechnicianId == SelectedTechnician.Id && 
-                (s.StatusServisan.ToLower() == "Jadi (Sudah diambil)".ToLower() || s.StatusServisan.ToLower() == "Tidak Jadi (Sudah diambil)".ToLower()))
+                (s.StatusServisan == "Jadi (Sudah diambil)" || s.StatusServisan == "Tidak Jadi (Sudah diambil)"))
                 .Select(s => new TechnicianResultModel
                 {
                     NomorNota = s.NomorNota,
@@ -281,7 +277,7 @@ namespace PSMDesktopUI.ViewModels
                     Biaya = s.TotalBiaya,
                     HargaSparepart = s.HargaSparepart,
                     LabaRugi = s.LabaRugi,
-                    Kerusakan = damageList.Find(d => d.Id == s.DamageId).Kerusakan,
+                    Kerusakan = s.Kerusakan,
                     NamaTeknisi = Technicians.SingleOrDefault(t => t.Id == s.TechnicianId).Nama
                 }).ToList();
 

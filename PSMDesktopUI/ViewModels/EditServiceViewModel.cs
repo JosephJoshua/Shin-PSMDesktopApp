@@ -15,10 +15,8 @@ namespace PSMDesktopUI.ViewModels
         private readonly IWindowManager _windowManager;
 
         private readonly IServiceEndpoint _serviceEndpoint;
-        private readonly IDamageEndpoint _damageEndpoint;
         private readonly ITechnicianEndpoint _technicianEndpoint;
 
-        private int _damageId = -1;
         private int _technicianId;
 
         private int _nomorNota;
@@ -26,7 +24,7 @@ namespace PSMDesktopUI.ViewModels
         private string _noHp;
         private string _tipeHp;
         private string _imei;
-        private string _damage;
+        private string _kerusakan;
         private string _yangBelumDicek;
         private string _warna;
         private string _kataSandiPola;
@@ -111,19 +109,6 @@ namespace PSMDesktopUI.ViewModels
             }
         }
 
-        public string Damage
-        {
-            get => _damage;
-
-            set
-            {
-                _damage = value;
-
-                NotifyOfPropertyChange(() => Damage);
-                NotifyOfPropertyChange(() => CanSave);
-            }
-        }
-
         public string YangBelumDicek
         {
             get => _yangBelumDicek;
@@ -179,14 +164,16 @@ namespace PSMDesktopUI.ViewModels
             }
         }
 
-        public int DamageId
+        public string Kerusakan
         {
-            get => _damageId;
+            get => _kerusakan;
 
             set
             {
-                _damageId = value;
-                NotifyOfPropertyChange(() => DamageId);
+                _kerusakan = value;
+
+                NotifyOfPropertyChange(() => Kerusakan);
+                NotifyOfPropertyChange(() => CanSave);
             }
         }
 
@@ -370,22 +357,15 @@ namespace PSMDesktopUI.ViewModels
             }
         }
 
-        public bool CustomerIsMember
-        {
-            get => NamaPelanggan.StartsWith("M-");
-        }
-
         public bool CanSave
         {
-            get => !string.IsNullOrWhiteSpace(NamaPelanggan) && !string.IsNullOrWhiteSpace(TipeHp) && !string.IsNullOrWhiteSpace(Damage);
+            get => !string.IsNullOrWhiteSpace(NamaPelanggan) && !string.IsNullOrWhiteSpace(TipeHp) && !string.IsNullOrWhiteSpace(Kerusakan);
         }
 
-        public EditServiceViewModel(IWindowManager windowManager, ITechnicianEndpoint technicianEndpoint,
-                                    IDamageEndpoint damageEndpoint, IServiceEndpoint serviceEndpoint)
+        public EditServiceViewModel(IWindowManager windowManager, ITechnicianEndpoint technicianEndpoint, IServiceEndpoint serviceEndpoint)
         {
             _windowManager = windowManager;
             _serviceEndpoint = serviceEndpoint;
-            _damageEndpoint = damageEndpoint;
             _technicianEndpoint = technicianEndpoint;
         }
 
@@ -400,19 +380,6 @@ namespace PSMDesktopUI.ViewModels
         {
             List<TechnicianModel> technicianList = await _technicianEndpoint.GetAll();
             Technicians = new BindingList<TechnicianModel>(technicianList);
-        }
-
-        public void SelectDamage()
-        {
-            SelectDamageViewModel selectDamageVM = IoC.Get<SelectDamageViewModel>();
-
-            if (_windowManager.ShowDialog(selectDamageVM) == true)
-            {
-                DamageModel selectedDamage = selectDamageVM.SelectedDamage;
-
-                Damage = selectedDamage.Kerusakan;
-                DamageId = selectedDamage.Id;
-            }
         }
 
         public async Task Save()
@@ -444,7 +411,7 @@ namespace PSMDesktopUI.ViewModels
             }
         }
 
-        public async Task SetFieldValues(ServiceModel service)
+        public void SetFieldValues(ServiceModel service)
         {
             NomorNota = service.NomorNota;
             NamaPelanggan = service.NamaPelanggan;
@@ -462,10 +429,7 @@ namespace PSMDesktopUI.ViewModels
             Discount = service.Discount;
             Dp = (double)service.Dp;
             TambahanBiaya = (double)service.TambahanBiaya;
-            DamageId = service.DamageId;
-
-            // Get damage from id
-            Damage = (await _damageEndpoint.GetAll()).Where(d => d.Id == DamageId).FirstOrDefault().Kerusakan;
+            Kerusakan = service.Kerusakan;
 
             _technicianId = service.TechnicianId;
 
@@ -531,7 +495,7 @@ namespace PSMDesktopUI.ViewModels
                 NoHp = NoHp,
                 TipeHp = TipeHp,
                 Imei = Imei,
-                DamageId = DamageId,
+                Kerusakan = Kerusakan,
                 KondisiHp = KondisiHp,
                 YangBelumDicek = YangBelumDicek,
                 Kelengkapan = kelengkapan,

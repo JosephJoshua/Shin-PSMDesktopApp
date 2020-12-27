@@ -20,7 +20,7 @@ namespace PSMDataManager.Controllers
         public List<SparepartModel> GetByService(int nomorNota)
         {
             SparepartData data = new SparepartData();
-            return data.GetSparepartsByService(nomorNota);
+            return data.GetSparepartByNomorNota(nomorNota);
         }
 
         [HttpPost]

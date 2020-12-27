@@ -10,7 +10,7 @@ namespace PSMDesktopUI.Library.Api
 
         Task<List<SparepartModel>> GetAll();
 
-        Task<List<SparepartModel>> GetByService(int nomorNota);
+        Task<List<SparepartModel>> GetByNomorNota(int nomorNota);
 
         Task Insert(SparepartModel sparepart);
     }

@@ -125,7 +125,7 @@
             <dxg:GridColumn Header="No Hp" FieldName="NoHp" />
             <dxg:GridColumn Header="Tipe Hp" FieldName="TipeHp" />
             <dxg:GridColumn Header="Imei" FieldName="Imei" />
-            <dxg:GridColumn Header="Damage Id" FieldName="DamageId" />
+            <dxg:GridColumn Header="Kerusakan" FieldName="Kerusakan" />
             <dxg:GridColumn Header="Kondisi Hp" FieldName="KondisiHp" />
             <dxg:GridColumn Header="Yang Belum Dicek" FieldName="YangBelumDicek" />
             <dxg:GridColumn Header="Kelengkapan" FieldName="Kelengkapan" />
@@ -141,9 +141,9 @@
             <dxg:GridColumn Header="Dp" FieldName="Dp" />
             <dxg:GridColumn Header="Tambahan Biaya" FieldName="TambahanBiaya" />
             <dxg:GridColumn Header="Total Biaya" FieldName="TotalBiaya" />
-            <dxg:GridColumn Header="Harga Sparepart" FieldName="HargaSparepart" />
+            <dxg:GridColumn Header="Harga Sparepart" FieldName="HargaSparepart" Visible="{Binding Path=IsAdmin}" />
             <dxg:GridColumn Header="Sisa" FieldName="Sisa" />
-            <dxg:GridColumn Header="Laba/Rugi" FieldName="LabaRugi" />
+            <dxg:GridColumn Header="Laba/Rugi" FieldName="LabaRugi" Visible="{Binding Path=IsAdmin}" />
             <dxg:GridColumn Header="Tanggal Pengambilan" FieldName="TanggalPengambilan" />
 
             <dxg:GridControl.View>
@@ -249,7 +249,7 @@
             <TextBlock FontSize="14" Text="{Binding Path=SelectedService.NoHp, StringFormat=No Hp: {0}}" />
             <TextBlock FontSize="14" Text="{Binding Path=SelectedService.TipeHp, StringFormat=Tipe Hp: {0}}" />
             <TextBlock FontSize="14" Text="{Binding Path=SelectedService.Imei, StringFormat=Imei: {0}}" />
-            <TextBlock FontSize="14" Text="{Binding Path=SelectedServiceDamage, StringFormat=Kerusakan: {0}}" />
+            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.Kerusakan, StringFormat=Kerusakan: {0}}" />
             <TextBlock FontSize="14" Text="{Binding Path=SelectedService.KondisiHp, StringFormat=Kondisi Hp: {0}}" />
             <TextBlock FontSize="14" Text="{Binding Path=SelectedService.YangBelumDicek, StringFormat=Yang Belum Dicek: {0}}" />
             <TextBlock FontSize="14" Text="{Binding Path=SelectedService.Kelengkapan, StringFormat=Kelengkapan: {0}}" />
@@ -265,9 +265,9 @@
             <TextBlock FontSize="14" Text="{Binding Path=SelectedService.Dp, StringFormat=Dp: Rp{0:N0}}" />
             <TextBlock FontSize="14" Text="{Binding Path=SelectedService.TambahanBiaya, StringFormat=TambahanBiaya: Rp{0:N0}}" />
             <TextBlock FontSize="14" Text="{Binding Path=SelectedService.TotalBiaya, StringFormat=Total Biaya: Rp{0:N0}}" />
-            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.HargaSparepart, StringFormat=Harga Sparepart: Rp{0:N0}}" />
+            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.HargaSparepart, StringFormat=Harga Sparepart: Rp{0:N0}}" Visibility="{c:Binding Path=IsAdmin, FalseToVisibility=Collapsed}" />
             <TextBlock FontSize="14" Text="{Binding Path=SelectedService.Sisa, StringFormat=Sisa: Rp{0:N0}}" />
-            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.LabaRugi, StringFormat=Laba/Rugi: Rp{0:N0}}" />
+            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.LabaRugi, StringFormat=Laba/Rugi: Rp{0:N0}}" Visibility="{c:Binding Path=IsAdmin, FalseToVisibility=Collapsed}" />
             <TextBlock FontSize="14" Text="{Binding Path=SelectedService.TanggalPengambilan, StringFormat=Tanggal Pengambilan: {0}}" />
         </StackPanel>
 

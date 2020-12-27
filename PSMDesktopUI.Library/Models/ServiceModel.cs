@@ -18,7 +18,7 @@ namespace PSMDesktopUI.Library.Models
 
         public string Imei { get; set; }
 
-        public int DamageId { get; set; }
+        public string Kerusakan { get; set; }
 
         public string KondisiHp { get; set; }
 

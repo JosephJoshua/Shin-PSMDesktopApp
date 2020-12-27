@@ -20,7 +20,6 @@ namespace PSMDesktopUI.ViewModels
         private readonly IServiceEndpoint _serviceEndpoint;
         private readonly ITechnicianEndpoint _technicianEndpoint;
         private readonly ISalesEndpoint _salesEndpoint;
-        private readonly IDamageEndpoint _damageEndpoint;
         private readonly ISparepartEndpoint _sparepartEndpoint;
 
         private bool _isLoading = false;
@@ -75,7 +74,6 @@ namespace PSMDesktopUI.ViewModels
 
                 NotifyOfPropertyChange(() => SelectedService);
                 NotifyOfPropertyChange(() => SelectedServiceTechnician);
-                NotifyOfPropertyChange(() => SelectedServiceDamage);
                 NotifyOfPropertyChange(() => SelectedServiceSales);
                 NotifyOfPropertyChange(() => CanAddSparepart);
                 NotifyOfPropertyChange(() => CanEditService);
@@ -91,7 +89,7 @@ namespace PSMDesktopUI.ViewModels
             {
                 if (SelectedService == null) return null;
 
-                return _technicianEndpoint.GetAll().Result.Where((t) => t.Id == SelectedService.TechnicianId).FirstOrDefault().Nama;
+                return _technicianEndpoint.GetById(SelectedService.TechnicianId).Result.Nama;
             }
         }
 
@@ -101,17 +99,7 @@ namespace PSMDesktopUI.ViewModels
             {
                 if (SelectedService == null) return null;
 
-                return _salesEndpoint.GetAll().Result.Where((t) => t.Id == SelectedService.SalesId).FirstOrDefault().Nama;
-            }
-        }
-
-        public string SelectedServiceDamage
-        {
-            get
-            {
-                if (SelectedService == null) return null;
-
-                return _damageEndpoint.GetAll().Result.Where((t) => t.Id == SelectedService.DamageId).FirstOrDefault().Kerusakan;
+                return _salesEndpoint.GetById(SelectedService.SalesId).Result.Nama;
             }
         }
 
@@ -197,6 +185,11 @@ namespace PSMDesktopUI.ViewModels
             get => SelectedService != null;
         }
 
+        public bool IsAdmin
+        {
+            get => _apiHelper.LoggedInUser.Role.ToLower() == "Admin".ToLower();
+        }
+
         public bool IsCustomerService
         {
             get => _apiHelper.LoggedInUser.Role.ToLower() == "Customer Service".ToLower();
@@ -209,7 +202,7 @@ namespace PSMDesktopUI.ViewModels
 
         public ServicesViewModel(IApiHelper apiHelper, IWindowManager windowManager, IServiceEndpoint serviceEndpoint,
                                  ITechnicianEndpoint technicianEndpoint, ISalesEndpoint salesEndpoint,
-                                 IDamageEndpoint damageEndpoint, ISparepartEndpoint sparepartEndpoint)
+                                 ISparepartEndpoint sparepartEndpoint)
         {
             DisplayName = "Services";
 
@@ -218,7 +211,6 @@ namespace PSMDesktopUI.ViewModels
             _serviceEndpoint = serviceEndpoint;
             _technicianEndpoint = technicianEndpoint;
             _salesEndpoint = salesEndpoint;
-            _damageEndpoint = damageEndpoint;
             _sparepartEndpoint = sparepartEndpoint;
         }
 
@@ -235,7 +227,7 @@ namespace PSMDesktopUI.ViewModels
             
             if (service.Spareparts == null)
             {
-                service.Spareparts = await _sparepartEndpoint.GetByService(service.NomorNota);
+                service.Spareparts = await _sparepartEndpoint.GetByNomorNota(service.NomorNota);
             }
         }
 
@@ -266,7 +258,6 @@ namespace PSMDesktopUI.ViewModels
 
             if (_windowManager.ShowDialog(addSparepartVM) == true)
             {
-                await SyncServiceValues(nomorNota);
                 await LoadServices();
             }
         }
@@ -278,11 +269,10 @@ namespace PSMDesktopUI.ViewModels
             ServiceModel service = SelectedService;
 
             EditServiceViewModel editServiceVM = IoC.Get<EditServiceViewModel>();
-            await editServiceVM.SetFieldValues(service);
+            editServiceVM.SetFieldValues(service);
 
             if (_windowManager.ShowDialog(editServiceVM) == true)
             {
-                await SyncServiceValues(service.NomorNota);
                 await LoadServices();
             }
         }
@@ -316,7 +306,6 @@ namespace PSMDesktopUI.ViewModels
             if (DXMessageBox.Show("Are you sure you want to delete this sparepart?", "Services", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 await _sparepartEndpoint.Delete(SelectedSparepart.Id);
-                await SyncServiceValues(SelectedSparepart.NomorNota);
                 await LoadServices();
             }
         }
@@ -362,13 +351,13 @@ namespace PSMDesktopUI.ViewModels
             OnRefresh?.Invoke();
         }
 
-        public async Task PrintService()
+        public void PrintService()
         {
             if (SelectedService == null) return;
 
-            string kerusakan = (await _damageEndpoint.GetAll()).Find(d => d.Id == SelectedService.DamageId).Kerusakan;
-            string kelengkapan = SelectedService.Kelengkapan.Trim().Replace(" ", ", ").ToLower();
-            kelengkapan = kelengkapan[0].ToString().ToUpper() + kelengkapan.Substring(1);
+            string kelengkapan = SelectedService.Kelengkapan.Trim().Replace(" ", ", ");
+
+            kelengkapan = kelengkapan[0].ToString() + kelengkapan.Substring(1).ToLower();
 
             ServiceInvoicePreviewViewModel invoicePreviewVM = IoC.Get<ServiceInvoicePreviewViewModel>();
             invoicePreviewVM.SetInvoiceModel(new ServiceInvoiceModel
@@ -378,7 +367,7 @@ namespace PSMDesktopUI.ViewModels
                 NoHp = SelectedService.NoHp,
                 TipeHp = SelectedService.TipeHp,
                 Imei = SelectedService.Imei ?? "",
-                Kerusakan = kerusakan,
+                Kerusakan = SelectedService.Kerusakan,
                 TotalBiaya = SelectedService.TotalBiaya,
                 Dp = SelectedService.Dp,
                 Sisa = SelectedService.Sisa,
@@ -389,48 +378,6 @@ namespace PSMDesktopUI.ViewModels
             });
 
             _windowManager.ShowDialog(invoicePreviewVM);
-        }
-
-        public async Task SyncServiceValues(int nomorNota)
-        {
-            ServiceModel service = (await _serviceEndpoint.GetAll()).Where((s) => s.NomorNota == nomorNota).FirstOrDefault();
-
-            decimal hargaSparepart = 0;
-
-            foreach (SparepartModel s in await _sparepartEndpoint.GetByService(nomorNota))
-            {
-                hargaSparepart += s.Harga;
-            }
-
-            decimal labaRugi = service.TotalBiaya - hargaSparepart;
-
-            ServiceModel newService = new ServiceModel
-            {
-                NomorNota = service.NomorNota,
-                NamaPelanggan = service.NamaPelanggan,
-                NoHp = service.NoHp,
-                TipeHp = service.TipeHp,
-                Imei = service.Imei,
-                DamageId = service.DamageId,
-                KondisiHp = service.KondisiHp,
-                YangBelumDicek = service.YangBelumDicek,
-                Kelengkapan = service.Kelengkapan,
-                Warna = service.Warna,
-                KataSandiPola = service.KataSandiPola,
-                TechnicianId = service.TechnicianId,
-                StatusServisan = service.StatusServisan,
-                TanggalKonfirmasi = service.TanggalKonfirmasi,
-                IsiKonfirmasi = service.IsiKonfirmasi,
-                Biaya = service.Biaya,
-                Discount = service.Discount,
-                Dp = service.Dp,
-                TambahanBiaya = service.TambahanBiaya,
-                HargaSparepart = hargaSparepart,
-                LabaRugi = labaRugi,
-                TanggalPengambilan = service.TanggalPengambilan,
-            };
-
-            await _serviceEndpoint.Update(newService);
         }
 
         private bool AskForCSPassword()

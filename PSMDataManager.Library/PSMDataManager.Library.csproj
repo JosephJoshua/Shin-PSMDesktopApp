@@ -46,14 +46,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DapperConfig.cs" />
-    <Compile Include="DataAccess\DamageData.cs" />
-    <Compile Include="DataAccess\MemberData.cs" />
     <Compile Include="DataAccess\SalesData.cs" />
     <Compile Include="DataAccess\ServiceData.cs" />
     <Compile Include="DataAccess\SparepartData.cs" />
     <Compile Include="DataAccess\TechnicianData.cs" />
-    <Compile Include="Models\DamageModel.cs" />
-    <Compile Include="Models\MemberModel.cs" />
     <Compile Include="Models\SalesModel.cs" />
     <Compile Include="Models\ServiceModel.cs" />
     <Compile Include="Models\SparepartModel.cs" />

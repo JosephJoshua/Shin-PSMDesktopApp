@@ -14,12 +14,12 @@ namespace PSMDataManager.Library.DataAccess
             return data;
         }
 
-        public List<SparepartModel> GetSparepartsByService(int nomorNota)
+        public List<SparepartModel> GetSparepartByNomorNota(int nomorNota)
         {
             SqlDataAccess sql = new SqlDataAccess();
             var p = new { nomorNota };
 
-            var data = sql.LoadData<SparepartModel, dynamic>("dbo.spGetSparepartsByService", p, "PSMData");
+            var data = sql.LoadData<SparepartModel, dynamic>("dbo.spGetSparepartByNomorNota", p, "PSMData");
             return data;
         }
 

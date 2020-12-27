@@ -23,11 +23,9 @@ namespace PSMDesktopUI
         {
             _container
                 .Instance(_container)
-                .PerRequest<IMemberEndpoint, MemberEndpoint>()
                 .PerRequest<ITechnicianEndpoint, TechnicianEndpoint>()
                 .PerRequest<IServiceEndpoint, ServiceEndpoint>()
                 .PerRequest<ISparepartEndpoint, SparepartEndpoint>()
-                .PerRequest<IDamageEndpoint, DamageEndpoint>()
                 .PerRequest<ISalesEndpoint, SalesEndpoint>();
 
             _container

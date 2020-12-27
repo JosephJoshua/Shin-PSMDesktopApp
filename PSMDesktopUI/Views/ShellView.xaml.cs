@@ -1,4 +1,5 @@
-﻿using DevExpress.Xpf.Core;
+﻿using System.ComponentModel;
+using DevExpress.Xpf.Core;
 using PSMDesktopUI.ViewModels;
 
 namespace PSMDesktopUI.Views
@@ -10,12 +11,12 @@ namespace PSMDesktopUI.Views
             InitializeComponent();
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void Window_Closing(object sender, CancelEventArgs e)
         {
             if (DataContext != null)
             {
                 ShellViewModel vm = (ShellViewModel)DataContext;
-                vm.OnClose();
+                vm.OnClose(e);
             }
         }
     }

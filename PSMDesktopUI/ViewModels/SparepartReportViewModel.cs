@@ -91,10 +91,10 @@ namespace PSMDesktopUI.ViewModels
             _sparepartEndpoint = sparepartEndpoint;
         }
 
-        protected override async void OnViewLoaded(object view)
+        protected override void OnViewLoaded(object view)
         {
             base.OnViewLoaded(view);
-            await LoadSpareparts();
+            LoadSpareparts();
         }
 
         public void ExportToExcel()
@@ -155,7 +155,7 @@ namespace PSMDesktopUI.ViewModels
             Marshal.ReleaseComObject(xlApp);
         }
 
-        public async Task LoadSpareparts()
+        public async void LoadSpareparts()
         {
             if (IsLoading) return;
 

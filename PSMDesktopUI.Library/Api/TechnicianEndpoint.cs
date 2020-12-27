@@ -31,6 +31,22 @@ namespace PSMDesktopUI.Library.Api
             }
         }
 
+        public async Task<TechnicianModel> GetById(int id)
+        {
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/Technician/" + id).ConfigureAwait(false))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    TechnicianModel result = await response.Content.ReadAsAsync<TechnicianModel>();
+                    return result;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
         public async Task Insert(TechnicianModel technician)
         {
             await _apiHelper.ApiClient.PostAsJsonAsync("/api/Technician", technician).ConfigureAwait(false);

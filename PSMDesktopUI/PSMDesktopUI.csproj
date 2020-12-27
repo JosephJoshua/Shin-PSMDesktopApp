@@ -194,35 +194,23 @@
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="EnumHelper.cs" />
     <Compile Include="ValueConverters\EnumToCollectionConverter.cs" />
-    <Compile Include="ViewModels\AddDamageViewModel.cs" />
-    <Compile Include="ViewModels\AddMemberViewModel.cs" />
     <Compile Include="ViewModels\AddSalesViewModel.cs" />
     <Compile Include="ViewModels\AddServiceViewModel.cs" />
     <Compile Include="ViewModels\AddSparepartViewModel.cs" />
     <Compile Include="ViewModels\AddTechnicianViewModel.cs" />
     <Compile Include="ViewModels\CSPasswordViewModel.cs" />
-    <Compile Include="ViewModels\DamagesViewModel.cs" />
-    <Compile Include="ViewModels\EditMemberViewModel.cs" />
     <Compile Include="ViewModels\EditServiceViewModel.cs" />
     <Compile Include="ViewModels\EditStatusViewModel.cs" />
     <Compile Include="ViewModels\ProfitReportViewModel.cs" />
     <Compile Include="ViewModels\SalesViewModel.cs" />
-    <Compile Include="ViewModels\SelectDamageViewModel.cs" />
     <Compile Include="ViewModels\ServiceInvoicePreviewViewModel.cs" />
     <Compile Include="ViewModels\SparepartReportViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
-    <Compile Include="ViewModels\MembersViewModel.cs" />
     <Compile Include="ViewModels\RecalculateViewModel.cs" />
     <Compile Include="ViewModels\ServicesViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="ViewModels\TechnicianReportViewModel.cs" />
     <Compile Include="ViewModels\TechniciansViewModel.cs" />
-    <Compile Include="Views\AddDamageView.xaml.cs">
-      <DependentUpon>AddDamageView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\AddMemberView.xaml.cs">
-      <DependentUpon>AddMemberView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\AddSalesView.xaml.cs">
       <DependentUpon>AddSalesView.xaml</DependentUpon>
     </Compile>
@@ -238,12 +226,6 @@
     <Compile Include="Views\CSPasswordView.xaml.cs">
       <DependentUpon>CSPasswordView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\DamagesView.xaml.cs">
-      <DependentUpon>DamagesView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\EditMemberView.xaml.cs">
-      <DependentUpon>EditMemberView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\EditServiceView.xaml.cs">
       <DependentUpon>EditServiceView.xaml</DependentUpon>
     </Compile>
@@ -253,9 +235,6 @@
     <Compile Include="Views\LoginView.xaml.cs">
       <DependentUpon>LoginView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MembersView.xaml.cs">
-      <DependentUpon>MembersView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\ProfitReportView.xaml.cs">
       <DependentUpon>ProfitReportView.xaml</DependentUpon>
     </Compile>
@@ -264,9 +243,6 @@
     </Compile>
     <Compile Include="Views\SalesView.xaml.cs">
       <DependentUpon>SalesView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\SelectDamageView.xaml.cs">
-      <DependentUpon>SelectDamageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ServiceInvoicePreviewView.xaml.cs">
       <DependentUpon>ServiceInvoicePreviewView.xaml</DependentUpon>
@@ -328,20 +304,6 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PSMDesktopUI.Library\PSMDesktopUI.Library.csproj">
-      <Project>{43c59d6e-1549-43f5-9528-460b1a3c4111}</Project>
-      <Name>PSMDesktopUI.Library</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="Views\AddDamageView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\AddMemberView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\AddSalesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -362,14 +324,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\DamagesView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\EditMemberView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\EditServiceView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -382,10 +336,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MembersView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\ProfitReportView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -395,10 +345,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SalesView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\SelectDamageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -463,6 +409,12 @@
     <EmbeddedResource Include="settings.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PSMDesktopUI.Library\PSMDesktopUI.Library.csproj">
+      <Project>{43c59d6e-1549-43f5-9528-460b1a3c4111}</Project>
+      <Name>PSMDesktopUI.Library</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\MaterialDesignThemes.3.0.0\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.3.0.0\build\MaterialDesignThemes.targets')" />

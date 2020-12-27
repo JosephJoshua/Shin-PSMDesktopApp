@@ -8,6 +8,7 @@ namespace PSMDesktopUI.Library.Api
     {
         Task Delete(int id);
         Task<List<SalesModel>> GetAll();
+        Task<SalesModel> GetById(int id);
         Task Insert(SalesModel sales);
     }
 }

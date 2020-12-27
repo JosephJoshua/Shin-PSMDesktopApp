@@ -31,7 +31,7 @@ namespace PSMDesktopUI.Library.Api
             }
         }
 
-        public async Task<List<SparepartModel>> GetByService(int nomorNota)
+        public async Task<List<SparepartModel>> GetByNomorNota(int nomorNota)
         {
             using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/Sparepart/" + nomorNota).ConfigureAwait(false))
             {
