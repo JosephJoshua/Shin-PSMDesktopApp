@@ -1,6 +1,7 @@
 ﻿using PSMDataManager.Library.Internal.DataAccess;
 using PSMDataManager.Library.Models;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PSMDataManager.Library.DataAccess
 {
@@ -14,6 +15,14 @@ namespace PSMDataManager.Library.DataAccess
             return data;
         }
 
+        public ServiceModel GetServiceByNomorNota(int nomorNota)
+        {
+            SqlDataAccess sql = new SqlDataAccess();
+            ServiceModel service = sql.LoadData<ServiceModel, dynamic>("dbo.spGetService", new { NomorNota = nomorNota }, "PSMData").FirstOrDefault();
+
+            return service;
+        }
+
         public void InsertService(ServiceModel service)
         {
             SqlDataAccess sql = new SqlDataAccess();
@@ -23,7 +32,7 @@ namespace PSMDataManager.Library.DataAccess
                 service.NoHp,
                 service.TipeHp,
                 service.Imei,
-                service.DamageId,
+                service.Kerusakan,
                 service.KondisiHp,
                 service.YangBelumDicek,
                 service.Kelengkapan,
@@ -56,7 +65,7 @@ namespace PSMDataManager.Library.DataAccess
                 service.NoHp,
                 service.TipeHp,
                 service.Imei,
-                service.DamageId,
+                service.Kerusakan,
                 service.KondisiHp,
                 service.YangBelumDicek,
                 service.Kelengkapan,
@@ -71,7 +80,6 @@ namespace PSMDataManager.Library.DataAccess
                 service.Discount,
                 service.Dp,
                 service.TambahanBiaya,
-                service.HargaSparepart,
                 service.TanggalPengambilan
             };
 

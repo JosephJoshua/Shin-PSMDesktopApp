@@ -31,6 +31,22 @@ namespace PSMDesktopUI.Library.Api
             }
         }
 
+        public async Task<SalesModel> GetById(int id)
+        {
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/Sales/" + id).ConfigureAwait(false))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    SalesModel result = await response.Content.ReadAsAsync<SalesModel>();
+                    return result;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
         public async Task Insert(SalesModel sales)
         {
             await _apiHelper.ApiClient.PostAsJsonAsync("/api/Sales", sales).ConfigureAwait(false);

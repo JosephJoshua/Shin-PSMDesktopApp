@@ -16,6 +16,14 @@ namespace PSMDataManager.Controllers
             return data.GetSales();
         }
 
+        [HttpGet]
+        [Route("api/Sales/{id}")]
+        public SalesModel GetById(int id)
+        {
+            SalesData data = new SalesData();
+            return data.GetSalesById(id);
+        }
+
         [HttpPost]
         [Route("api/Sales")]
         public IHttpActionResult Post(SalesModel sales)

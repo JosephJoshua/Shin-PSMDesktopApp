@@ -16,6 +16,14 @@ namespace PSMDataManager.Controllers
             return data.GetServices();
         }
 
+        [HttpGet]
+        [Route("api/Service/{nomorNota}")]
+        public ServiceModel GetByNomorNota(int nomorNota)
+        {
+            ServiceData data = new ServiceData();
+            return data.GetServiceByNomorNota(nomorNota);
+        }
+
         [HttpPost]
         public IHttpActionResult Post(ServiceModel service)
         {
@@ -27,6 +35,11 @@ namespace PSMDataManager.Controllers
             if (string.IsNullOrWhiteSpace(service.TipeHp))
             {
                 return BadRequest("The field 'TipeHp' cannot be null");
+            }
+
+            if (string.IsNullOrWhiteSpace(service.Kerusakan))
+            {
+                return BadRequest("The field 'Kerusakan' cannot be null");
             }
 
             if (service.TanggalKonfirmasi == DateTime.MinValue)

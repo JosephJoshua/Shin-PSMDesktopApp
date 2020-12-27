@@ -67,7 +67,7 @@ namespace PSMDesktopUI.ViewModels
                 CurrentAction = $"Recalculating service expenses ({i + 1}/{_services.Count})";
                 decimal hargaSparepart = 0;
 
-                foreach (SparepartModel s in await _sparepartEndpoint.GetByService(_services[i].NomorNota))
+                foreach (SparepartModel s in await _sparepartEndpoint.GetByNomorNota(_services[i].NomorNota))
                 {
                     hargaSparepart += s.Harga;
                 }
@@ -79,7 +79,7 @@ namespace PSMDesktopUI.ViewModels
                     NoHp = _services[i].NoHp,
                     TipeHp = _services[i].TipeHp,
                     Imei = _services[i].Imei,
-                    DamageId = _services[i].DamageId,
+                    Kerusakan = _services[i].Kerusakan,
                     KondisiHp = _services[i].KondisiHp,
                     YangBelumDicek = _services[i].YangBelumDicek,
                     Kelengkapan = _services[i].Kelengkapan,
@@ -120,7 +120,7 @@ namespace PSMDesktopUI.ViewModels
                     NoHp = _services[i].NoHp,
                     TipeHp = _services[i].TipeHp,
                     Imei = _services[i].Imei,
-                    DamageId = _services[i].DamageId,
+                    Kerusakan = _services[i].Kerusakan,
                     YangBelumDicek = _services[i].YangBelumDicek,
                     Kelengkapan = _services[i].Kelengkapan,
                     Warna = _services[i].Warna,

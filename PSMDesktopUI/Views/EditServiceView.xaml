@@ -21,9 +21,8 @@
             <dxlc:LayoutGroup Orientation="Horizontal">
                 <dxlc:LayoutGroup Orientation="Vertical" ItemSpace="4">
                     <dxlc:LayoutItem Label="Nama Pelanggan:" Margin="4">
-                        <dxe:TextEdit x:Name="NamaPelanggan" Margin="10 0 0 0" Height="30"
+                        <dxe:TextEdit x:Name="NamaPelanggan" Margin="10 0 0 0"                        Height="30"
                                       AllowNullInput="False"
-                                      IsReadOnly="{Binding Path=CustomerIsMember}"
                                       Text="{Binding Path=NamaPelanggan, UpdateSourceTrigger=PropertyChanged}" />
                     </dxlc:LayoutItem>
 
@@ -46,17 +45,10 @@
                     </dxlc:LayoutItem>
 
                     <dxlc:LayoutItem Label="Kerusakan:" Margin="4">
-                        <dxlc:LayoutGroup Orientation="Horizontal" Margin="10 0 0 0" Height="30">
-                            <dxe:TextEdit x:Name="Damage"
-                                          Margin="0 0 0 5"
-                                          Text="{Binding Path=Damage}"
-                                          IsReadOnly="True"
-                                          Height="30" />
-
-                            <dx:SimpleButton Content="..."
-                                             MaxWidth="35" FontSize="15"
-                                             cal:Message.Attach="[Event Click] = [Action SelectDamage]" />
-                        </dxlc:LayoutGroup>
+                        <dxe:TextEdit x:Name="Kerusakan"
+                                      Margin="10 0 0 5"
+                                      Text="{Binding Path=Kerusakan}"
+                                      Height="30" />
                     </dxlc:LayoutItem>
 
                     <dxlc:LayoutItem Label="Yang Belum Dicek:" Margin="4">

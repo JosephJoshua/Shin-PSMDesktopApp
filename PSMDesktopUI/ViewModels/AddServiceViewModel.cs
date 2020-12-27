@@ -13,21 +13,13 @@ namespace PSMDesktopUI.ViewModels
     {
         private readonly IWindowManager _windowManager;
 
-        private readonly IMemberEndpoint _memberEndpoint;
         private readonly ISalesEndpoint _salesEndpoint;
         private readonly IServiceEndpoint _serviceEndpoint;
         private readonly ITechnicianEndpoint _technicianEndpoint;
 
         private bool _showTextFields = false;
-        private bool _showMemberGrid = false;
         private bool _showSalesGrid = true;
-        private bool _memberIsCustomer;
-
-        private bool _isMemberLoading = false;
         private bool _isSalesLoading = false;
-
-        private BindingList<MemberModel> _members;
-        private MemberModel _selectedMember;
 
         private BindingList<SalesModel> _sales;
         private SalesModel _selectedSales;
@@ -36,14 +28,13 @@ namespace PSMDesktopUI.ViewModels
         private string _noHp;
         private string _tipeHp;
         private string _imei;
-        private string _damage;
+        private string _kerusakan;
         private string _yangBelumDicek;
         private string _warna;
         private string _kataSandiPola;
         private string _kondisiHp;
         private string _isiKonfirmasi;
 
-        private int _damageId = -1;
         private int _salesId;
 
         private double _biaya;
@@ -76,17 +67,6 @@ namespace PSMDesktopUI.ViewModels
             }
         }
 
-        public bool ShowMemberGrid
-        {
-            get => _showMemberGrid;
-
-            set
-            {
-                _showMemberGrid = value;
-                NotifyOfPropertyChange(() => ShowMemberGrid);
-            }
-        }
-
         public bool ShowSalesGrid
         {
             get => _showSalesGrid;
@@ -98,33 +78,6 @@ namespace PSMDesktopUI.ViewModels
             }
         }
 
-        public bool ShowMemberButtons
-        {
-            get => !ShowTextFields && !ShowMemberGrid && !ShowSalesGrid;
-        }
-
-        public bool MemberIsCustomer
-        {
-            get => _memberIsCustomer;
-
-            set
-            {
-                _memberIsCustomer = value;
-                NotifyOfPropertyChange(() => MemberIsCustomer);
-            }
-        }
-
-        public bool IsMemberLoading
-        {
-            get => _isMemberLoading;
-
-            set
-            {
-                _isMemberLoading = value;
-                NotifyOfPropertyChange(() => IsMemberLoading);
-            }
-        }
-
         public bool IsSalesLoading
         {
             get => _isSalesLoading;
@@ -133,30 +86,6 @@ namespace PSMDesktopUI.ViewModels
             {
                 _isSalesLoading = value;
                 NotifyOfPropertyChange(() => IsSalesLoading);
-            }
-        }
-
-        public BindingList<MemberModel> Members
-        {
-            get => _members;
-            
-            set
-            {
-                _members = value;
-                NotifyOfPropertyChange(() => Members);
-            }
-        }
-
-        public MemberModel SelectedMember
-        {
-            get => _selectedMember;
-
-            set
-            {
-                _selectedMember = value;
-
-                NotifyOfPropertyChange(() => SelectedMember);
-                NotifyOfPropertyChange(() => HasSelectedMember);
             }
         }
 
@@ -181,11 +110,6 @@ namespace PSMDesktopUI.ViewModels
                 NotifyOfPropertyChange(() => SelectedSales);
                 NotifyOfPropertyChange(() => HasSelectedSales);
             }
-        }
-
-        public bool HasSelectedMember
-        {
-            get => SelectedMember != null;
         }
 
         public bool HasSelectedSales
@@ -241,15 +165,15 @@ namespace PSMDesktopUI.ViewModels
             }
         }
 
-        public string Damage
+        public string Kerusakan
         {
-            get => _damage;
+            get => _kerusakan;
             
             set
             {
-                _damage = value;
+                _kerusakan = value;
 
-                NotifyOfPropertyChange(() => Damage);
+                NotifyOfPropertyChange(() => Kerusakan);
                 NotifyOfPropertyChange(() => CanAdd);
             }
         }
@@ -306,17 +230,6 @@ namespace PSMDesktopUI.ViewModels
             {
                 _isiKonfirmasi = value;
                 NotifyOfPropertyChange(() => IsiKonfirmasi);
-            }
-        }
-
-        public int DamageId
-        {
-            get => _damageId;
-
-            set
-            {
-                _damageId = value;
-                NotifyOfPropertyChange(() => DamageId);
             }
         }
 
@@ -508,15 +421,14 @@ namespace PSMDesktopUI.ViewModels
 
         public bool CanAdd
         {
-            get => !string.IsNullOrWhiteSpace(NamaPelanggan) && !string.IsNullOrWhiteSpace(TipeHp) && !string.IsNullOrEmpty(Damage);
+            get => !string.IsNullOrWhiteSpace(NamaPelanggan) && !string.IsNullOrWhiteSpace(TipeHp) && !string.IsNullOrEmpty(Kerusakan);
         }
 
-        public AddServiceViewModel(IWindowManager windowManager, IMemberEndpoint memberEndpoint, ISalesEndpoint salesEndpoint,
+        public AddServiceViewModel(IWindowManager windowManager, ISalesEndpoint salesEndpoint,
                                    ITechnicianEndpoint technicianEndpoint, IServiceEndpoint serviceEndpoint)
         {
             _windowManager = windowManager;
 
-            _memberEndpoint = memberEndpoint;
             _salesEndpoint = salesEndpoint;
             _serviceEndpoint = serviceEndpoint;
             _technicianEndpoint = technicianEndpoint;
@@ -543,57 +455,12 @@ namespace PSMDesktopUI.ViewModels
             Technicians = new BindingList<TechnicianModel>(technicianList);
         }
 
-        public async Task SelectMember()
-        {
-            ShowTextFields = false;
-            ShowMemberGrid = true;
-
-            NotifyOfPropertyChange(() => ShowMemberButtons);
-
-            await LoadMembers();
-        }
-
-        public void SelectNonMember()
-        {
-            ShowMemberGrid = false;
-            ShowTextFields = true;
-
-            NotifyOfPropertyChange(() => ShowMemberButtons);
-        }
-
-        public void ConfirmMember()
-        {
-            ShowMemberGrid = false;
-            ShowTextFields = true;
-
-            NotifyOfPropertyChange(() => ShowMemberButtons);
-
-            MemberIsCustomer = true;
-
-            NamaPelanggan = SelectedMember.Nama;
-            NoHp = SelectedMember.NoHp ?? "";
-        }
-
         public void ConfirmSales()
         {
             ShowSalesGrid = false;
-
-            NotifyOfPropertyChange(() => ShowMemberButtons);
-
+            ShowTextFields = true;
+            
             SalesId = SelectedSales.Id;
-        }
-
-        public void SelectDamage()
-        {
-            SelectDamageViewModel selectDamageVM = IoC.Get<SelectDamageViewModel>();
-
-            if (_windowManager.ShowDialog(selectDamageVM) == true)
-            {
-                DamageModel selectedDamage = selectDamageVM.SelectedDamage;
-
-                Damage = selectedDamage.Kerusakan;
-                DamageId = selectedDamage.Id;
-            }
         }
 
         public async Task Add()
@@ -607,17 +474,6 @@ namespace PSMDesktopUI.ViewModels
         public void Cancel()
         {
             TryClose(false);
-        }
-
-        public async Task LoadMembers()
-        {
-            if (IsMemberLoading) return;
-
-            IsMemberLoading = true;
-            List<MemberModel> memberList = await _memberEndpoint.GetAll();
-
-            IsMemberLoading = false;
-            Members = new BindingList<MemberModel>(memberList);
         }
 
         public async Task LoadSales()
@@ -669,7 +525,7 @@ namespace PSMDesktopUI.ViewModels
                 NoHp = NoHp,
                 TipeHp = TipeHp,
                 Imei = Imei,
-                DamageId = DamageId,
+                Kerusakan = Kerusakan,
                 KondisiHp = KondisiHp,
                 YangBelumDicek = YangBelumDicek,
                 Kelengkapan = kelengkapan,

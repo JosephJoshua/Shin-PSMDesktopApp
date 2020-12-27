@@ -16,6 +16,14 @@ namespace PSMDataManager.Controllers
             return data.GetTechnicians();
         }
 
+        [HttpGet]
+        [Route("api/Technician/{id}")]
+        public TechnicianModel GetById(int id)
+        {
+            TechnicianData data = new TechnicianData();
+            return data.GetTechnicianById(id);
+        }
+
         [HttpPost]
         [Route("api/Technician")]
         public IHttpActionResult Post(TechnicianModel technician)
