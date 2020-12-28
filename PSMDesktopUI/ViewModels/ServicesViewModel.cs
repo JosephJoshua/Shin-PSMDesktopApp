@@ -157,7 +157,7 @@ namespace PSMDesktopUI.ViewModels
 
         public bool CanAddSparepart
         {
-            get => !IsLoading && (SelectedService != null || SelectedSparepart != null);
+            get => !IsCustomerService && !IsLoading && (SelectedService != null || SelectedSparepart != null);
         }
 
         public bool CanEditService
@@ -172,7 +172,7 @@ namespace PSMDesktopUI.ViewModels
 
         public bool CanDeleteSparepart
         {
-            get => !IsBuyer && !IsLoading && SelectedSparepart != null;
+            get => IsAdmin && !IsLoading && SelectedSparepart != null;
         }
         
         public bool CanPrintService
@@ -187,17 +187,17 @@ namespace PSMDesktopUI.ViewModels
 
         public bool IsAdmin
         {
-            get => _apiHelper.LoggedInUser.Role.ToLower() == "Admin".ToLower();
+            get => _apiHelper.LoggedInUser.Role == "Admin";
         }
 
         public bool IsCustomerService
         {
-            get => _apiHelper.LoggedInUser.Role.ToLower() == "Customer Service".ToLower();
+            get => _apiHelper.LoggedInUser.Role == "Customer Service";
         }
 
         public bool IsBuyer
         {
-            get => _apiHelper.LoggedInUser.Role.ToLower() == "Buyer".ToLower();
+            get => _apiHelper.LoggedInUser.Role == "Buyer";
         }
 
         public ServicesViewModel(IApiHelper apiHelper, IWindowManager windowManager, IServiceEndpoint serviceEndpoint,

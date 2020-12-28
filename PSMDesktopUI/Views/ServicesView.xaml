@@ -141,7 +141,7 @@
             <dxg:GridColumn Header="Dp" FieldName="Dp" />
             <dxg:GridColumn Header="Tambahan Biaya" FieldName="TambahanBiaya" />
             <dxg:GridColumn Header="Total Biaya" FieldName="TotalBiaya" />
-            <dxg:GridColumn Header="Harga Sparepart" FieldName="HargaSparepart" Visible="{Binding Path=IsAdmin}" />
+            <dxg:GridColumn Header="Harga Sparepart" FieldName="HargaSparepart" Visible="{c:Binding Path=!IsCustomerService}" />
             <dxg:GridColumn Header="Sisa" FieldName="Sisa" />
             <dxg:GridColumn Header="Laba/Rugi" FieldName="LabaRugi" Visible="{Binding Path=IsAdmin}" />
             <dxg:GridColumn Header="Tanggal Pengambilan" FieldName="TanggalPengambilan" />
@@ -151,7 +151,8 @@
                                DetailHeaderContent="Services"
                                AllowScrollAnimation="True"
                                AllowFixedGroups="True"
-                               AllowEditing="False" />
+                               AllowEditing="False" 
+                               AllowMasterDetail="{c:Binding Path=!IsCustomerService}"/>
             </dxg:GridControl.View>
 
             <i:Interaction.Triggers>
@@ -265,7 +266,7 @@
             <TextBlock FontSize="14" Text="{Binding Path=SelectedService.Dp, StringFormat=Dp: Rp{0:N0}}" />
             <TextBlock FontSize="14" Text="{Binding Path=SelectedService.TambahanBiaya, StringFormat=TambahanBiaya: Rp{0:N0}}" />
             <TextBlock FontSize="14" Text="{Binding Path=SelectedService.TotalBiaya, StringFormat=Total Biaya: Rp{0:N0}}" />
-            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.HargaSparepart, StringFormat=Harga Sparepart: Rp{0:N0}}" Visibility="{c:Binding Path=IsAdmin, FalseToVisibility=Collapsed}" />
+            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.HargaSparepart, StringFormat=Harga Sparepart: Rp{0:N0}}" Visibility="{c:Binding Path=!IsCustomerService}" />
             <TextBlock FontSize="14" Text="{Binding Path=SelectedService.Sisa, StringFormat=Sisa: Rp{0:N0}}" />
             <TextBlock FontSize="14" Text="{Binding Path=SelectedService.LabaRugi, StringFormat=Laba/Rugi: Rp{0:N0}}" Visibility="{c:Binding Path=IsAdmin, FalseToVisibility=Collapsed}" />
             <TextBlock FontSize="14" Text="{Binding Path=SelectedService.TanggalPengambilan, StringFormat=Tanggal Pengambilan: {0}}" />
