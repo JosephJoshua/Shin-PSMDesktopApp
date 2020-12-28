@@ -48,7 +48,6 @@ namespace PSMDataManager.Library.DataAccess
                 service.Dp,
                 service.TambahanBiaya,
                 service.HargaSparepart,
-                service.LabaRugi,
                 service.TanggalPengambilan
             };
 
