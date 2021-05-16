@@ -1,0 +1,31 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.202
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSMDesktopApp", "PSMDesktopApp\PSMDesktopApp.csproj", "{780C942C-CD02-4357-A6BB-D085AD516A98}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSMDesktopApp.Library", "PSMDesktopApp.Library\PSMDesktopApp.Library.csproj", "{43C59D6E-1549-43F5-9528-460B1A3C4111}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{780C942C-CD02-4357-A6BB-D085AD516A98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{780C942C-CD02-4357-A6BB-D085AD516A98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{780C942C-CD02-4357-A6BB-D085AD516A98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{780C942C-CD02-4357-A6BB-D085AD516A98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43C59D6E-1549-43F5-9528-460B1A3C4111}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43C59D6E-1549-43F5-9528-460B1A3C4111}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43C59D6E-1549-43F5-9528-460B1A3C4111}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43C59D6E-1549-43F5-9528-460B1A3C4111}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {67CD89AF-4835-4F13-A9C8-07A0D5CE1DE9}
+	EndGlobalSection
+EndGlobal

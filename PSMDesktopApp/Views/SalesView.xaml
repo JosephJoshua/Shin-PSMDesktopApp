@@ -1,0 +1,118 @@
+﻿<UserControl x:Class="PSMDesktopApp.Views.SalesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:c="clr-namespace:CalcBinding;assembly=CalcBinding"
+             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+             xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    
+    <UserControl.Resources>
+        <Style TargetType="ScrollBar">
+            <Setter Property="Background" Value="#333337" />
+        </Style>
+    </UserControl.Resources>
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="3*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="35" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Title -->
+        <TextBlock Grid.Column="0" Grid.Row="0"
+                   Grid.ColumnSpan="2"
+                   Text="Sales"
+                   FontSize="24"
+                   Foreground="White"
+                   HorizontalAlignment="Center"
+                   Margin="0 0 0 10" />
+        
+        <!-- Search box -->
+        <dxe:TextEdit Grid.Column="0" Grid.Row="1"
+                      Grid.ColumnSpan="2"
+                      NullText="Search.."
+                      Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                      cal:Message.Attach="[Event KeyDown] = [Action Search($eventArgs)]" />
+
+        <!-- Progress bar -->
+        <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
+                     Grid.Column="0" Grid.Row="2"
+                     Grid.ColumnSpan="2"
+                     Width="40"
+                     Height="40"
+                     HorizontalAlignment="Center"
+                     VerticalAlignment="Center"
+                     Value="0"
+                     IsIndeterminate="True"
+                     Visibility="{c:Binding Path=IsLoading}" />
+
+        <!-- Data grid -->
+        <dxg:GridControl Grid.Column="0" Grid.Row="2"
+                         Grid.ColumnSpan="2"
+                         Margin="0 10 0 0"
+                         SelectionMode="Row"
+                         CurrentItem="{Binding Path=SelectedSales, Mode=OneWayToSource}"
+                         ItemsSource="{Binding Path=Sales}"
+                         Visibility="{c:Binding Path=!IsLoading}">
+
+            <dxg:GridColumn Header="Id" Width="*" Binding="{Binding Path=Id}">
+                <dxg:GridColumn.EditSettings>
+                    <dxe:TextEditSettings HorizontalContentAlignment="Left" />
+                </dxg:GridColumn.EditSettings>
+            </dxg:GridColumn>
+
+            <dxg:GridColumn Header="Nama" Width="9*" Binding="{Binding Path=Nama}" />
+
+            <dxg:GridControl.View>
+                <dxg:TableView AllowScrollAnimation="True"
+                               AllowFixedGroups="True"
+                               AllowEditing="False" />
+            </dxg:GridControl.View>
+            
+        </dxg:GridControl>
+
+        <!-- Floating action buttons -->
+        <material:PopupBox Style="{StaticResource MaterialDesignMultiFloatingActionPopupBox}"
+                           Grid.Column="1" Grid.Row="2"
+                           HorizontalAlignment="Right"
+                           VerticalAlignment="Bottom"
+                           Margin="16">
+
+            <StackPanel>
+                <Button ToolTip="Add"
+                        Background="{DynamicResource PrimaryHueMidBrush}"
+                        Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                        IsEnabled="{Binding Path=CanAddSales}"
+                        cal:Message.Attach="[Event Click] = [Action AddSales]">
+                    <material:PackIcon Kind="Add" />
+                </Button>
+
+                <Button ToolTip="Delete"
+                        Background="{DynamicResource PrimaryHueMidBrush}"
+                        Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                        IsEnabled="{Binding Path=CanDeleteSales}"
+                        cal:Message.Attach="[Event Click] = [Action DeleteSales]">
+                    <material:PackIcon Kind="Delete" />
+                </Button>
+
+                <Button ToolTip="Refresh"
+                        Background="{DynamicResource PrimaryHueMidBrush}"
+                        Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                        cal:Message.Attach="[Event Click] = [Action LoadSales]">
+                    <material:PackIcon Kind="Refresh" />
+                </Button>
+            </StackPanel>
+        </material:PopupBox>
+    </Grid>
+</UserControl>
