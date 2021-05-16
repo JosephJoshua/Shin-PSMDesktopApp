@@ -3,11 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28803.202
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSMDataManager", "PSMDataManager\PSMDataManager.csproj", "{3C468FA3-3E62-4561-B8F0-6174B8AC72B5}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSMDesktopUI", "PSMDesktopUI\PSMDesktopUI.csproj", "{780C942C-CD02-4357-A6BB-D085AD516A98}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSMDataManager.Library", "PSMDataManager.Library\PSMDataManager.Library.csproj", "{0ACF3383-2C08-4203-B76B-0E378E62A442}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PSMDesktopUI.Library", "PSMDesktopUI.Library\PSMDesktopUI.Library.csproj", "{43C59D6E-1549-43F5-9528-460B1A3C4111}"
 EndProject
@@ -17,24 +13,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{3C468FA3-3E62-4561-B8F0-6174B8AC72B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3C468FA3-3E62-4561-B8F0-6174B8AC72B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3C468FA3-3E62-4561-B8F0-6174B8AC72B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3C468FA3-3E62-4561-B8F0-6174B8AC72B5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3EF1F662-36D4-46E0-B8C4-6138CB2430AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3EF1F662-36D4-46E0-B8C4-6138CB2430AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3EF1F662-36D4-46E0-B8C4-6138CB2430AE}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{3EF1F662-36D4-46E0-B8C4-6138CB2430AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3EF1F662-36D4-46E0-B8C4-6138CB2430AE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3EF1F662-36D4-46E0-B8C4-6138CB2430AE}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{780C942C-CD02-4357-A6BB-D085AD516A98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{780C942C-CD02-4357-A6BB-D085AD516A98}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{780C942C-CD02-4357-A6BB-D085AD516A98}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{780C942C-CD02-4357-A6BB-D085AD516A98}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0ACF3383-2C08-4203-B76B-0E378E62A442}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0ACF3383-2C08-4203-B76B-0E378E62A442}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0ACF3383-2C08-4203-B76B-0E378E62A442}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0ACF3383-2C08-4203-B76B-0E378E62A442}.Release|Any CPU.Build.0 = Release|Any CPU
 		{43C59D6E-1549-43F5-9528-460B1A3C4111}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{43C59D6E-1549-43F5-9528-460B1A3C4111}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43C59D6E-1549-43F5-9528-460B1A3C4111}.Release|Any CPU.ActiveCfg = Release|Any CPU
