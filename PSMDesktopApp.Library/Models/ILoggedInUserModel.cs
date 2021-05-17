@@ -2,10 +2,14 @@ namespace PSMDesktopApp.Library.Models
 {
     public interface ILoggedInUserModel
     {
-        string EmailAddress { get; set; }
-        string Id { get; set; }
-        string Role { get; set; }
+        string email { get; set; }
+
+        string id { get; set; }
+
+        string role { get; set; }
+
         string Token { get; set; }
-        string Username { get; set; }
+
+        string username { get; set; }
     }
 }

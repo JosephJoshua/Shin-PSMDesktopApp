@@ -2,8 +2,8 @@ namespace PSMDesktopApp.Library.Models
 {
     public class AuthenticatedUser
     {
-        public string access_token { get; set; }
+        public string expire { get; set; }
 
-        public string userName { get; set; }
+        public string token { get; set; }
     }
 }

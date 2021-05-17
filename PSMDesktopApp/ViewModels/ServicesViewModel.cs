@@ -187,17 +187,17 @@ namespace PSMDesktopApp.ViewModels
 
         public bool IsAdmin
         {
-            get => _apiHelper.LoggedInUser.Role == "Admin";
+            get => _apiHelper.LoggedInUser.role == "Admin";
         }
 
         public bool IsCustomerService
         {
-            get => _apiHelper.LoggedInUser.Role == "Customer Service";
+            get => _apiHelper.LoggedInUser.role == "Customer Service";
         }
 
         public bool IsBuyer
         {
-            get => _apiHelper.LoggedInUser.Role == "Buyer";
+            get => _apiHelper.LoggedInUser.role == "Buyer";
         }
 
         public ServicesViewModel(IApiHelper apiHelper, IWindowManager windowManager, IServiceEndpoint serviceEndpoint,

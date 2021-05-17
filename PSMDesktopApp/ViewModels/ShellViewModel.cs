@@ -70,7 +70,7 @@ namespace PSMDesktopApp.ViewModels
             }
             else
             {
-                string role = _apiHelper.LoggedInUser.Role;
+                string role = _apiHelper.LoggedInUser.role;
 
                 _loggedIn = true;
 

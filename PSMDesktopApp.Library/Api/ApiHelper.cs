@@ -2,10 +2,11 @@ using PSMDesktopApp.Library.Helpers;
 using PSMDesktopApp.Library.Models;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
+using System.Web.Script.Serialization;
 
 namespace PSMDesktopApp.Library.Api
 {
@@ -44,26 +45,20 @@ namespace PSMDesktopApp.Library.Api
             _apiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public async Task<AuthenticatedUser> Authenticate(string username, string password)
+        public async Task<AuthenticatedUser> Authenticate(string email, string password)
         {
-            var data = new FormUrlEncodedContent(new[]
+            string jsonReq = new JavaScriptSerializer().Serialize(new
             {
-                new KeyValuePair<string, string>("grant_type", "password"),
-                new KeyValuePair<string, string>("username", username),
-                new KeyValuePair<string, string>("password", password),
+                email,
+                password,
             });
 
-            using (HttpResponseMessage response = await _apiClient.PostAsync("/token", data))
+            using (HttpResponseMessage response = await _apiClient.PostAsync("/api/login", new StringContent(jsonReq, Encoding.UTF8, "application/json")))
             {
-                if (response.IsSuccessStatusCode)
-                {
-                    var result = await response.Content.ReadAsAsync<AuthenticatedUser>();
-                    return result;
-                }
-                else
-                {
-                    throw new Exception(response.ReasonPhrase);
-                }
+                response.EnsureSuccessStatusCode();
+
+                var result = await response.Content.ReadAsAsync<AuthenticatedUser>();
+                return result;
             }
         }
 
@@ -75,22 +70,16 @@ namespace PSMDesktopApp.Library.Api
             _apiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             _apiClient.DefaultRequestHeaders.Add("Authorization", $"Bearer { token }");
 
-            using (HttpResponseMessage response = await _apiClient.GetAsync("/api/user"))
+            using (HttpResponseMessage response = await _apiClient.GetAsync("/api/users/current"))
             {
-                if (response.IsSuccessStatusCode)
-                {
-                    var result = await response.Content.ReadAsAsync<LoggedInUserModel>();
+                response.EnsureSuccessStatusCode();
+                var result = await response.Content.ReadAsAsync<LoggedInUserModel>();
 
-                    LoggedInUser.Id = result.Id;
-                    LoggedInUser.Username = result.Username;
-                    LoggedInUser.EmailAddress = result.EmailAddress;
-                    LoggedInUser.Role = result.Role;
-                    LoggedInUser.Token = token;
-                }
-                else
-                {
-                    throw new Exception(response.ReasonPhrase);
-                }
+                LoggedInUser.id = result.id;
+                LoggedInUser.username = result.username;
+                LoggedInUser.email = result.email;
+                LoggedInUser.role = result.role;
+                LoggedInUser.Token = token;
             }
         }
     }
