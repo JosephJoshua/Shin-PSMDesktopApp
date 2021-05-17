@@ -10,22 +10,22 @@ namespace PSMDesktopApp.ViewModels
 {
     public class LoginViewModel : Screen
     {
-        private string _username;
+        private string _email;
         private string _password;
 
         private string _errorMessage;
 
         private readonly IApiHelper _apiHelper;
 
-        public string Username
+        public string Email
         {
-            get => _username;
+            get => _email;
 
             set
             {
-                _username = value;
+                _email = value;
 
-                NotifyOfPropertyChange(() => Username);
+                NotifyOfPropertyChange(() => Email);
                 NotifyOfPropertyChange(() => CanLogin);
             }
         }
@@ -63,7 +63,7 @@ namespace PSMDesktopApp.ViewModels
 
         public bool CanLogin
         {
-            get => !string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(Password);
+            get => !string.IsNullOrWhiteSpace(Email) && !string.IsNullOrWhiteSpace(Password);
         }
 
         public LoginViewModel(IApiHelper apiHelper)
@@ -79,8 +79,8 @@ namespace PSMDesktopApp.ViewModels
             {
                 ErrorMessage = string.Empty;
 
-                var result = await _apiHelper.Authenticate(Username, Password);
-                await _apiHelper.GetLoggedInUserInfo(result.access_token);
+                var result = await _apiHelper.Authenticate(Email, Password);
+                await _apiHelper.GetLoggedInUserInfo(result.token);
 
                 Application.Current.Dispatcher.Invoke(() => TryClose(true));
             }
