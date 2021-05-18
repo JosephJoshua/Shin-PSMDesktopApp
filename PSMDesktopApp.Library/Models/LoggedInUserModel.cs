@@ -1,5 +1,3 @@
-using Newtonsoft.Json;
-
 namespace PSMDesktopApp.Library.Models
 {
     public class LoggedInUserModel : ILoggedInUserModel
@@ -12,6 +10,6 @@ namespace PSMDesktopApp.Library.Models
 
         public string email { get; set; }
 
-        public string role { get; set; }
+        public UserRole role { get; set; }
     }
 }

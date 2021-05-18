@@ -6,7 +6,7 @@ namespace PSMDesktopApp.Library.Models
 
         string id { get; set; }
 
-        string role { get; set; }
+        UserRole role { get; set; }
 
         string Token { get; set; }
 

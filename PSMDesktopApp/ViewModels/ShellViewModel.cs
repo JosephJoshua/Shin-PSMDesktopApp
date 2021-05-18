@@ -1,6 +1,7 @@
 using Caliburn.Micro;
 using DevExpress.Xpf.Core;
 using PSMDesktopApp.Library.Api;
+using PSMDesktopApp.Library.Models;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
@@ -70,15 +71,11 @@ namespace PSMDesktopApp.ViewModels
             }
             else
             {
-                string role = _apiHelper.LoggedInUser.role;
+                UserRole role = _apiHelper.LoggedInUser.role;
 
                 _loggedIn = true;
 
-                if (role == "Customer Service")
-                {
-                    Items.Add(_servicesViewModel);
-                }
-                else if (role == "Admin")
+                if (role == UserRole.Admin)
                 {
                     Items.Add(_techniciansViewModel);
                     Items.Add(_salesViewModel);
@@ -87,10 +84,9 @@ namespace PSMDesktopApp.ViewModels
                     Items.Add(_profitReportViewModel);
                     Items.Add(_technicianReportViewModel);
                 }
-                else if (role == "Buyer")
+                else if (role == UserRole.CustomerService)
                 {
                     Items.Add(_servicesViewModel);
-                    Items.Add(_sparepartReportViewModel);
                 }
             }
         }
