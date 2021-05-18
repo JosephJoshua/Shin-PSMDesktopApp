@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using PSMDesktopApp.Library.Helpers;
 using PSMDesktopApp.Library.Models;
 using System;
@@ -53,6 +54,7 @@ namespace PSMDesktopApp.Library.Api
                 password,
             });
 
+            // TODO: Use HttpClient.PostAsJsonAsync()
             using (HttpResponseMessage response = await _apiClient.PostAsync("/api/login", new StringContent(jsonReq, Encoding.UTF8, "application/json")))
             {
                 response.EnsureSuccessStatusCode();

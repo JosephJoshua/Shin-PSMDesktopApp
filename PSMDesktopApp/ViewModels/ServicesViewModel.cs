@@ -33,6 +33,11 @@ namespace PSMDesktopApp.ViewModels
         private SearchType _searchTypes;
         private SearchType _selectedSearchType;
 
+        private UserRole _userRole
+        {
+            get => _apiHelper.LoggedInUser.role;
+        }
+
         public delegate void OnRefreshEventHandler();
         public event OnRefreshEventHandler OnRefresh;
 
@@ -152,52 +157,37 @@ namespace PSMDesktopApp.ViewModels
 
         public bool CanAddService
         {
-            get => !IsBuyer && !IsLoading;
+            get => !IsLoading;
         }
 
         public bool CanAddSparepart
         {
-            get => !IsCustomerService && !IsLoading && (SelectedService != null || SelectedSparepart != null);
+            get => !IsLoading && (SelectedService != null || SelectedSparepart != null);
         }
 
         public bool CanEditService
         {
-            get => !IsBuyer && !IsLoading && SelectedService != null;
+            get => !IsLoading && SelectedService != null;
         }
 
         public bool CanDeleteService
         {
-            get => !IsBuyer && !IsLoading && SelectedService != null;
+            get => !IsLoading && SelectedService != null;
         }
 
         public bool CanDeleteSparepart
         {
-            get => IsAdmin && !IsLoading && SelectedSparepart != null;
+            get => _userRole == UserRole.Admin && !IsLoading && SelectedSparepart != null;
         }
         
         public bool CanPrintService
         {
-            get => !IsBuyer && !IsLoading && SelectedService != null;
+            get => !IsLoading && SelectedService != null;
         }
 
         public bool ShowInfo
         {
             get => SelectedService != null;
-        }
-
-        public bool IsAdmin
-        {
-            get => _apiHelper.LoggedInUser.role == "Admin";
-        }
-
-        public bool IsCustomerService
-        {
-            get => _apiHelper.LoggedInUser.role == "Customer Service";
-        }
-
-        public bool IsBuyer
-        {
-            get => _apiHelper.LoggedInUser.role == "Buyer";
         }
 
         public ServicesViewModel(IApiHelper apiHelper, IWindowManager windowManager, IServiceEndpoint serviceEndpoint,
@@ -264,7 +254,7 @@ namespace PSMDesktopApp.ViewModels
 
         public async Task EditService()
         {
-            if (IsCustomerService && !AskForCSPassword()) return;
+            if (_userRole == UserRole.CustomerService && !AskForCSPassword()) return;
 
             ServiceModel service = SelectedService;
 
@@ -277,6 +267,7 @@ namespace PSMDesktopApp.ViewModels
             }
         }
 
+        // TODO: Edit status dan kerusakan
         public async Task EditStatus()
         {
             ServiceModel service = SelectedService;
@@ -292,7 +283,7 @@ namespace PSMDesktopApp.ViewModels
 
         public async Task DeleteService()
         {
-            if (IsCustomerService && !AskForCSPassword()) return;
+            if (_userRole == UserRole.CustomerService && !AskForCSPassword()) return;
 
             if (DXMessageBox.Show("Are you sure you want to delete this service?", "Services", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
