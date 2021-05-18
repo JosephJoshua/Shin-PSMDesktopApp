@@ -1,6 +1,7 @@
 using PSMDesktopApp.Library.Models;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -15,11 +16,12 @@ namespace PSMDesktopApp.Library.Api
             _apiHelper = apiHelper;
         }
 
-        public async Task<List<SalesModel>> GetAll()
+        public async Task<List<SalesModel>> GetAll(string searchText = "")
         {
-            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/Sales").ConfigureAwait(false))
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync(WebUtility.UrlEncode("/api/sales?q=" + searchText))
+                    .ConfigureAwait(false))
             {
-                if (response.IsSuccessStatusCode)
+                if (response.IsSuccessStatusCode)   
                 {
                     var result = await response.Content.ReadAsAsync<List<SalesModel>>();
                     return result;
@@ -33,7 +35,7 @@ namespace PSMDesktopApp.Library.Api
 
         public async Task<SalesModel> GetById(int id)
         {
-            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/Sales/" + id).ConfigureAwait(false))
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/sales/" + id).ConfigureAwait(false))
             {
                 if (response.IsSuccessStatusCode)
                 {
@@ -49,12 +51,12 @@ namespace PSMDesktopApp.Library.Api
 
         public async Task Insert(SalesModel sales)
         {
-            await _apiHelper.ApiClient.PostAsJsonAsync("/api/Sales", sales).ConfigureAwait(false);
+            await _apiHelper.ApiClient.PostAsJsonAsync("/api/sales", sales).ConfigureAwait(false);
         }
 
         public async Task Delete(int id)
         {
-            await _apiHelper.ApiClient.DeleteAsync("/api/Sales/" + id).ConfigureAwait(false);
+            await _apiHelper.ApiClient.DeleteAsync("/api/sales/" + id).ConfigureAwait(false);
         }
     }
 }
