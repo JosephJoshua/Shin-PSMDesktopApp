@@ -84,7 +84,6 @@ namespace PSMDesktopApp.ViewModels
 
                 Application.Current.Dispatcher.Invoke(() => TryClose(true));
             }
-            // TODO: Catch HttpRequestException instead
             catch (Exception ex)
             {
                 ErrorMessage = ex.Message;
