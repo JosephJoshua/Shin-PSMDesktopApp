@@ -48,13 +48,12 @@ namespace PSMDesktopApp.Library.Api
 
         public async Task<AuthenticatedUser> Authenticate(string email, string password)
         {
-            string jsonReq = new JavaScriptSerializer().Serialize(new
+            string jsonReq = JsonConvert.SerializeObject(new
             {
                 email,
                 password,
             });
 
-            // TODO: Use HttpClient.PostAsJsonAsync()
             using (HttpResponseMessage response = await _apiClient.PostAsync("/api/login", new StringContent(jsonReq, Encoding.UTF8, "application/json")))
             {
                 response.EnsureSuccessStatusCode();
