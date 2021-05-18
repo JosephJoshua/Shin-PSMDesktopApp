@@ -56,10 +56,15 @@ namespace PSMDesktopApp.Library.Api
 
             using (HttpResponseMessage response = await _apiClient.PostAsync("/api/login", new StringContent(jsonReq, Encoding.UTF8, "application/json")))
             {
-                response.EnsureSuccessStatusCode();
-
-                var result = await response.Content.ReadAsAsync<AuthenticatedUser>();
-                return result;
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsAsync<AuthenticatedUser>();
+                    return result;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
             }
         }
 
@@ -73,14 +78,20 @@ namespace PSMDesktopApp.Library.Api
 
             using (HttpResponseMessage response = await _apiClient.GetAsync("/api/users/current"))
             {
-                response.EnsureSuccessStatusCode();
-                var result = await response.Content.ReadAsAsync<LoggedInUserModel>();
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsAsync<LoggedInUserModel>();
 
-                LoggedInUser.id = result.id;
-                LoggedInUser.username = result.username;
-                LoggedInUser.email = result.email;
-                LoggedInUser.role = result.role;
-                LoggedInUser.Token = token;
+                    LoggedInUser.id = result.id;
+                    LoggedInUser.username = result.username;
+                    LoggedInUser.email = result.email;
+                    LoggedInUser.role = result.role;
+                    LoggedInUser.Token = token;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
             }
         }
     }
