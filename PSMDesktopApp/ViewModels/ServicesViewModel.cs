@@ -33,7 +33,7 @@ namespace PSMDesktopApp.ViewModels
         private SearchType _searchTypes;
         private SearchType _selectedSearchType;
 
-        private UserRole _userRole
+        private UserRole LoggedInUserRole
         {
             get => _apiHelper.LoggedInUser.role;
         }
@@ -177,7 +177,7 @@ namespace PSMDesktopApp.ViewModels
 
         public bool CanDeleteSparepart
         {
-            get => _userRole == UserRole.Admin && !IsLoading && SelectedSparepart != null;
+            get => IsAdmin && !IsLoading && SelectedSparepart != null;
         }
         
         public bool CanPrintService
@@ -188,6 +188,11 @@ namespace PSMDesktopApp.ViewModels
         public bool ShowInfo
         {
             get => SelectedService != null;
+        }
+
+        public bool IsAdmin
+        {
+            get => LoggedInUserRole == UserRole.Admin;
         }
 
         public ServicesViewModel(IApiHelper apiHelper, IWindowManager windowManager, IServiceEndpoint serviceEndpoint,
@@ -254,7 +259,7 @@ namespace PSMDesktopApp.ViewModels
 
         public async Task EditService()
         {
-            if (_userRole == UserRole.CustomerService && !AskForCSPassword()) return;
+            if (LoggedInUserRole == UserRole.CustomerService && !AskForCSPassword()) return;
 
             ServiceModel service = SelectedService;
 
@@ -283,7 +288,7 @@ namespace PSMDesktopApp.ViewModels
 
         public async Task DeleteService()
         {
-            if (_userRole == UserRole.CustomerService && !AskForCSPassword()) return;
+            if (LoggedInUserRole == UserRole.CustomerService && !AskForCSPassword()) return;
 
             if (DXMessageBox.Show("Are you sure you want to delete this service?", "Services", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
