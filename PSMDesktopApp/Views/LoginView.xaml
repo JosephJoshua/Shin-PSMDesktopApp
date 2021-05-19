@@ -13,11 +13,12 @@
     ResizeMode="NoResize"
     WindowStartupLocation="CenterOwner"
     Title="Service Manager"
-    Height="220" Width="475">
+    Height="240" Width="475">
 
     <Grid>
         <dxlc:LayoutControl Orientation="Vertical" dxe:ValidationService.IsValidationContainer="True">
-            <dxlc:LayoutGroup Orientation="Vertical">
+            <dxlc:LayoutGroup Orientation="Vertical"
+                              VerticalAlignment="Center">
                 <dxlc:LayoutItem Foreground="Pink"
                                  HorizontalAlignment="Center"
                                  Margin="0 0 15 0"
@@ -35,7 +36,7 @@
                 </dxlc:LayoutItem>
             </dxlc:LayoutGroup>
 
-            <dxlc:LayoutGroup Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 10 0 0">
+            <dxlc:LayoutGroup Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 10 0 0">
                 <dx:SimpleButton x:Name="Login"
                                  Content="Login" Height="35" MinWidth="100"
                                  FontSize="15" Margin="0 0 5 0" />
