@@ -29,12 +29,15 @@ namespace PSMDesktopApp.Library.Api
         {
             var content = await response.Content.ReadAsAsync<HttpErrorContent>();
 
+            // If content.Message is null, just put the reason phrase as the message.
+            string message = $"{ response.ReasonPhrase }{ (content.Message != null ? ":" : "") } { content.Message ?? "" }";
+
             if (content.Error == null)
             {
-                return new ApiException(content.Message);
+                return new ApiException(message);
             }
 
-            return new ApiException(content.Message, content.Error);
+            return new ApiException(message, content.Error);
         }
 
         private class HttpErrorContent
