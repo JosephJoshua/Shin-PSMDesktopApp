@@ -63,7 +63,7 @@ namespace PSMDesktopApp.Library.Api
                 }
                 else
                 {
-                    throw new Exception(response.ReasonPhrase);
+                    throw await ApiException.FromHttpResponse(response);
                 }
             }
         }
@@ -90,7 +90,7 @@ namespace PSMDesktopApp.Library.Api
                 }
                 else
                 {
-                    throw new Exception(response.ReasonPhrase);
+                    throw await ApiException.FromHttpResponse(response);
                 }
             }
         }
