@@ -38,7 +38,7 @@ namespace PSMDesktopApp.ViewModels
         private int _salesId;
 
         private double _biaya;
-        private int _discount;
+        private int _diskon;
         private double _dp;
         private double _tambahanBiaya;
 
@@ -47,7 +47,7 @@ namespace PSMDesktopApp.ViewModels
         private bool _isMemoryChecked = false;
         private bool _isCondomChecked = false;
 
-        private DateTime _tanggalKonfirmasi = DateTime.Now;
+        private DateTime? _tanggalKonfirmasi = DateTime.Now;
         private bool _sudahKonfirmasi = false;
 
         private BindingList<TechnicianModel> _technicians;
@@ -258,15 +258,15 @@ namespace PSMDesktopApp.ViewModels
             }
         }
 
-        public int Discount
+        public int Diskon
         {
-            get => _discount;
+            get => _diskon;
 
             set
             {
-                _discount = value;
+                _diskon = value;
 
-                NotifyOfPropertyChange(() => Discount);
+                NotifyOfPropertyChange(() => Diskon);
                 NotifyOfPropertyChange(() => TotalBiaya);
                 NotifyOfPropertyChange(() => Sisa);
             }
@@ -301,7 +301,7 @@ namespace PSMDesktopApp.ViewModels
 
         public double TotalBiaya
         {
-            get => (Biaya - (Biaya * ((double)Discount / 100))) + TambahanBiaya;
+            get => (100.0 - Diskon) / 100.0 * Biaya + TambahanBiaya;
         }
 
         public double Sisa
@@ -353,7 +353,7 @@ namespace PSMDesktopApp.ViewModels
             }
         }
 
-        public DateTime TanggalKonfirmasi
+        public DateTime? TanggalKonfirmasi
         {
             get => _tanggalKonfirmasi;
 
@@ -519,6 +519,9 @@ namespace PSMDesktopApp.ViewModels
 
             bool sudahDiambil = SelectedStatus == ServiceStatus.JadiSudahDiambil || SelectedStatus == ServiceStatus.TidakJadiSudahDiambil;
 
+            // Has to be nullable so that the compiler won't complain about the implicit conversion between DateTime and null.
+            DateTime? now = DateTime.Now;
+
             ServiceModel service = new ServiceModel
             {
                 NamaPelanggan = NamaPelanggan,
@@ -534,15 +537,12 @@ namespace PSMDesktopApp.ViewModels
                 TechnicianId = SelectedTechnician.Id,
                 SalesId = SalesId,
                 StatusServisan = SelectedStatus.Description(),
-                TanggalKonfirmasi = SudahKonfirmasi ? TanggalKonfirmasi : DateTime.MinValue,
+                TanggalKonfirmasi = SudahKonfirmasi ? TanggalKonfirmasi : null,
                 IsiKonfirmasi = IsiKonfirmasi,
                 Biaya = (decimal)Biaya,
-                Discount = Discount,
+                Diskon = Diskon,
                 Dp = (decimal)Dp,
                 TambahanBiaya = (decimal)TambahanBiaya,
-                HargaSparepart = 0,
-                LabaRugi = 0,
-                TanggalPengambilan = sudahDiambil ? DateTime.Now : DateTime.MinValue,
             };
 
             await _serviceEndpoint.Insert(service);

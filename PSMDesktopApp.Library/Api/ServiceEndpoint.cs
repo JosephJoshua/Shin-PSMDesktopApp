@@ -15,9 +15,24 @@ namespace PSMDesktopApp.Library.Api
             _apiHelper = apiHelper;
         }
 
-        public async Task<List<ServiceModel>> GetAll()
+        public async Task<List<ServiceModel>> GetAll(string searchText = "", SearchType searchType = SearchType.NamaPelanggan, DateTime? minDate = null, DateTime? maxDate = null)
         {
-            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/Service").ConfigureAwait(false))
+            var queryParams = new List<KeyValuePair<string, string>> 
+            { 
+                new KeyValuePair<string, string>("q", searchText),
+                new KeyValuePair<string, string>("by", GetColumnFromSearchType(searchType))
+            };
+
+            const string dtFormat = "yyyy-MM-ddTHH:mm:ss.fffzzz";
+
+            // We have to use the null conditional operator so we can use it as a normal DateTime, as opposed to a nullable one.
+            if (minDate != null) queryParams.Add(new KeyValuePair<string, string>("min_date", minDate?.ToString(dtFormat)));
+            if (maxDate != null) queryParams.Add(new KeyValuePair<string, string>("max_date", maxDate?.ToString(dtFormat)));
+
+            string query = await new FormUrlEncodedContent(queryParams).ReadAsStringAsync();
+            string url = "/api/servisan?" + query;
+
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync(url).ConfigureAwait(false))
             {
                 if (response.IsSuccessStatusCode)
                 {
@@ -26,14 +41,14 @@ namespace PSMDesktopApp.Library.Api
                 }
                 else
                 {
-                    throw new Exception(response.ReasonPhrase);
+                    throw await ApiException.FromHttpResponse(response);
                 }
             }
         }
 
         public async Task<ServiceModel> GetByNomorNota(int nomorNota)
         {
-            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/Service/" + nomorNota).ConfigureAwait(false))
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/servisan/" + nomorNota).ConfigureAwait(false))
             {
                 if (response.IsSuccessStatusCode)
                 {
@@ -42,24 +57,61 @@ namespace PSMDesktopApp.Library.Api
                 }
                 else
                 {
-                    throw new Exception(response.ReasonPhrase);
+                    throw await ApiException.FromHttpResponse(response);
                 }
             }
         }
 
         public async Task Insert(ServiceModel service)
         {
-            await _apiHelper.ApiClient.PostAsJsonAsync("/api/Service", service).ConfigureAwait(false);
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.PostAsJsonAsync("/api/servisan", service).ConfigureAwait(false))
+            {
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw await ApiException.FromHttpResponse(response);
+                }
+            }
         }
 
         public async Task Update(ServiceModel service)
         {
-            await _apiHelper.ApiClient.PutAsJsonAsync("/api/Service", service).ConfigureAwait(false);
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.PutAsJsonAsync("/api/servisan", service).ConfigureAwait(false))
+            {
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw await ApiException.FromHttpResponse(response);
+                }
+            }
         }
 
         public async Task Delete(int nomorNota)
         {
-            await _apiHelper.ApiClient.DeleteAsync("/api/Service/" + nomorNota).ConfigureAwait(false);
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.DeleteAsync("/api/servisan/" + nomorNota).ConfigureAwait(false))
+            {
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw await ApiException.FromHttpResponse(response);
+                }
+            }
+        }
+
+        private string GetColumnFromSearchType(SearchType searchType)
+        {
+            switch (searchType)
+            {
+                case SearchType.NamaPelanggan:
+                    return "nama_pelanggan";
+                case SearchType.NomorHp:
+                    return "nomor_hp";
+                case SearchType.NomorNota:
+                    return "nomor_nota";
+                case SearchType.Status:
+                    return "status";
+                case SearchType.TipeHp:
+                    return "tipe_hp";
+                default:
+                    throw new Exception("Unhandled search type");
+            }
         }
     }
 }

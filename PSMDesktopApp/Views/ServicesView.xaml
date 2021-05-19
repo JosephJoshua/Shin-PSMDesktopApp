@@ -45,7 +45,11 @@
         <!-- Search box -->
         <Grid Grid.Column="0" Grid.Row="1" Height="30">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             
@@ -60,6 +64,34 @@
                               ValueMember="Key"
                               DisplayMember="Value"
                               EditValue="{Binding SelectedSearchType, UpdateSourceTrigger=PropertyChanged}" />
+
+            <TextBlock Grid.Column="2" Grid.Row="0"
+                       Text="From:"
+                       FontSize="18"
+                       Foreground="White"
+                       VerticalAlignment="Center"
+                       Margin="15 0 10 0" />
+
+            <dxe:DateEdit Grid.Column="3" Grid.Row="0"
+                          Height="30"
+                          VerticalAlignment="Center"
+                          Mask="dd/MM/yyyy"
+                          MaskUseAsDisplayFormat="True"
+                          DateTime="{Binding StartDate}" />
+
+            <TextBlock Grid.Column="4" Grid.Row="0"
+                       Text="To:"
+                       FontSize="18"
+                       Foreground="White"
+                       VerticalAlignment="Center"
+                       Margin="15 0 10 0" />
+
+            <dxe:DateEdit Grid.Column="5" Grid.Row="0"
+                          Height="30"
+                          VerticalAlignment="Center"
+                          Mask="dd/MM/yyyy"
+                          MaskUseAsDisplayFormat="True"
+                          DateTime="{Binding EndDate}" />
         </Grid>
 
         <!-- Progress bar -->
@@ -131,17 +163,17 @@
             <dxg:GridColumn Header="Kelengkapan" FieldName="Kelengkapan" />
             <dxg:GridColumn Header="Warna" FieldName="Warna" />
             <dxg:GridColumn Header="Kata Sandi/Pola" FieldName="KataSandiPola" />
-            <dxg:GridColumn Header="Technician Id" FieldName="TechnicianId" />
-            <dxg:GridColumn Header="Sales Id" FieldName="SalesId" />
+            <dxg:GridColumn Header="ID Teknisi" FieldName="TechnicianId" />
+            <dxg:GridColumn Header="ID Sales" FieldName="SalesId" />
             <dxg:GridColumn Header="Status Servisan" FieldName="StatusServisan" />
             <dxg:GridColumn Header="Tanggal Konfirmasi" FieldName="TanggalKonfirmasi" />
             <dxg:GridColumn Header="Isi Konfirmasi" FieldName="IsiKonfirmasi" />
             <dxg:GridColumn Header="Biaya" FieldName="Biaya" />
-            <dxg:GridColumn Header="Discount" FieldName="Discount" />
+            <dxg:GridColumn Header="Diskon" FieldName="Diskon" />
             <dxg:GridColumn Header="Dp" FieldName="Dp" />
             <dxg:GridColumn Header="Tambahan Biaya" FieldName="TambahanBiaya" />
             <dxg:GridColumn Header="Total Biaya" FieldName="TotalBiaya" />
-            <dxg:GridColumn Header="Harga Sparepart" FieldName="HargaSparepart" Visible="{c:Binding Path=!IsCustomerService}" />
+            <dxg:GridColumn Header="Harga Sparepart" FieldName="HargaSparepart" />
             <dxg:GridColumn Header="Sisa" FieldName="Sisa" />
             <dxg:GridColumn Header="Laba/Rugi" FieldName="LabaRugi" Visible="{Binding Path=IsAdmin}" />
             <dxg:GridColumn Header="Tanggal Pengambilan" FieldName="TanggalPengambilan" />
@@ -151,8 +183,7 @@
                                DetailHeaderContent="Services"
                                AllowScrollAnimation="True"
                                AllowFixedGroups="True"
-                               AllowEditing="False" 
-                               AllowMasterDetail="{c:Binding Path=!IsCustomerService}"/>
+                               AllowEditing="False" />
             </dxg:GridControl.View>
 
             <i:Interaction.Triggers>
@@ -262,11 +293,11 @@
             <TextBlock FontSize="14" Text="{Binding Path=SelectedService.TanggalKonfirmasi, StringFormat=Tanggal Konfirmasi: {0}}" />
             <TextBlock FontSize="14" Text="{Binding Path=SelectedService.IsiKonfirmasi, StringFormat=Isi Konfirmasi: {0}}" />
             <TextBlock FontSize="14" Text="{Binding Path=SelectedService.Biaya, StringFormat=Biaya: Rp{0:N0}}" />
-            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.Discount, StringFormat=Discount: {0}%}" />
+            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.Diskon, StringFormat=Diskon: {0}%}" />
             <TextBlock FontSize="14" Text="{Binding Path=SelectedService.Dp, StringFormat=Dp: Rp{0:N0}}" />
             <TextBlock FontSize="14" Text="{Binding Path=SelectedService.TambahanBiaya, StringFormat=TambahanBiaya: Rp{0:N0}}" />
             <TextBlock FontSize="14" Text="{Binding Path=SelectedService.TotalBiaya, StringFormat=Total Biaya: Rp{0:N0}}" />
-            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.HargaSparepart, StringFormat=Harga Sparepart: Rp{0:N0}}" Visibility="{c:Binding Path=!IsCustomerService}" />
+            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.HargaSparepart, StringFormat=Harga Sparepart: Rp{0:N0}}" />
             <TextBlock FontSize="14" Text="{Binding Path=SelectedService.Sisa, StringFormat=Sisa: Rp{0:N0}}" />
             <TextBlock FontSize="14" Text="{Binding Path=SelectedService.LabaRugi, StringFormat=Laba/Rugi: Rp{0:N0}}" Visibility="{c:Binding Path=IsAdmin, FalseToVisibility=Collapsed}" />
             <TextBlock FontSize="14" Text="{Binding Path=SelectedService.TanggalPengambilan, StringFormat=Tanggal Pengambilan: {0}}" />

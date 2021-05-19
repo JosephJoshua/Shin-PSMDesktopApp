@@ -194,7 +194,7 @@ namespace PSMDesktopApp.ViewModels
                     new ProfitResultModel
                     {
                         NomorNota = s.NomorNota,
-                        TanggalPengambilan = s.TanggalPengambilan,
+                        TanggalPengambilan = s.TanggalPengambilan ?? throw new Exception("Tanggal pengambilan is null even though the servisan was already taken"),
                         TipeHp = s.TipeHp,
                         Biaya = s.TotalBiaya,
                         HargaSparepart = s.HargaSparepart,

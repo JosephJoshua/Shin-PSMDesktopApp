@@ -201,9 +201,9 @@
                                       Text="{Binding Path=Biaya, UpdateSourceTrigger=PropertyChanged}" />
                     </dxlc:LayoutItem>
 
-                    <dxlc:LayoutItem Label="Discount:" Margin="4">
-                        <dxe:TextEdit x:Name="Discount" Margin="10 0 0 0" Height="30"
-                                      Text="{Binding Path=Discount, UpdateSourceTrigger=PropertyChanged}" />
+                    <dxlc:LayoutItem Label="Diskon:" Margin="4">
+                        <dxe:TextEdit x:Name="Diskon" Margin="10 0 0 0" Height="30"
+                                      Text="{Binding Path=Diskon, UpdateSourceTrigger=PropertyChanged}" />
                     </dxlc:LayoutItem>
 
                     <dxlc:LayoutItem Label="Dp:" Margin="4">
@@ -238,8 +238,7 @@
 
                 <dx:SimpleButton x:Name="Cancel"
                                  Content="Cancel" Height="35" MinWidth="100"
-                                 FontSize="15" Margin="0 0 5 0"
-                                 Visibility="{c:Binding Path=!ShowMemberGrid}"/>
+                                 FontSize="15" Margin="0 0 5 0" />
             </dxlc:LayoutGroup>
         </dxlc:LayoutControl>
     </Grid>

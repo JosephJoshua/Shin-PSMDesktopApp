@@ -32,7 +32,7 @@ namespace PSMDesktopApp.ViewModels
         private string _isiKonfirmasi;
 
         private double _biaya;
-        private int _discount;
+        private int _diskon;
         private double _dp;
         private double _tambahanBiaya;
 
@@ -41,7 +41,7 @@ namespace PSMDesktopApp.ViewModels
         private bool _isMemoryChecked = false;
         private bool _isCondomChecked = false;
 
-        private DateTime _tanggalKonfirmasi;
+        private DateTime? _tanggalKonfirmasi;
         private bool _sudahKonfirmasi = false;
 
         private BindingList<TechnicianModel> _technicians;
@@ -191,15 +191,15 @@ namespace PSMDesktopApp.ViewModels
             }
         }
 
-        public int Discount
+        public int Diskon
         {
-            get => _discount;
+            get => _diskon;
 
             set
             {
-                _discount = value;
+                _diskon = value;
 
-                NotifyOfPropertyChange(() => Discount);
+                NotifyOfPropertyChange(() => Diskon);
                 NotifyOfPropertyChange(() => TotalBiaya);
                 NotifyOfPropertyChange(() => Sisa);
             }
@@ -234,7 +234,7 @@ namespace PSMDesktopApp.ViewModels
 
         public double TotalBiaya
         {
-            get => (Biaya - (Biaya * ((double)Discount / 100))) + TambahanBiaya;
+            get => (Biaya - (Biaya * ((double)Diskon / 100))) + TambahanBiaya;
         }
 
         public double Sisa
@@ -286,7 +286,7 @@ namespace PSMDesktopApp.ViewModels
             }
         }
 
-        public DateTime TanggalKonfirmasi
+        public DateTime? TanggalKonfirmasi
         {
             get => _tanggalKonfirmasi;
 
@@ -306,7 +306,7 @@ namespace PSMDesktopApp.ViewModels
                 _sudahKonfirmasi = value;
                 NotifyOfPropertyChange(() => SudahKonfirmasi);
 
-                if (SudahKonfirmasi && TanggalKonfirmasi.Year == 1753)
+                if (SudahKonfirmasi && TanggalKonfirmasi == null)
                 {
                     TanggalKonfirmasi = DateTime.Now;
                 }
@@ -422,11 +422,11 @@ namespace PSMDesktopApp.ViewModels
             YangBelumDicek = service.YangBelumDicek;
             Warna = service.Warna;
             KataSandiPola = service.KataSandiPola;
-            SudahKonfirmasi = service.TanggalKonfirmasi != new DateTime(1753, 1, 1, 0, 0, 0);
+            SudahKonfirmasi = service.TanggalKonfirmasi != null;
             TanggalKonfirmasi = service.TanggalKonfirmasi;
             IsiKonfirmasi = service.IsiKonfirmasi;
             Biaya = (double)service.Biaya;
-            Discount = service.Discount;
+            Diskon = service.Diskon;
             Dp = (double)service.Dp;
             TambahanBiaya = (double)service.TambahanBiaya;
             Kerusakan = service.Kerusakan;
@@ -486,8 +486,6 @@ namespace PSMDesktopApp.ViewModels
                 kelengkapan += "Condom ";
             }
 
-            bool sudahDiambil = SelectedStatus == ServiceStatus.JadiSudahDiambil || SelectedStatus == ServiceStatus.TidakJadiSudahDiambil;
-
             ServiceModel service = new ServiceModel
             {
                 NomorNota = NomorNota,
@@ -503,13 +501,12 @@ namespace PSMDesktopApp.ViewModels
                 KataSandiPola = KataSandiPola,
                 TechnicianId = SelectedTechnician.Id,
                 StatusServisan = SelectedStatus.Description(),
-                TanggalKonfirmasi = SudahKonfirmasi ? TanggalKonfirmasi : DateTime.MinValue,
+                TanggalKonfirmasi = SudahKonfirmasi ? TanggalKonfirmasi : null,
                 IsiKonfirmasi = IsiKonfirmasi,
                 Biaya = (decimal)Biaya,
-                Discount = Discount,
+                Diskon = Diskon,
                 Dp = (decimal)Dp,
                 TambahanBiaya = (decimal)TambahanBiaya,
-                TanggalPengambilan = sudahDiambil ? DateTime.Now : DateTime.MinValue,
             };
 
             await _serviceEndpoint.Update(service);

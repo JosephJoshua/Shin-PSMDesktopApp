@@ -5,10 +5,10 @@ using PSMDesktopApp.Library.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Linq;
 using System.Windows.Input;
 using System.Globalization;
 using DevExpress.Xpf.Grid;
+using System;
 
 namespace PSMDesktopApp.ViewModels
 {
@@ -32,6 +32,9 @@ namespace PSMDesktopApp.ViewModels
         private string _searchText;
         private SearchType _searchTypes;
         private SearchType _selectedSearchType;
+
+        private DateTime _startDate;
+        private DateTime _endDate;
 
         private UserRole LoggedInUserRole
         {
@@ -94,7 +97,8 @@ namespace PSMDesktopApp.ViewModels
             {
                 if (SelectedService == null) return null;
 
-                return _technicianEndpoint.GetById(SelectedService.TechnicianId).Result.Nama;
+                return "";
+                // return _technicianEndpoint.GetById(SelectedService.TechnicianId).Result.Nama;
             }
         }
 
@@ -104,7 +108,9 @@ namespace PSMDesktopApp.ViewModels
             {
                 if (SelectedService == null) return null;
 
-                return _salesEndpoint.GetById(SelectedService.SalesId).Result.Nama;
+                // TODO: Use actual endpoints
+                return "";
+                // return _salesEndpoint.GetById(SelectedService.SalesId).Result.Nama;
             }
         }
 
@@ -152,6 +158,28 @@ namespace PSMDesktopApp.ViewModels
             {
                 _selectedSearchType = value;
                 NotifyOfPropertyChange(() => SelectedSearchType);
+            }
+        }
+
+        public DateTime StartDate
+        {
+            get => _startDate;
+
+            set
+            {
+                _startDate = value;
+                NotifyOfPropertyChange(() => StartDate);
+            }
+        }
+        
+        public DateTime EndDate
+        {
+            get => _endDate;
+
+            set
+            {
+                _endDate = value;
+                NotifyOfPropertyChange(() => EndDate);
             }
         }
 
@@ -207,12 +235,17 @@ namespace PSMDesktopApp.ViewModels
             _technicianEndpoint = technicianEndpoint;
             _salesEndpoint = salesEndpoint;
             _sparepartEndpoint = sparepartEndpoint;
+
+            DateTime today = DateTime.Today;
+
+            // Set start and end date to the first and last date of the month, respectively.
+            _startDate = new DateTime(today.Year, today.Month, 1);
+            _endDate = _startDate.AddMonths(1).AddDays(-1);
         }
 
         protected override async void OnViewLoaded(object view)
         {
             base.OnViewLoaded(view);
-
             await LoadServices();
         }
 
@@ -311,35 +344,15 @@ namespace PSMDesktopApp.ViewModels
             if (IsLoading) return;
 
             IsLoading = true;
+            string searchText = (SearchText ?? "").Trim();
 
-            List<ServiceModel> serviceList = await _serviceEndpoint.GetAll();
-            if (!string.IsNullOrWhiteSpace(SearchText))
-            {
-                string searchText = SearchText.ToLower();
+            // Make sure the start date's time is set to the start of the day (at 00:00:00).
+            StartDate = StartDate.Date;
 
-                switch (SelectedSearchType)
-                {
-                    case SearchType.NomorNota:
-                        serviceList = serviceList.Where(s => s.NomorNota.ToString().ToLower().Contains(searchText)).ToList();
-                        break;
+            // Make sure the end date's time is set to the end of the day (at 23:59:59).
+            EndDate = EndDate.Date.AddDays(1).AddTicks(-1);
 
-                    case SearchType.NamaPelanggan:
-                        serviceList = serviceList.Where(s => s.NamaPelanggan.ToLower().Contains(searchText)).ToList();
-                        break;
-
-                    case SearchType.NomorHp:
-                        serviceList = serviceList.Where(s => s.NoHp.ToLower().Contains(searchText)).ToList();
-                        break;
-
-                    case SearchType.TipeHp:
-                        serviceList = serviceList.Where(s => s.TipeHp.ToLower().Contains(searchText)).ToList();
-                        break;
-
-                    case SearchType.Status:
-                        serviceList = serviceList.Where(s => s.StatusServisan.ToString().ToLower().Contains(searchText)).ToList();
-                        break;
-                }
-            }
+            List<ServiceModel> serviceList = await _serviceEndpoint.GetAll(searchText, SelectedSearchType, StartDate, EndDate);
 
             Services = new BindableCollection<ServiceModel>(serviceList);
             IsLoading = false;
@@ -351,25 +364,25 @@ namespace PSMDesktopApp.ViewModels
         {
             if (SelectedService == null) return;
 
-            string kelengkapan = SelectedService.Kelengkapan.Trim().Replace(" ", ", ");
+            string kelengkapan = SelectedService.Kelengkapan?.Trim().Replace(" ", ", ");
 
-            kelengkapan = kelengkapan[0].ToString() + kelengkapan.Substring(1).ToLower();
+            if (kelengkapan != null) kelengkapan = kelengkapan[0].ToString() + kelengkapan.Substring(1).ToLower();
 
             ServiceInvoicePreviewViewModel invoicePreviewVM = IoC.Get<ServiceInvoicePreviewViewModel>();
             invoicePreviewVM.SetInvoiceModel(new ServiceInvoiceModel
             {
                 NomorNota = SelectedService.NomorNota.ToString(),
                 NamaPelanggan = SelectedService.NamaPelanggan,
-                NoHp = SelectedService.NoHp,
+                NoHp = SelectedService.NoHp ?? "",
                 TipeHp = SelectedService.TipeHp,
                 Imei = SelectedService.Imei ?? "",
                 Kerusakan = SelectedService.Kerusakan,
                 TotalBiaya = SelectedService.TotalBiaya,
                 Dp = SelectedService.Dp,
                 Sisa = SelectedService.Sisa,
-                Kelengkapan = kelengkapan,
-                KondisiHp = SelectedService.KondisiHp,
-                YangBelumDicek = SelectedService.YangBelumDicek,
+                Kelengkapan = kelengkapan ?? "",
+                KondisiHp = SelectedService.KondisiHp ?? "",
+                YangBelumDicek = SelectedService.YangBelumDicek ?? "",
                 Tanggal = SelectedService.Tanggal.ToString("f", DateTimeFormatInfo.InvariantInfo),
             });
 

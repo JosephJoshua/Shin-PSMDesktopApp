@@ -21,7 +21,7 @@ namespace PSMDesktopApp.ViewModels
 
         private bool _sudahKonfirmasi;
         private string _isiKonfirmasi;
-        private DateTime _tanggalKonfirmasi;
+        private DateTime? _tanggalKonfirmasi;
 
         public int NomorNota
         {
@@ -70,7 +70,7 @@ namespace PSMDesktopApp.ViewModels
                 _sudahKonfirmasi = value;
                 NotifyOfPropertyChange(() => SudahKonfirmasi);
 
-                if (SudahKonfirmasi && TanggalKonfirmasi.Year == 1753)
+                if (SudahKonfirmasi && TanggalKonfirmasi == null)
                 {
                     TanggalKonfirmasi = DateTime.Now;
                 }
@@ -88,7 +88,7 @@ namespace PSMDesktopApp.ViewModels
             }
         }
 
-        public DateTime TanggalKonfirmasi
+        public DateTime? TanggalKonfirmasi
         {
             get => _tanggalKonfirmasi;
 
@@ -110,7 +110,7 @@ namespace PSMDesktopApp.ViewModels
             _oldService = service;
 
             NomorNota = service.NomorNota;
-            SudahKonfirmasi = service.TanggalKonfirmasi.Year != 1753;
+            SudahKonfirmasi = service.TanggalKonfirmasi != null;
             IsiKonfirmasi = service.IsiKonfirmasi;
             TanggalKonfirmasi = service.TanggalKonfirmasi;
 
@@ -125,12 +125,9 @@ namespace PSMDesktopApp.ViewModels
                 return false;
             }
 
-            bool sudahDiambil = SelectedStatus == ServiceStatus.JadiSudahDiambil || SelectedStatus == ServiceStatus.TidakJadiSudahDiambil;
-
             _oldService.StatusServisan = SelectedStatus.Description();
             _oldService.IsiKonfirmasi = IsiKonfirmasi;
-            _oldService.TanggalKonfirmasi = SudahKonfirmasi ? TanggalKonfirmasi : DateTime.MinValue;
-            _oldService.TanggalPengambilan = sudahDiambil ? DateTime.Now : DateTime.MinValue;
+            _oldService.TanggalKonfirmasi = SudahKonfirmasi ? TanggalKonfirmasi : null;
 
             await _serviceEndpoint.Update(_oldService);
             return true;
