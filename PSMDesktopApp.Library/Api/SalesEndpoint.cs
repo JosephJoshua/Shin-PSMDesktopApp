@@ -21,14 +21,14 @@ namespace PSMDesktopApp.Library.Api
             using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync(WebUtility.UrlEncode("/api/sales?q=" + searchText))
                     .ConfigureAwait(false))
             {
-                if (response.IsSuccessStatusCode)   
+                if (response.IsSuccessStatusCode)
                 {
                     var result = await response.Content.ReadAsAsync<List<SalesModel>>();
                     return result;
                 }
                 else
                 {
-                    throw new Exception(response.ReasonPhrase);
+                    throw await ApiException.FromHttpResponse(response);
                 }
             }
         }
@@ -44,19 +44,31 @@ namespace PSMDesktopApp.Library.Api
                 }
                 else
                 {
-                    throw new Exception(response.ReasonPhrase);
+                    throw await ApiException.FromHttpResponse(response);
                 }
             }
         }
 
         public async Task Insert(SalesModel sales)
         {
-            await _apiHelper.ApiClient.PostAsJsonAsync("/api/sales", sales).ConfigureAwait(false);
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.PostAsJsonAsync("/api/sales", sales).ConfigureAwait(false))
+            {
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw await ApiException.FromHttpResponse(response);
+                }
+            }
         }
 
         public async Task Delete(int id)
         {
-            await _apiHelper.ApiClient.DeleteAsync("/api/sales/" + id).ConfigureAwait(false);
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.DeleteAsync("/api/sales/" + id).ConfigureAwait(false))
+            {
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw await ApiException.FromHttpResponse(response);
+                }
+            }
         }
     }
 }
