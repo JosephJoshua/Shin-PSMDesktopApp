@@ -22,8 +22,14 @@
                 <dxlc:LayoutItem Foreground="Pink"
                                  HorizontalAlignment="Center"
                                  Margin="0 0 15 0"
-                                 Label="{Binding Path=ErrorMessage, Mode=OneWay}"
-                                 Visibility="{c:Binding Path=IsErrorMessageVisible}" />
+                                 Visibility="{c:Binding Path=IsErrorMessageVisible}">
+                    <dxlc:LayoutItem.Label>
+                        <TextBlock Text="{Binding Path=ErrorMessage}"
+                                   TextWrapping="Wrap"
+                                   MaxWidth="410"
+                                   TextAlignment="Center" />
+                    </dxlc:LayoutItem.Label>
+                </dxlc:LayoutItem>
 
                 <dxlc:LayoutItem Label="Email:" Margin="4">
                     <dxe:TextEdit x:Name="Username" Margin="10 0 0 0" Height="30"
