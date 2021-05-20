@@ -1,6 +1,7 @@
 using PSMDesktopApp.Library.Models;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -15,9 +16,10 @@ namespace PSMDesktopApp.Library.Api
             _apiHelper = apiHelper;
         }
 
-        public async Task<List<TechnicianModel>> GetAll()
+        public async Task<List<TechnicianModel>> GetAll(string searchText = "")
         {
-            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/Technician").ConfigureAwait(false))
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/teknisi/?q=" + WebUtility.UrlEncode(searchText))
+                    .ConfigureAwait(false))
             {
                 if (response.IsSuccessStatusCode)
                 {
@@ -26,14 +28,14 @@ namespace PSMDesktopApp.Library.Api
                 }
                 else
                 {
-                    throw new Exception(response.ReasonPhrase);
+                    throw await ApiException.FromHttpResponse(response);
                 }
             }
         }
 
         public async Task<TechnicianModel> GetById(int id)
         {
-            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/Technician/" + id).ConfigureAwait(false))
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/teknisi/" + id).ConfigureAwait(false))
             {
                 if (response.IsSuccessStatusCode)
                 {
@@ -42,19 +44,31 @@ namespace PSMDesktopApp.Library.Api
                 }
                 else
                 {
-                    throw new Exception(response.ReasonPhrase);
+                    throw await ApiException.FromHttpResponse(response);
                 }
             }
         }
 
         public async Task Insert(TechnicianModel technician)
         {
-            await _apiHelper.ApiClient.PostAsJsonAsync("/api/Technician", technician).ConfigureAwait(false);
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.PostAsJsonAsync("/api/teknisi", technician).ConfigureAwait(false))
+            {
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw await ApiException.FromHttpResponse(response);
+                }
+            }
         }
 
         public async Task Delete(int id)
         {
-            await _apiHelper.ApiClient.DeleteAsync("/api/Technician/" + id).ConfigureAwait(false);
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.DeleteAsync("/api/teknisi/" + id).ConfigureAwait(false))
+            {
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw await ApiException.FromHttpResponse(response);
+                }
+            }
         }
     }
 }

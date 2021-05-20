@@ -127,12 +127,7 @@ namespace PSMDesktopApp.ViewModels
             if (IsLoading) return;
 
             IsLoading = true;
-            List<TechnicianModel> technicianList = await _technicianEndpoint.GetAll();
-
-            if (!string.IsNullOrWhiteSpace(SearchText))
-            {
-                technicianList = technicianList.Where(t => t.Nama.ToLower().Contains(SearchText.ToLower())).ToList();
-            }
+            List<TechnicianModel> technicianList = await _technicianEndpoint.GetAll((SearchText ?? "").Trim());
 
             IsLoading = false;
             Technicians = new BindableCollection<TechnicianModel>(technicianList);

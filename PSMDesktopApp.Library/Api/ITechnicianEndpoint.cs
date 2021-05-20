@@ -6,7 +6,7 @@ namespace PSMDesktopApp.Library.Api
 {
     public interface ITechnicianEndpoint
     {
-        Task<List<TechnicianModel>> GetAll();
+        Task<List<TechnicianModel>> GetAll(string searchText = "");
 
         Task<TechnicianModel> GetById(int id);
 
