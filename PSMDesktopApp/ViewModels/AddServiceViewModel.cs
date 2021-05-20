@@ -517,11 +517,6 @@ namespace PSMDesktopApp.ViewModels
                 kelengkapan += "Condom ";
             }
 
-            bool sudahDiambil = SelectedStatus == ServiceStatus.JadiSudahDiambil || SelectedStatus == ServiceStatus.TidakJadiSudahDiambil;
-
-            // Has to be nullable so that the compiler won't complain about the implicit conversion between DateTime and null.
-            DateTime? now = DateTime.Now;
-
             ServiceModel service = new ServiceModel
             {
                 NamaPelanggan = NamaPelanggan,
