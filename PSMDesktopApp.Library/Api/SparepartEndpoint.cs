@@ -1,5 +1,4 @@
 using PSMDesktopApp.Library.Models;
-using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -17,7 +16,7 @@ namespace PSMDesktopApp.Library.Api
 
         public async Task<List<SparepartModel>> GetAll()
         {
-            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/Sparepart").ConfigureAwait(false))
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/sparepart").ConfigureAwait(false))
             {
                 if (response.IsSuccessStatusCode)
                 {
@@ -26,14 +25,14 @@ namespace PSMDesktopApp.Library.Api
                 }
                 else
                 {
-                    throw new Exception(response.ReasonPhrase);
+                    throw await ApiException.FromHttpResponse(response);
                 }
             }
         }
 
         public async Task<List<SparepartModel>> GetByNomorNota(int nomorNota)
         {
-            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/Sparepart/" + nomorNota).ConfigureAwait(false))
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/sparepart/" + nomorNota).ConfigureAwait(false))
             {
                 if (response.IsSuccessStatusCode)
                 {
@@ -42,19 +41,31 @@ namespace PSMDesktopApp.Library.Api
                 }
                 else
                 {
-                    throw new Exception(response.ReasonPhrase);
+                    throw await ApiException.FromHttpResponse(response);
                 }
             }
         }
 
         public async Task Insert(SparepartModel sparepart)
         {
-            await _apiHelper.ApiClient.PostAsJsonAsync("/api/Sparepart", sparepart).ConfigureAwait(false);
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.PostAsJsonAsync("/api/sparepart", sparepart).ConfigureAwait(false))
+            {
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw await ApiException.FromHttpResponse(response);
+                }
+            }
         }
 
         public async Task Delete(int id)
         {
-            await _apiHelper.ApiClient.DeleteAsync("/api/Sparepart/" + id).ConfigureAwait(false);
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.DeleteAsync("/api/sparepart/" + id).ConfigureAwait(false))
+            {
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw await ApiException.FromHttpResponse(response);
+                }
+            }
         }
     }
 }
