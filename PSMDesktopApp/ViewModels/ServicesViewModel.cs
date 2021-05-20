@@ -97,8 +97,7 @@ namespace PSMDesktopApp.ViewModels
             {
                 if (SelectedService == null) return null;
 
-                return "";
-                // return _technicianEndpoint.GetById(SelectedService.TechnicianId).Result.Nama;
+                return _technicianEndpoint.GetById(SelectedService.TechnicianId).Result.Nama;
             }
         }
 
@@ -108,9 +107,7 @@ namespace PSMDesktopApp.ViewModels
             {
                 if (SelectedService == null) return null;
 
-                // TODO: Use actual endpoints
-                return "";
-                // return _salesEndpoint.GetById(SelectedService.SalesId).Result.Nama;
+                return _salesEndpoint.GetById(SelectedService.SalesId).Result.Nama;
             }
         }
 
