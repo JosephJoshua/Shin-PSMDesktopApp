@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using PSMDesktopApp.Library.Models;
@@ -8,7 +9,7 @@ namespace PSMDesktopApp.Library.Api
     {
         Task Delete(int id);
 
-        Task<List<SparepartModel>> GetAll();
+        Task<List<SparepartModel>> GetAll(DateTime? minDate = null, DateTime? maxDate = null);
 
         Task<List<SparepartModel>> GetByNomorNota(int nomorNota);
 
