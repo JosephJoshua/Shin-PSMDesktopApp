@@ -1,4 +1,5 @@
 using PSMDesktopApp.Library.Models;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -14,9 +15,19 @@ namespace PSMDesktopApp.Library.Api
             _apiHelper = apiHelper;
         }
 
-        public async Task<List<SparepartModel>> GetAll()
+        public async Task<List<SparepartModel>> GetAll(DateTime? minDate = null, DateTime? maxDate = null)
         {
-            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/sparepart").ConfigureAwait(false))
+            var queryParams = new List<KeyValuePair<string, string>>();
+            const string dtFormat = "yyyy-MM-ddTHH:mm:ss.fffzzz";
+
+            // We have to use the null conditional operator so we can use it as a normal DateTime, as opposed to a nullable one.
+            if (minDate != null) queryParams.Add(new KeyValuePair<string, string>("min_date", minDate?.ToString(dtFormat)));
+            if (maxDate != null) queryParams.Add(new KeyValuePair<string, string>("max_date", maxDate?.ToString(dtFormat)));
+
+            string query = await new FormUrlEncodedContent(queryParams).ReadAsStringAsync();
+            string url = "/api/sparepart?" + query;
+
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync(url).ConfigureAwait(false))
             {
                 if (response.IsSuccessStatusCode)
                 {
