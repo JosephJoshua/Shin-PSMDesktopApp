@@ -18,7 +18,7 @@ namespace PSMDesktopApp.Library.Api
 
         public async Task<List<SalesModel>> GetAll(string searchText = "")
         {
-            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync(WebUtility.UrlEncode("/api/sales?q=" + searchText))
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/sales?q=" + WebUtility.UrlEncode(searchText))
                     .ConfigureAwait(false))
             {
                 if (response.IsSuccessStatusCode)
