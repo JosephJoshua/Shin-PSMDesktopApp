@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Globalization;
 using DevExpress.Xpf.Grid;
 using System;
+using DevExpress.Data.Extensions;
 
 namespace PSMDesktopApp.ViewModels
 {
@@ -252,6 +253,7 @@ namespace PSMDesktopApp.ViewModels
             
             if (service.Spareparts == null)
             {
+                // We could use LoadSparepart(service.NomorNota) but doing this eliminates the need for searching through the Services list.
                 service.Spareparts = await _sparepartEndpoint.GetByNomorNota(service.NomorNota);
             }
         }
@@ -283,7 +285,7 @@ namespace PSMDesktopApp.ViewModels
 
             if (_windowManager.ShowDialog(addSparepartVM) == true)
             {
-                await LoadServices();
+                await LoadSparepart(nomorNota);
             }
         }
 
@@ -331,8 +333,10 @@ namespace PSMDesktopApp.ViewModels
         {
             if (DXMessageBox.Show("Are you sure you want to delete this sparepart?", "Services", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
+                int nomorNota = SelectedSparepart.NomorNota;
+
                 await _sparepartEndpoint.Delete(SelectedSparepart.Id);
-                await LoadServices();
+                await LoadSparepart(nomorNota);
             }
         }
 
@@ -355,6 +359,14 @@ namespace PSMDesktopApp.ViewModels
             IsLoading = false;
 
             OnRefresh?.Invoke();
+        }
+
+        public async Task LoadSparepart(int nomorNota)
+        {
+            int index = Services.FindIndex(s => s.NomorNota == nomorNota);
+
+            Services[index] = await _serviceEndpoint.GetByNomorNota(nomorNota);
+            Services[index].Spareparts = await _sparepartEndpoint.GetByNomorNota(nomorNota);
         }
 
         public void PrintService()
