@@ -27,22 +27,33 @@ namespace PSMDesktopApp.Library.Api
 
         public static async Task<ApiException> FromHttpResponse(HttpResponseMessage response)
         {
-            var content = await response.Content.ReadAsAsync<HttpErrorContent>();
-
-            // If content.Message is null, just put the reason phrase as the message.
-            string message = $"{ response.ReasonPhrase }{ (content.Message != null ? ":" : "") } { content.Message ?? "" }";
-
-            if (content.Error == null)
+            // To avoid InvalidDataContract and UnsupportedMediaType exceptions when reading an
+            // response body returned by gin-gonic or gin-jwt.
+            if (response.Content.Headers.ContentType.MediaType == "application/json")
             {
+                var content = await response.Content.ReadAsAsync<HttpErrorContent>();
+                string message = $"{ response.ReasonPhrase }{ (content.Message != null ? ":" : "") } { content.Message ?? "" }";
+
+                if (content.Error == null)
+                {
+                    return new ApiException(message);
+                }
+
+                return new ApiException(message, content.Error);
+            }
+            else if (response.Content.Headers.ContentType.MediaType == "text/plain")
+            {
+                string message = await response.Content.ReadAsStringAsync();
                 return new ApiException(message);
             }
 
-            return new ApiException(message, content.Error);
+            // Don't think this will ever be reached...
+            return new ApiException(response.ReasonPhrase);
         }
 
         private class HttpErrorContent
         {
-            [JsonProperty(PropertyName = "message", Required = Required.Always)]
+            [JsonProperty(PropertyName = "message")]
             public string Message { get; set; }
 
             [JsonProperty(PropertyName = "error")]
