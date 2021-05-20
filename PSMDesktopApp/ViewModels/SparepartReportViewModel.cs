@@ -79,7 +79,7 @@ namespace PSMDesktopApp.ViewModels
 
         public decimal TotalCost
         {
-            get => Spareparts.Sum(t => t.Harga);
+            get => Spareparts?.Sum(t => t.Harga) ?? 0;
         }
 
         public SparepartReportViewModel(ISparepartEndpoint sparepartEndpoint)
@@ -158,19 +158,17 @@ namespace PSMDesktopApp.ViewModels
             if (IsLoading) return;
 
             IsLoading = true;
-            List<SparepartModel> sparepartList = await _sparepartEndpoint.GetAll();
-            List<SparepartModel> filteredList = new List<SparepartModel>();
 
-            foreach (SparepartModel sparepart in sparepartList)
-            {
-                if (sparepart.TanggalPembelian.Date >= StartDate.Date && sparepart.TanggalPembelian.Date <= EndDate.Date)
-                {
-                    filteredList.Add(sparepart);
-                }
-            }
+            // Make sure the start date's time is set to the start of the day
+            StartDate = StartDate.Date;
+
+            // Make sure the end date's time is set to the end of the day
+            EndDate = EndDate.Date.AddDays(1).AddTicks(-1);
+
+            List<SparepartModel> sparepartList = await _sparepartEndpoint.GetAll(StartDate, EndDate);
 
             IsLoading = false;
-            Spareparts = new BindableCollection<SparepartModel>(filteredList);
+            Spareparts = new BindableCollection<SparepartModel>(sparepartList);
         }
     }
 }
