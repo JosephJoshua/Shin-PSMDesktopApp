@@ -126,7 +126,7 @@ namespace PSMDesktopApp.ViewModels
             if (IsLoading) return;
 
             IsLoading = true;
-            List<SalesModel> salesList = await _salesEndpoint.GetAll(SearchText.Trim());
+            List<SalesModel> salesList = await _salesEndpoint.GetAll((SearchText ?? "").Trim());
 
             IsLoading = false;
             Sales = new BindableCollection<SalesModel>(salesList);
