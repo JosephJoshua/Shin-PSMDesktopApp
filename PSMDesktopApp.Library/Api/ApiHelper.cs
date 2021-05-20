@@ -70,10 +70,6 @@ namespace PSMDesktopApp.Library.Api
 
         public async Task GetLoggedInUserInfo(string token)
         {
-            _apiClient.DefaultRequestHeaders.Clear();
-            _apiClient.DefaultRequestHeaders.Accept.Clear();
-            
-            _apiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             _apiClient.DefaultRequestHeaders.Add("Authorization", $"Bearer { token }");
 
             using (HttpResponseMessage response = await _apiClient.GetAsync("/api/users/current"))
