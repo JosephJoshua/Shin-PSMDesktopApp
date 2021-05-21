@@ -82,17 +82,17 @@ namespace PSMDesktopApp.ViewModels
         
         public decimal TotalRevenue
         {
-            get => ProfitResults.Sum(t => t.Biaya);
+            get => ProfitResults?.Sum(t => t.Biaya) ?? 0;
         }
 
         public decimal TotalCost
         {
-            get => ProfitResults.Sum(t => t.HargaSparepart);
+            get => ProfitResults?.Sum(t => t.HargaSparepart) ?? 0;
         }
 
         public decimal TotalProfit
         {
-            get => ProfitResults.Sum(t => t.LabaRugi);
+            get => ProfitResults?.Sum(t => t.LabaRugi) ?? 0;
         }
 
         public ProfitReportViewModel(IServiceEndpoint serviceEndpoint)

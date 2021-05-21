@@ -130,17 +130,17 @@ namespace PSMDesktopApp.ViewModels
 
         public decimal TotalRevenue
         {
-            get => TechnicianResults.Sum(t => t.Biaya);
+            get => TechnicianResults?.Sum(t => t.Biaya) ?? 0;
         }
 
         public decimal TotalCost
         {
-            get => TechnicianResults.Sum(t => t.HargaSparepart);
+            get => TechnicianResults?.Sum(t => t.HargaSparepart) ?? 0;
         }
 
         public decimal TotalProfit
         {
-            get => TechnicianResults.Sum(t => t.LabaRugi);
+            get => TechnicianResults?.Sum(t => t.LabaRugi) ?? 0;
         }
 
         public decimal Proceeds
