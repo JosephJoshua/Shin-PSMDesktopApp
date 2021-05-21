@@ -74,7 +74,6 @@ namespace PSMDesktopApp.ViewModels
 
                 ServiceModel newService = new ServiceModel
                 {
-                    NomorNota = _services[i].NomorNota,
                     NamaPelanggan = _services[i].NamaPelanggan,
                     NoHp = _services[i].NoHp,
                     TipeHp = _services[i].TipeHp,
@@ -98,7 +97,7 @@ namespace PSMDesktopApp.ViewModels
                     TanggalPengambilan = _services[i].TanggalPengambilan,
                 };
 
-                await _serviceEndpoint.Update(newService);
+                await _serviceEndpoint.Update(newService, _services[i].NomorNota);
             }
 
             CurrentAction = "Done calculating service expenses..";
@@ -115,7 +114,6 @@ namespace PSMDesktopApp.ViewModels
 
                 ServiceModel newService = new ServiceModel
                 {
-                    NomorNota = _services[i].NomorNota,
                     NamaPelanggan = _services[i].NamaPelanggan,
                     NoHp = _services[i].NoHp,
                     TipeHp = _services[i].TipeHp,
@@ -138,7 +136,7 @@ namespace PSMDesktopApp.ViewModels
                     TanggalPengambilan = _services[i].TanggalPengambilan,
                 };
 
-                await _serviceEndpoint.Update(newService);
+                await _serviceEndpoint.Update(newService, _services[i].NomorNota);
             }
         }
     }

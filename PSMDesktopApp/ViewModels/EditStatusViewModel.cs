@@ -126,10 +126,10 @@ namespace PSMDesktopApp.ViewModels
             }
 
             _oldService.StatusServisan = SelectedStatus.Description();
-            _oldService.IsiKonfirmasi = IsiKonfirmasi;
+            _oldService.IsiKonfirmasi = SudahKonfirmasi ? IsiKonfirmasi : "";
             _oldService.TanggalKonfirmasi = SudahKonfirmasi ? TanggalKonfirmasi : null;
 
-            await _serviceEndpoint.Update(_oldService);
+            await _serviceEndpoint.Update(_oldService, NomorNota);
             return true;
         }
 

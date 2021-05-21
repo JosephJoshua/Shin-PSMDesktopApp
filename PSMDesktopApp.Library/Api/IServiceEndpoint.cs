@@ -11,6 +11,6 @@ namespace PSMDesktopApp.Library.Api
         Task<List<ServiceModel>> GetAll(string searchText = "", SearchType searchType = SearchType.NamaPelanggan, DateTime? minDate = null, DateTime? maxDate = null);
         Task<ServiceModel> GetByNomorNota(int nomorNota); 
         Task Insert(ServiceModel service);
-        Task Update(ServiceModel service);
+        Task Update(ServiceModel service, int nomorNota);
     }
 }

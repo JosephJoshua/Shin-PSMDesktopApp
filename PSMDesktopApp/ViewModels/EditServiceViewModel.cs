@@ -12,12 +12,11 @@ namespace PSMDesktopApp.ViewModels
 {
     public class EditServiceViewModel : Screen
     {
-        private readonly IWindowManager _windowManager;
-
         private readonly IServiceEndpoint _serviceEndpoint;
         private readonly ITechnicianEndpoint _technicianEndpoint;
 
         private int _technicianId;
+        private int _salesId;
 
         private int _nomorNota;
         private string _namaPelanggan;
@@ -362,9 +361,8 @@ namespace PSMDesktopApp.ViewModels
             get => !string.IsNullOrWhiteSpace(NamaPelanggan) && !string.IsNullOrWhiteSpace(TipeHp) && !string.IsNullOrWhiteSpace(Kerusakan);
         }
 
-        public EditServiceViewModel(IWindowManager windowManager, ITechnicianEndpoint technicianEndpoint, IServiceEndpoint serviceEndpoint)
+        public EditServiceViewModel(ITechnicianEndpoint technicianEndpoint, IServiceEndpoint serviceEndpoint)
         {
-            _windowManager = windowManager;
             _serviceEndpoint = serviceEndpoint;
             _technicianEndpoint = technicianEndpoint;
         }
@@ -432,6 +430,7 @@ namespace PSMDesktopApp.ViewModels
             Kerusakan = service.Kerusakan;
 
             _technicianId = service.TechnicianId;
+            _salesId = service.SalesId;
 
             SelectedStatus = Enum.GetValues(ServiceStatuses.GetType()).Cast<ServiceStatus>().Where((e) => e.Description() == service.StatusServisan).FirstOrDefault();
 
@@ -488,7 +487,6 @@ namespace PSMDesktopApp.ViewModels
 
             ServiceModel service = new ServiceModel
             {
-                NomorNota = NomorNota,
                 NamaPelanggan = NamaPelanggan,
                 NoHp = NoHp,
                 TipeHp = TipeHp,
@@ -500,16 +498,17 @@ namespace PSMDesktopApp.ViewModels
                 Warna = Warna,
                 KataSandiPola = KataSandiPola,
                 TechnicianId = SelectedTechnician.Id,
+                SalesId = _salesId,
                 StatusServisan = SelectedStatus.Description(),
                 TanggalKonfirmasi = SudahKonfirmasi ? TanggalKonfirmasi : null,
-                IsiKonfirmasi = IsiKonfirmasi,
+                IsiKonfirmasi = SudahKonfirmasi ? IsiKonfirmasi : "",
                 Biaya = (decimal)Biaya,
                 Diskon = Diskon,
                 Dp = (decimal)Dp,
                 TambahanBiaya = (decimal)TambahanBiaya,
             };
 
-            await _serviceEndpoint.Update(service);
+            await _serviceEndpoint.Update(service, NomorNota);
             return true;
         }
     }
