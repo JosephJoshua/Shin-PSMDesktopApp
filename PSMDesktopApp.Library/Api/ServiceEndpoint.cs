@@ -73,9 +73,9 @@ namespace PSMDesktopApp.Library.Api
             }
         }
 
-        public async Task Update(ServiceModel service)
+        public async Task Update(ServiceModel service, int nomorNota)
         {
-            using (HttpResponseMessage response = await _apiHelper.ApiClient.PutAsJsonAsync("/api/servisan", service).ConfigureAwait(false))
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.PutAsJsonAsync("/api/servisan/" + nomorNota, service).ConfigureAwait(false))
             {
                 if (!response.IsSuccessStatusCode)
                 {

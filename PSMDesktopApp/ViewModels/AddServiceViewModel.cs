@@ -533,7 +533,7 @@ namespace PSMDesktopApp.ViewModels
                 SalesId = SalesId,
                 StatusServisan = SelectedStatus.Description(),
                 TanggalKonfirmasi = SudahKonfirmasi ? TanggalKonfirmasi : null,
-                IsiKonfirmasi = IsiKonfirmasi,
+                IsiKonfirmasi = SudahKonfirmasi ? IsiKonfirmasi : "",
                 Biaya = (decimal)Biaya,
                 Diskon = Diskon,
                 Dp = (decimal)Dp,
