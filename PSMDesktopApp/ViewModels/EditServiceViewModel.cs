@@ -49,6 +49,8 @@ namespace PSMDesktopApp.ViewModels
         private TechnicianModel _selectedTechnician;
         private ServiceStatus _selectedStatus;
 
+        private ServiceStatus _oldStatus;
+
         public int NomorNota
         {
             get => _nomorNota;
@@ -434,6 +436,8 @@ namespace PSMDesktopApp.ViewModels
 
             SelectedStatus = Enum.GetValues(ServiceStatuses.GetType()).Cast<ServiceStatus>().Where((e) => e.Description() == service.StatusServisan).FirstOrDefault();
 
+            _oldStatus = SelectedStatus;
+
             if (service.Kelengkapan.Contains("Battery"))
             {
                 IsBatteryChecked = true;
@@ -457,6 +461,13 @@ namespace PSMDesktopApp.ViewModels
 
         public async Task<bool> UpdateService()
         {
+            if ((_oldStatus == ServiceStatus.JadiSudahDiambil || _oldStatus == ServiceStatus.TidakJadiSudahDiambil) &&
+                (SelectedStatus == ServiceStatus.JadiBelumDiambil || SelectedStatus == ServiceStatus.TidakJadiBelumDiambil))
+            {
+                DXMessageBox.Show("Can't update to 'Belum diambil' if the service was originally 'Sudah diambil'");
+                return false;
+            }
+
             if ((SelectedStatus == ServiceStatus.TidakJadiBelumDiambil || SelectedStatus == ServiceStatus.TidakJadiSudahDiambil) && Biaya != 0)
             {
                 DXMessageBox.Show("'Biaya' must be 0 if the service is cancelled. Please set 'Biaya' to be 0", "Edit service");
