@@ -23,6 +23,7 @@ namespace PSMDesktopApp.ViewModels
         private readonly ISalesEndpoint _salesEndpoint;
         private readonly ISparepartEndpoint _sparepartEndpoint;
 
+        private bool _showAllColumns = false;
         private bool _isLoading = false;
 
         private BindableCollection<ServiceModel> _services;
@@ -44,6 +45,17 @@ namespace PSMDesktopApp.ViewModels
 
         public delegate void OnRefreshEventHandler();
         public event OnRefreshEventHandler OnRefresh;
+
+        public bool ShowAllColumns
+        {
+            get => _showAllColumns;
+
+            set
+            {
+                _showAllColumns = value;
+                NotifyOfPropertyChange(() => ShowAllColumns);
+            }
+        }
 
         public bool IsLoading
         {
