@@ -23,6 +23,11 @@ namespace PSMDesktopApp.ViewModels
         private string _isiKonfirmasi;
         private DateTime? _tanggalKonfirmasi;
 
+        // Set to false after we finish setting fields.
+        // Needed so that it won't ask for password if the service to be set has 'Tidak jadi (Belum diambil)' or 'Tidak jadi (Sudah diambil)'
+        // as its original status.
+        private bool _isLoadingFields = true;
+
         public int NomorNota
         {
             get => _nomorNota;
@@ -51,7 +56,7 @@ namespace PSMDesktopApp.ViewModels
 
             set
             {
-                if (value == ServiceStatus.TidakJadiBelumDiambil || value == ServiceStatus.TidakJadiSudahDiambil)
+                if (!_isLoadingFields && (value == ServiceStatus.TidakJadiBelumDiambil || value == ServiceStatus.TidakJadiSudahDiambil))
                 {
                     if (!AskForCSPassword()) return;
                 }
@@ -115,10 +120,22 @@ namespace PSMDesktopApp.ViewModels
             TanggalKonfirmasi = service.TanggalKonfirmasi;
 
             SelectedStatus = Enum.GetValues(ServiceStatuses.GetType()).Cast<ServiceStatus>().Where((e) => e.Description() == service.StatusServisan).FirstOrDefault();
+
+            _isLoadingFields = false;
         }
 
         public async Task<bool> UpdateService()
         {
+            ServiceStatus oldStatus = Enum.GetValues(ServiceStatuses.GetType()).Cast<ServiceStatus>().Where(e => e.Description() ==
+                _oldService.StatusServisan).FirstOrDefault();
+
+            if ((oldStatus == ServiceStatus.JadiSudahDiambil || oldStatus == ServiceStatus.TidakJadiSudahDiambil) &&
+                (SelectedStatus == ServiceStatus.JadiBelumDiambil || SelectedStatus == ServiceStatus.TidakJadiBelumDiambil))
+            {
+                DXMessageBox.Show("Can't update to 'Belum diambil' if the service was originally 'Sudah diambil'");
+                return false;
+            }
+
             if (SelectedStatus == ServiceStatus.TidakJadiBelumDiambil || SelectedStatus == ServiceStatus.TidakJadiSudahDiambil)
             {
                 DXMessageBox.Show("'Biaya' must be 0 if the service is cancelled. Please edit the service and set 'Biaya' to be 0", "Edit service");
