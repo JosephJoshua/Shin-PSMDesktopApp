@@ -51,6 +51,8 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             
             <dxe:TextEdit Grid.Column="0" Grid.Row="0"
@@ -67,7 +69,6 @@
 
             <TextBlock Grid.Column="2" Grid.Row="0"
                        Text="From:"
-                       FontSize="18"
                        Foreground="White"
                        VerticalAlignment="Center"
                        Margin="15 0 10 0" />
@@ -81,7 +82,6 @@
 
             <TextBlock Grid.Column="4" Grid.Row="0"
                        Text="To:"
-                       FontSize="18"
                        Foreground="White"
                        VerticalAlignment="Center"
                        Margin="15 0 10 0" />
@@ -92,6 +92,17 @@
                           Mask="dd/MM/yyyy"
                           MaskUseAsDisplayFormat="True"
                           DateTime="{Binding EndDate}" />
+
+            <dxe:CheckEdit Grid.Column="6" Grid.Row="0"
+                           Height="30"
+                           VerticalAlignment="Center"
+                           IsChecked="{Binding Path=ShowAllColumns}"
+                           Margin="15 0 8 0" />
+
+            <TextBlock Grid.Column="7" Grid.Row="0"
+                       VerticalAlignment="Center"
+                       Foreground="White"
+                       Text="Show all columns" />
         </Grid>
 
         <!-- Progress bar -->
@@ -104,7 +115,7 @@
                      Value="0"
                      IsIndeterminate="True"
                      Visibility="{c:Binding Path=IsLoading}" />
-        
+
         <!-- Data grid -->
         <dxg:GridControl x:Name="ServicesGrid" Grid.Column="0" Grid.Row="2"
                          Margin="0 10 0 0"
@@ -156,27 +167,27 @@
             <dxg:GridColumn Header="Nama Pelanggan" FieldName="NamaPelanggan" />
             <dxg:GridColumn Header="No Hp" FieldName="NoHp" />
             <dxg:GridColumn Header="Tipe Hp" FieldName="TipeHp" />
-            <dxg:GridColumn Header="Imei" FieldName="Imei" />
+            <dxg:GridColumn Header="Imei" FieldName="Imei" Visible="{Binding Path=ShowAllColumns}" />
             <dxg:GridColumn Header="Kerusakan" FieldName="Kerusakan" />
             <dxg:GridColumn Header="Kondisi Hp" FieldName="KondisiHp" />
-            <dxg:GridColumn Header="Yang Belum Dicek" FieldName="YangBelumDicek" />
-            <dxg:GridColumn Header="Kelengkapan" FieldName="Kelengkapan" />
-            <dxg:GridColumn Header="Warna" FieldName="Warna" />
-            <dxg:GridColumn Header="Kata Sandi/Pola" FieldName="KataSandiPola" />
-            <dxg:GridColumn Header="ID Teknisi" FieldName="TechnicianId" />
-            <dxg:GridColumn Header="ID Sales" FieldName="SalesId" />
+            <dxg:GridColumn Header="Yang Belum Dicek" FieldName="YangBelumDicek" Visible="{Binding Path=ShowAllColumns}" />
+            <dxg:GridColumn Header="Kelengkapan" FieldName="Kelengkapan" Visible="{Binding Path=ShowAllColumns}" />
+            <dxg:GridColumn Header="Warna" FieldName="Warna" Visible="{Binding Path=ShowAllColumns}" />
+            <dxg:GridColumn Header="Kata Sandi/Pola" FieldName="KataSandiPola" Visible="{Binding Path=ShowAllColumns}" />
+            <dxg:GridColumn Header="ID Teknisi" FieldName="TechnicianId" Visible="{Binding Path=ShowAllColumns}" />
+            <dxg:GridColumn Header="ID Sales" FieldName="SalesId" Visible="{Binding Path=ShowAllColumns}" />
             <dxg:GridColumn Header="Status Servisan" FieldName="StatusServisan" />
-            <dxg:GridColumn Header="Tanggal Konfirmasi" FieldName="TanggalKonfirmasi" />
-            <dxg:GridColumn Header="Isi Konfirmasi" FieldName="IsiKonfirmasi" />
-            <dxg:GridColumn Header="Biaya" FieldName="Biaya" />
-            <dxg:GridColumn Header="Diskon" FieldName="Diskon" />
-            <dxg:GridColumn Header="Dp" FieldName="Dp" />
-            <dxg:GridColumn Header="Tambahan Biaya" FieldName="TambahanBiaya" />
-            <dxg:GridColumn Header="Total Biaya" FieldName="TotalBiaya" />
-            <dxg:GridColumn Header="Harga Sparepart" FieldName="HargaSparepart" />
-            <dxg:GridColumn Header="Sisa" FieldName="Sisa" />
-            <dxg:GridColumn Header="Laba/Rugi" FieldName="LabaRugi" Visible="{Binding Path=IsAdmin}" />
-            <dxg:GridColumn Header="Tanggal Pengambilan" FieldName="TanggalPengambilan" />
+            <dxg:GridColumn Header="Tanggal Konfirmasi" FieldName="TanggalKonfirmasi" Visible="{Binding Path=ShowAllColumns}" />
+            <dxg:GridColumn Header="Isi Konfirmasi" FieldName="IsiKonfirmasi" Visible="{Binding Path=ShowAllColumns}" />
+            <dxg:GridColumn Header="Biaya" FieldName="Biaya" Visible="{Binding Path=ShowAllColumns}" />
+            <dxg:GridColumn Header="Diskon" FieldName="Diskon" Visible="{Binding Path=ShowAllColumns}" />
+            <dxg:GridColumn Header="Dp" FieldName="Dp" Visible="{Binding Path=ShowAllColumns}" />
+            <dxg:GridColumn Header="Tambahan Biaya" FieldName="TambahanBiaya" Visible="{Binding Path=ShowAllColumns}" />
+            <dxg:GridColumn Header="Total Biaya" FieldName="TotalBiaya" Visible="{Binding Path=ShowAllColumns}" />
+            <dxg:GridColumn Header="Harga Sparepart" FieldName="HargaSparepart" Visible="{Binding Path=ShowAllColumns}" />
+            <dxg:GridColumn Header="Sisa" FieldName="Sisa" Visible="{Binding Path=ShowAllColumns}" />
+            <dxg:GridColumn Header="Laba/Rugi" FieldName="LabaRugi" Visible="{c:Binding Path='IsAdmin and ShowAllColumns'}" />
+            <dxg:GridColumn Header="Tanggal Pengambilan" FieldName="TanggalPengambilan" Visible="{Binding Path=ShowAllColumns}" />
 
             <dxg:GridControl.View>
                 <dxg:TableView x:Name="MasterView"
