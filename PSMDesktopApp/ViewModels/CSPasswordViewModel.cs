@@ -34,7 +34,6 @@ namespace PSMDesktopApp.ViewModels
 
         public void Submit()
         {
-            // Validate password using the encryption helper
             string hashedPassword = ConfigurationManager.AppSettings["cspassword"];
             bool isCorrect = _encryptionHelper.VerifyHashedPassword(hashedPassword, Password);
 
