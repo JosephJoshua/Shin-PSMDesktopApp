@@ -113,8 +113,9 @@ namespace PSMDesktopApp.ViewModels
 
             set
             {
-                if (value < 0 || value > 100) return;
-
+                if (value < 0) value = 0;
+                if (value > 100) value = 100;
+                
                 _technicianRate = value;
 
                 NotifyOfPropertyChange(() => TechnicianRate);
