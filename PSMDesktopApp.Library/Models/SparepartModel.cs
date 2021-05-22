@@ -17,7 +17,7 @@ namespace PSMDesktopApp.Library.Models
         [JsonProperty(PropertyName = "harga")]
         public decimal Harga { get; set; }
 
-        [JsonProperty(PropertyName = "tanggal_pengambilan")]
+        [JsonProperty(PropertyName = "tanggal_pembelian")]
         public DateTime TanggalPembelian { get; set; }
     }
 }
