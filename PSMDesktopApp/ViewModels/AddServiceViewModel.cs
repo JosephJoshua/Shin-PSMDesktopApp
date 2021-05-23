@@ -491,7 +491,7 @@ namespace PSMDesktopApp.ViewModels
         {
             if ((SelectedStatus == ServiceStatus.TidakJadiSudahDiambil || SelectedStatus == ServiceStatus.TidakJadiBelumDiambil) && Biaya != 0)
             {
-                DXMessageBox.Show("'Biaya' must be 0 if the service is cancelled. Please set 'Biaya' to be 0", "Add service");
+                DXMessageBox.Show("Biaya harus 0 jika servisan dibatalkan. Tolong atur biaya menjadi 0", "Tambah servisan");
                 return false;
             }
 
@@ -499,7 +499,7 @@ namespace PSMDesktopApp.ViewModels
 
             if (IsBatteryChecked)
             {
-                kelengkapan += "Battery ";
+                kelengkapan += "Baterai ";
             }
 
             if (IsSimChecked)
@@ -509,7 +509,7 @@ namespace PSMDesktopApp.ViewModels
 
             if (IsMemoryChecked)
             {
-                kelengkapan += "Memory ";
+                kelengkapan += "Memori ";
             }
 
             if (IsCondomChecked)

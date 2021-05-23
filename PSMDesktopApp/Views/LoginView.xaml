@@ -12,7 +12,7 @@
     ShowInTaskbar="False"
     ResizeMode="NoResize"
     WindowStartupLocation="CenterOwner"
-    Title="Service Manager"
+    Title="Servisan Manager"
     Height="240" Width="475">
 
     <Grid>
@@ -32,7 +32,7 @@
                 </dxlc:LayoutItem>
 
                 <dxlc:LayoutItem Label="Email:" Margin="4">
-                    <dxe:TextEdit x:Name="Username" Margin="10 0 0 0" Height="30"
+                    <dxe:TextEdit x:Name="Email" Margin="10 0 0 0" Height="30"
                                   Text="{Binding Path=Email, UpdateSourceTrigger=PropertyChanged}" />
                 </dxlc:LayoutItem>
 

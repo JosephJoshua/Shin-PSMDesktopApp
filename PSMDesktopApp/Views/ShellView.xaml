@@ -11,7 +11,7 @@
     TitleAlignment="Center"
     WindowStartupLocation="CenterScreen"
     WindowState="Maximized"
-    Title="Service Manager"
+    Title="Servisan Manager"
     Height="728" Width="1080"
     Closing="Window_Closing">
 

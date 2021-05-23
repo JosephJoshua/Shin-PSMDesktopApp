@@ -155,7 +155,7 @@ namespace PSMDesktopApp.ViewModels
 
         public TechnicianReportViewModel(IServiceEndpoint serviceEndpoint, ITechnicianEndpoint technicianEndpoint)
         {
-            DisplayName = "Technician Report";
+            DisplayName = "Laporan Teknisi";
             
             _serviceEndpoint = serviceEndpoint;
             _technicianEndpoint = technicianEndpoint;
@@ -175,7 +175,7 @@ namespace PSMDesktopApp.ViewModels
 
             if (xlApp == null)
             {
-                DXMessageBox.Show("Microsoft Excel is not properly installed");
+                DXMessageBox.Show("Microsoft Excel tidak dapat ditemukan", "Laporan Teknisi");
                 return;
             }
 
@@ -231,13 +231,13 @@ namespace PSMDesktopApp.ViewModels
             ((Excel.Range)xlWorksheet.Cells[TechnicianResults.Count + 4, 8]).NumberFormat = "Rp#,##0.00";
 
             // Proceeds
-            xlWorksheet.Cells[TechnicianResults.Count + 3, 1] = "Proceeds:";
+            xlWorksheet.Cells[TechnicianResults.Count + 3, 1] = "Pendapatan teknisi:";
             xlWorksheet.Cells[TechnicianResults.Count + 3, 8] = Proceeds.ToString();
 
             ((Excel.Range)xlWorksheet.Cells[TechnicianResults.Count + 3, 8]).NumberFormat = "Rp#,##0.00";
 
             // Rate
-            xlWorksheet.Cells[TechnicianResults.Count + 4, 1] = "Rate:";
+            xlWorksheet.Cells[TechnicianResults.Count + 4, 1] = "Persentase pendapatan teknisi:";
             xlWorksheet.Cells[TechnicianResults.Count + 4, 8] = TechnicianRate + "%";
 
             xlWorksheet.Columns.AutoFit();

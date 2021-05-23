@@ -33,7 +33,7 @@
         <!-- Title -->
         <TextBlock Grid.Column="0" Grid.Row="0"
                    Grid.ColumnSpan="2"
-                   Text="Technicians"
+                   Text="Teknisi"
                    FontSize="24"
                    Foreground="White"
                    HorizontalAlignment="Center"
@@ -42,7 +42,7 @@
         <!-- Search box -->
         <dxe:TextEdit Grid.Column="0" Grid.Row="1"
                       Grid.ColumnSpan="2"
-                      NullText="Search.."
+                      NullText="Cari.."
                       Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                       cal:Message.Attach="[Event KeyDown] = [Action Search($eventArgs)]"/>
 
@@ -91,7 +91,7 @@
                            Margin="16">
 
             <StackPanel>
-                <Button ToolTip="Add"
+                <Button ToolTip="Tambah"
                         Background="{DynamicResource PrimaryHueMidBrush}"
                         Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
                         IsEnabled="{Binding Path=CanAddTechnician}"
@@ -99,7 +99,7 @@
                     <material:PackIcon Kind="Add" />
                 </Button>
 
-                <Button ToolTip="Delete"
+                <Button ToolTip="Hapus"
                         Background="{DynamicResource PrimaryHueMidBrush}"
                         Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
                         IsEnabled="{Binding Path=CanDeleteTechnician}"

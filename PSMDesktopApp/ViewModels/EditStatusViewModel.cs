@@ -132,13 +132,13 @@ namespace PSMDesktopApp.ViewModels
             if ((oldStatus == ServiceStatus.JadiSudahDiambil || oldStatus == ServiceStatus.TidakJadiSudahDiambil) &&
                 (SelectedStatus == ServiceStatus.JadiBelumDiambil || SelectedStatus == ServiceStatus.TidakJadiBelumDiambil))
             {
-                DXMessageBox.Show("Can't update to 'Belum diambil' if the service was originally 'Sudah diambil'");
+                DXMessageBox.Show("Tidak bisa ubah servisan dari 'Sudah diambil' menjadi 'Belum diambil'", "Edit servisan");
                 return false;
             }
 
             if (SelectedStatus == ServiceStatus.TidakJadiBelumDiambil || SelectedStatus == ServiceStatus.TidakJadiSudahDiambil)
             {
-                DXMessageBox.Show("'Biaya' must be 0 if the service is cancelled. Please edit the service and set 'Biaya' to be 0", "Edit service");
+                DXMessageBox.Show("Biaya harus 0 jika servisan dibatalkan", "Edit servisan");
                 return false;
             }
 
