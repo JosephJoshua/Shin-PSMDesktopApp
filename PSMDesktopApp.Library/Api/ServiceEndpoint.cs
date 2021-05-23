@@ -1,3 +1,4 @@
+using PSMDesktopApp.Library.Helpers;
 using PSMDesktopApp.Library.Models;
 using System;
 using System.Collections.Generic;
@@ -23,11 +24,9 @@ namespace PSMDesktopApp.Library.Api
                 new KeyValuePair<string, string>("by", GetColumnFromSearchType(searchType))
             };
 
-            const string dtFormat = "yyyy-MM-ddTHH:mm:ss.fffzzz";
-
             // We have to use the null conditional operator so we can use it as a normal DateTime, as opposed to a nullable one.
-            if (minDate != null) queryParams.Add(new KeyValuePair<string, string>("min_date", minDate?.ToString(dtFormat)));
-            if (maxDate != null) queryParams.Add(new KeyValuePair<string, string>("max_date", maxDate?.ToString(dtFormat)));
+            if (minDate != null) queryParams.Add(new KeyValuePair<string, string>("min_date", minDate?.ToString(Constants.DateTimeFormat)));
+            if (maxDate != null) queryParams.Add(new KeyValuePair<string, string>("max_date", maxDate?.ToString(Constants.DateTimeFormat)));
 
             string query = await new FormUrlEncodedContent(queryParams).ReadAsStringAsync();
             string url = "/api/servisan?" + query;
