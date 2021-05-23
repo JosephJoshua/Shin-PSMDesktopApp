@@ -30,7 +30,7 @@
         <!-- Title -->
         <TextBlock Grid.Column="0" Grid.Row="0"
                    Grid.ColumnSpan="5"
-                   Text="Sparepart Report"
+                   Text="Laporan Sparepart"
                    FontSize="24"
                    Foreground="White"
                    HorizontalAlignment="Center"
@@ -38,7 +38,7 @@
 
         <!-- Date range -->
         <TextBlock Grid.Column="0" Grid.Row="1"
-                   Text="From:"
+                   Text="Dari:"
                    FontSize="18"
                    Foreground="White"
                    VerticalAlignment="Center"
@@ -53,7 +53,7 @@
                       DateTime="{Binding StartDate}"/>
 
         <TextBlock Grid.Column="2" Grid.Row="1"
-                   Text="To:"
+                   Text="Sampai:"
                    FontSize="18"
                    Foreground="White"
                    VerticalAlignment="Center"
@@ -156,6 +156,6 @@
                    FontSize="18"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
-                   Text="No results found" />
+                   Text="Tidak ditemukan sparepart" />
     </Grid>
 </UserControl>

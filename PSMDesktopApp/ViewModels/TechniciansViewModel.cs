@@ -84,7 +84,7 @@ namespace PSMDesktopApp.ViewModels
 
         public TechniciansViewModel(IWindowManager windowManager, ITechnicianEndpoint technicianEndpoint)
         {
-            DisplayName = "Technicians";
+            DisplayName = "Teknisi";
 
             _windowManager = windowManager;
             _technicianEndpoint = technicianEndpoint;
@@ -115,7 +115,7 @@ namespace PSMDesktopApp.ViewModels
 
         public async Task DeleteTechnician()
         {
-            if (DXMessageBox.Show("Are you sure you want to delete this technician?", "Technicians", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            if (DXMessageBox.Show("Apakah anda yakin ingin menghapus teknisi ini?", "Teknisi", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 await _technicianEndpoint.Delete(SelectedTechnician.Id);
                 await LoadTechnicians();

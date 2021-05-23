@@ -438,7 +438,7 @@ namespace PSMDesktopApp.ViewModels
 
             _oldStatus = SelectedStatus;
 
-            if (service.Kelengkapan.Contains("Battery"))
+            if (service.Kelengkapan.Contains("Baterai"))
             {
                 IsBatteryChecked = true;
             }
@@ -448,7 +448,7 @@ namespace PSMDesktopApp.ViewModels
                 IsSimChecked = true;
             }
 
-            if (service.Kelengkapan.Contains("Memory"))
+            if (service.Kelengkapan.Contains("Memori"))
             {
                 IsMemoryChecked = true;
             }
@@ -464,13 +464,13 @@ namespace PSMDesktopApp.ViewModels
             if ((_oldStatus == ServiceStatus.JadiSudahDiambil || _oldStatus == ServiceStatus.TidakJadiSudahDiambil) &&
                 (SelectedStatus == ServiceStatus.JadiBelumDiambil || SelectedStatus == ServiceStatus.TidakJadiBelumDiambil))
             {
-                DXMessageBox.Show("Can't update to 'Belum diambil' if the service was originally 'Sudah diambil'");
+                DXMessageBox.Show("Tidak bisa ubah servisan dari 'Sudah diambil' menjadi 'Belum diambil'", "Edit servisan");
                 return false;
             }
 
             if ((SelectedStatus == ServiceStatus.TidakJadiBelumDiambil || SelectedStatus == ServiceStatus.TidakJadiSudahDiambil) && Biaya != 0)
             {
-                DXMessageBox.Show("'Biaya' must be 0 if the service is cancelled. Please set 'Biaya' to be 0", "Edit service");
+                DXMessageBox.Show("Biaya harus 0 jika servisan dibatalkan. Tolong atur biaya menjadi 0", "Edit servisan");
                 return false;
             }
 
@@ -478,7 +478,7 @@ namespace PSMDesktopApp.ViewModels
 
             if (IsBatteryChecked)
             {
-                kelengkapan += "Battery ";
+                kelengkapan += "Batterai ";
             }
 
             if (IsSimChecked)
@@ -488,7 +488,7 @@ namespace PSMDesktopApp.ViewModels
 
             if (IsMemoryChecked)
             {
-                kelengkapan += "Memory ";
+                kelengkapan += "Memori ";
             }
 
             if (IsCondomChecked)

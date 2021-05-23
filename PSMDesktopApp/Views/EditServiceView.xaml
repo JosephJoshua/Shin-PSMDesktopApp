@@ -58,14 +58,14 @@
 
                     <dxlc:LayoutItem Label="Kelengkapan:" Margin="4">
                         <dxlc:LayoutGroup Orientation="Horizontal" Margin="10 0 0 0" Height="25">
-                            <dxe:CheckEdit Content=" Battery" HorizontalAlignment="Stretch" 
+                            <dxe:CheckEdit Content=" Baterai" HorizontalAlignment="Stretch" 
                                            IsChecked="{Binding Path=IsBatteryChecked, UpdateSourceTrigger=PropertyChanged}" />
 
                             <dxe:CheckEdit Content=" SIM" HorizontalAlignment="Stretch"
                                            Margin="8 0 0 0"
                                            IsChecked="{Binding Path=IsSimChecked, UpdateSourceTrigger=PropertyChanged}" />
 
-                            <dxe:CheckEdit Content=" Memory" HorizontalAlignment="Stretch" 
+                            <dxe:CheckEdit Content=" Memori" HorizontalAlignment="Stretch" 
                                            Margin="0 0 5 0"
                                            IsChecked="{Binding Path=IsMemoryChecked, UpdateSourceTrigger=PropertyChanged}" />
 
@@ -168,11 +168,11 @@
 
             <dxlc:LayoutGroup Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 10 0 0">
                 <dx:SimpleButton x:Name="Save"
-                                 Content="Save" Height="35" MinWidth="100"
+                                 Content="Simpan" Height="35" MinWidth="100"
                                  FontSize="15" Margin="0 0 5 0" />
 
                 <dx:SimpleButton x:Name="Cancel"
-                                 Content="Cancel" Height="35" MinWidth="100"
+                                 Content="Batal" Height="35" MinWidth="100"
                                  FontSize="15" Margin="0 0 5 0" />
             </dxlc:LayoutGroup>
         </dxlc:LayoutControl>

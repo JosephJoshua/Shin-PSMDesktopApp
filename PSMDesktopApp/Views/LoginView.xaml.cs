@@ -7,7 +7,7 @@ namespace PSMDesktopApp.Views
         public LoginView()
         {
             InitializeComponent();
-            Username.Focus();
+            Email.Focus();
         }
     }
 }

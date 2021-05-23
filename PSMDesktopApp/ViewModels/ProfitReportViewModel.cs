@@ -97,7 +97,7 @@ namespace PSMDesktopApp.ViewModels
 
         public ProfitReportViewModel(IServiceEndpoint serviceEndpoint)
         {
-            DisplayName = "Profit Report";
+            DisplayName = "Laporan Laba/Rugi";
             _serviceEndpoint = serviceEndpoint;
         }
 
@@ -113,7 +113,7 @@ namespace PSMDesktopApp.ViewModels
 
             if (xlApp == null)
             {
-                DXMessageBox.Show("Microsoft Excel is not properly installed");
+                DXMessageBox.Show("Microsoft Excel tidak dapat ditemukan", "Laporan Laba/Rugi");
                 return;
             }
 
@@ -194,7 +194,7 @@ namespace PSMDesktopApp.ViewModels
                     new ProfitResultModel
                     {
                         NomorNota = s.NomorNota,
-                        TanggalPengambilan = s.TanggalPengambilan ?? throw new Exception("Tanggal pengambilan is null even though the servisan was already taken"),
+                        TanggalPengambilan = s.TanggalPengambilan ?? throw new Exception("Tanggal pengambilan merupakan null walaupun servisan sudah diambil"),
                         TipeHp = s.TipeHp,
                         Biaya = s.TotalBiaya,
                         HargaSparepart = s.HargaSparepart,

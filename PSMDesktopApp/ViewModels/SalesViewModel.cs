@@ -114,7 +114,7 @@ namespace PSMDesktopApp.ViewModels
 
         public async Task DeleteSales()
         {
-            if (DXMessageBox.Show("Are you sure you want to delete this sales?", "Sales", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            if (DXMessageBox.Show("Apakah anda yakin ingin menghapus sales ini?", "Sales", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 await _salesEndpoint.Delete(SelectedSales.Id);
                 await LoadSales();
