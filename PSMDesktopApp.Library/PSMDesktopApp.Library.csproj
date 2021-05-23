@@ -68,6 +68,7 @@
     <Compile Include="Api\SparepartEndpoint.cs" />
     <Compile Include="Api\TechnicianEndpoint.cs" />
     <Compile Include="AppValues.cs" />
+    <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\ISettingsHelper.cs" />
     <Compile Include="Helpers\IStringEncryptionHelper.cs" />
     <Compile Include="Helpers\SettingsHelper.cs" />
