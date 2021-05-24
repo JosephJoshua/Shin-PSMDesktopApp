@@ -23,11 +23,6 @@ namespace PSMDesktopApp.ViewModels
         private string _isiKonfirmasi;
         private DateTime? _tanggalKonfirmasi;
 
-        // Set to false after we finish setting fields.
-        // Needed so that it won't ask for password if the service to be set has 'Tidak jadi (Belum diambil)' or 'Tidak jadi (Sudah diambil)'
-        // as its original status.
-        private bool _isLoadingFields = true;
-
         public int NomorNota
         {
             get => _nomorNota;
@@ -56,11 +51,6 @@ namespace PSMDesktopApp.ViewModels
 
             set
             {
-                if (!_isLoadingFields && (value == ServiceStatus.TidakJadiBelumDiambil || value == ServiceStatus.TidakJadiSudahDiambil))
-                {
-                    if (!AskForCSPassword()) return;
-                }
-
                 _selectedStatus = value;
                 NotifyOfPropertyChange(() => SelectedStatus);
             }
@@ -120,14 +110,19 @@ namespace PSMDesktopApp.ViewModels
             TanggalKonfirmasi = service.TanggalKonfirmasi;
 
             SelectedStatus = Enum.GetValues(ServiceStatuses.GetType()).Cast<ServiceStatus>().Where((e) => e.Description() == service.StatusServisan).FirstOrDefault();
-
-            _isLoadingFields = false;
         }
 
         public async Task<bool> UpdateService()
         {
             ServiceStatus oldStatus = Enum.GetValues(ServiceStatuses.GetType()).Cast<ServiceStatus>().Where(e => e.Description() ==
                 _oldService.StatusServisan).FirstOrDefault();
+
+            if ((oldStatus == ServiceStatus.JadiBelumDiambil || oldStatus == ServiceStatus.JadiSudahDiambil) &&
+                (SelectedStatus == ServiceStatus.TidakJadiBelumDiambil || SelectedStatus == ServiceStatus.TidakJadiSudahDiambil))
+            {
+                DXMessageBox.Show("Tidak bisa ubah servisan dari 'Jadi' menjadi 'Tidak jadi'", "Edit servisan");
+                return false;
+            }
 
             if ((oldStatus == ServiceStatus.JadiSudahDiambil || oldStatus == ServiceStatus.TidakJadiSudahDiambil) &&
                 (SelectedStatus == ServiceStatus.JadiBelumDiambil || SelectedStatus == ServiceStatus.TidakJadiBelumDiambil))
