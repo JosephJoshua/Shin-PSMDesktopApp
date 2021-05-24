@@ -13,11 +13,23 @@
     WindowStartupLocation="CenterOwner"
     Title="{Binding NomorNota}"
     TitleAlignment="Center"
-    Height="245" Width="500">
+    Height="410" Width="500">
     
     <Grid>
         <dxlc:LayoutControl Orientation="Vertical" dxe:ValidationService.IsValidationContainer="True">
             <dxlc:LayoutGroup Orientation="Vertical">
+                <dxlc:LayoutItem Label="Kerusakan:" Margin="4">
+                    <dxe:TextEdit x:Name="Kerusakan" Margin="10 0 0 0" Height="30"
+                                  AllowNullInput="False"
+                                  Text="{Binding Path=Kerusakan, UpdateSourceTrigger=PropertyChanged}" />
+                </dxlc:LayoutItem>
+
+                <dxlc:LayoutItem Label="No. Hp:" Margin="4">
+                    <dxe:TextEdit x:Name="NoHp" Margin="10 0 0 0" Height="30"
+                                  AllowNullInput="False"
+                                  Text="{Binding Path=NoHp, UpdateSourceTrigger=PropertyChanged}" />
+                </dxlc:LayoutItem>
+
                 <dxlc:LayoutItem Label="Status:" Margin="4">
                     <dxe:ComboBoxEdit 
                         x:Name="StatusComboBox"
@@ -43,9 +55,21 @@
 
                 <dxlc:LayoutItem Label="Isi Konfirmasi:" Margin="4">
                     <dxe:TextEdit x:Name="IsiKonfirmasi" Margin="10 0 0 0" Height="30"
-                              AllowNullInput="False"
-                              IsEnabled="{Binding Path=SudahKonfirmasi, Mode=OneWay}"
-                              Text="{Binding Path=IsiKonfirmasi, UpdateSourceTrigger=PropertyChanged}" />
+                                  AllowNullInput="False"
+                                  IsEnabled="{Binding Path=SudahKonfirmasi, Mode=OneWay}"
+                                  Text="{Binding Path=IsiKonfirmasi, UpdateSourceTrigger=PropertyChanged}" />
+                </dxlc:LayoutItem>
+
+                <dxlc:LayoutItem Label="Dp:" Margin="4">
+                    <dxe:TextEdit x:Name="Dp" Margin="10 0 0 0" Height="30"
+                                  AllowNullInput="False"
+                                  Text="{Binding Path=Dp, UpdateSourceTrigger=PropertyChanged}" />
+                </dxlc:LayoutItem>
+
+                <dxlc:LayoutItem Label="Tambahan Biaya:" Margin="4">
+                    <dxe:TextEdit x:Name="TambahanBiaya" Margin="10 0 0 0" Height="30"
+                                  AllowNullInput="False"
+                                  Text="{Binding Path=TambahanBiaya, UpdateSourceTrigger=PropertyChanged}" />
                 </dxlc:LayoutItem>
             </dxlc:LayoutGroup>
 
