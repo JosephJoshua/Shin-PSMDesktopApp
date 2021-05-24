@@ -44,26 +44,26 @@
             </Grid.ColumnDefinitions>
 
             <!-- Date range -->
-            <TextBlock Grid.Column="0" Grid.Row="1"
+            <TextBlock Grid.Column="0" Grid.Row="0"
                    Text="Dari:"
                    Foreground="White"
                    VerticalAlignment="Center"
                    Margin="0 0 10 0" />
 
-            <dxe:DateEdit Grid.Column="1" Grid.Row="1"
+            <dxe:DateEdit Grid.Column="1" Grid.Row="0"
                       VerticalAlignment="Center"
                       MaskType="DateTime"
                       Mask="dd/MM/yyyy"
                       MaskUseAsDisplayFormat="True"
                       DateTime="{Binding StartDate}"/>
 
-            <TextBlock Grid.Column="2" Grid.Row="1"
+            <TextBlock Grid.Column="2" Grid.Row="0"
                    Text="Sampai:"
                    Foreground="White"
                    VerticalAlignment="Center"
                    Margin="20 0 10 0" />
 
-            <dxe:DateEdit Grid.Column="3" Grid.Row="1"
+            <dxe:DateEdit Grid.Column="3" Grid.Row="0"
                       VerticalAlignment="Center"
                       MaskType="DateTime"
                       Mask="dd/MM/yyyy"
