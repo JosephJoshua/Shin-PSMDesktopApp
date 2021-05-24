@@ -7,6 +7,7 @@ namespace PSMDesktopApp.Views
         public CSPasswordView()
         {
             InitializeComponent();
+            Password.Focus();
         }
     }
 }

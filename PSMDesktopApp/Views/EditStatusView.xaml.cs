@@ -7,6 +7,7 @@ namespace PSMDesktopApp.Views
         public EditStatusView()
         {
             InitializeComponent();
+            StatusComboBox.Focus();
         }
     }
 }
