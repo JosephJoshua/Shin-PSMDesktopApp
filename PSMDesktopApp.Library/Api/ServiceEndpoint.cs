@@ -101,7 +101,7 @@ namespace PSMDesktopApp.Library.Api
                 case SearchType.NamaPelanggan:
                     return "nama_pelanggan";
                 case SearchType.NomorHp:
-                    return "nomor_hp";
+                    return "no_hp";
                 case SearchType.NomorNota:
                     return "nomor_nota";
                 case SearchType.Status:
