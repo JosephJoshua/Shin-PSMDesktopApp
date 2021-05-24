@@ -71,9 +71,7 @@
     <Compile Include="AppValues.cs" />
     <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\ISettingsHelper.cs" />
-    <Compile Include="Helpers\IStringEncryptionHelper.cs" />
     <Compile Include="Helpers\SettingsHelper.cs" />
-    <Compile Include="Helpers\StringEncryptionHelper.cs" />
     <Compile Include="JsonConverters\CustomDateTimeConverter.cs" />
     <Compile Include="Models\AuthenticatedUser.cs" />
     <Compile Include="Models\ILoggedInUserModel.cs" />

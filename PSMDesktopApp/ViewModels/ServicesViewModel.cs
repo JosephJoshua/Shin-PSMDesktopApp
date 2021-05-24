@@ -210,7 +210,7 @@ namespace PSMDesktopApp.ViewModels
 
         public bool CanDeleteService
         {
-            get => !IsLoading && SelectedService != null;
+            get => IsAdmin && !IsLoading && SelectedService != null;
         }
 
         public bool CanDeleteSparepart
@@ -231,6 +231,11 @@ namespace PSMDesktopApp.ViewModels
         public bool IsAdmin
         {
             get => LoggedInUserRole == UserRole.Admin;
+        }
+
+        public bool IsCustomerService
+        {
+            get => LoggedInUserRole == UserRole.CustomerService;
         }
 
         public ServicesViewModel(IApiHelper apiHelper, IWindowManager windowManager, IServiceEndpoint serviceEndpoint,
@@ -303,8 +308,6 @@ namespace PSMDesktopApp.ViewModels
 
         public async Task EditService()
         {
-            if (LoggedInUserRole == UserRole.CustomerService && !AskForCSPassword()) return;
-
             ServiceModel service = SelectedService;
 
             EditServiceViewModel editServiceVM = IoC.Get<EditServiceViewModel>();
@@ -316,15 +319,14 @@ namespace PSMDesktopApp.ViewModels
             }
         }
 
-        // TODO: Edit status dan kerusakan
-        public async Task EditStatus()
+        public async Task EditServiceLimited()
         {
             ServiceModel service = SelectedService;
 
-            EditStatusViewModel editStatusVM = IoC.Get<EditStatusViewModel>();
-            editStatusVM.SetFieldValues(service);
+            EditServiceLimitedViewModel editServiceVM = IoC.Get<EditServiceLimitedViewModel>();
+            editServiceVM.SetFieldValues(service);
 
-            if (_windowManager.ShowDialog(editStatusVM) == true)
+            if (_windowManager.ShowDialog(editServiceVM) == true)
             {
                 await LoadServices();
             }
@@ -332,8 +334,6 @@ namespace PSMDesktopApp.ViewModels
 
         public async Task DeleteService()
         {
-            if (LoggedInUserRole == UserRole.CustomerService && !AskForCSPassword()) return;
-
             if (DXMessageBox.Show("Apakah anda yakin ingin menghapus servisan ini?", "Servisan", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 await _serviceEndpoint.Delete(SelectedService.NomorNota);
@@ -408,11 +408,6 @@ namespace PSMDesktopApp.ViewModels
             });
 
             _windowManager.ShowDialog(invoicePreviewVM);
-        }
-
-        private bool AskForCSPassword()
-        {
-            return _windowManager.ShowDialog(IoC.Get<CSPasswordViewModel>()) == true;
         }
     }
 }

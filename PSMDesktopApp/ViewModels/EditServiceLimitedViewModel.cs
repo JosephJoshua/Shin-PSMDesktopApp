@@ -8,9 +8,8 @@ using System.Threading.Tasks;
 
 namespace PSMDesktopApp.ViewModels
 {
-    public class EditStatusViewModel : Screen
+    public class EditServiceLimitedViewModel : Screen
     {
-        private readonly IWindowManager _windowManager;
         private readonly IServiceEndpoint _serviceEndpoint;
 
         private ServiceModel _oldService;
@@ -94,9 +93,8 @@ namespace PSMDesktopApp.ViewModels
             }
         }
 
-        public EditStatusViewModel(IWindowManager windowManager, IServiceEndpoint serviceEndpoint)
+        public EditServiceLimitedViewModel(IServiceEndpoint serviceEndpoint)
         {
-            _windowManager = windowManager;
             _serviceEndpoint = serviceEndpoint;
         }
 
@@ -117,10 +115,10 @@ namespace PSMDesktopApp.ViewModels
             ServiceStatus oldStatus = Enum.GetValues(ServiceStatuses.GetType()).Cast<ServiceStatus>().Where(e => e.Description() ==
                 _oldService.StatusServisan).FirstOrDefault();
 
-            if ((oldStatus == ServiceStatus.JadiBelumDiambil || oldStatus == ServiceStatus.JadiSudahDiambil) &&
-                (SelectedStatus == ServiceStatus.TidakJadiBelumDiambil || SelectedStatus == ServiceStatus.TidakJadiSudahDiambil))
+            if (oldStatus == ServiceStatus.JadiSudahDiambil && (SelectedStatus == ServiceStatus.TidakJadiBelumDiambil ||
+                SelectedStatus == ServiceStatus.TidakJadiSudahDiambil))
             {
-                DXMessageBox.Show("Tidak bisa ubah servisan dari 'Jadi' menjadi 'Tidak jadi'", "Edit servisan");
+                DXMessageBox.Show("Tidak bisa ubah servisan dari 'Jadi (Sudah diambil)' menjadi 'Tidak jadi'", "Edit servisan");
                 return false;
             }
 
@@ -162,11 +160,6 @@ namespace PSMDesktopApp.ViewModels
         public void Cancel()
         {
             TryClose(false);
-        }
-
-        private bool AskForCSPassword()
-        {
-            return _windowManager.ShowDialog(IoC.Get<CSPasswordViewModel>()) == true;
         }
     }
 }

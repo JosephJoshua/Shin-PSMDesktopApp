@@ -232,23 +232,25 @@
                                 <material:PackIcon Kind="AddShoppingCart" />
                             </Button>
 
-                            <Button ToolTip="Edit"
+                            <Button ToolTip="Edit Servisan"
                                     Background="{DynamicResource PrimaryHueMidBrush}"
                                     Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
                                     IsEnabled="{Binding Path=CanEditService}"
+                                    Visibility="{c:Binding Path=!IsCustomerService}"
                                     cal:Message.Attach="[Event Click] = [Action EditService]">
                                 <material:PackIcon Kind="Edit" />
                             </Button>
 
-                            <Button ToolTip="Edit Status"
+                            <Button ToolTip="Edit Servisan"
                                     Background="{DynamicResource PrimaryHueMidBrush}"
                                     Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
                                     IsEnabled="{Binding Path=CanEditService}"
-                                    cal:Message.Attach="[Event Click] = [Action EditStatus]">
-                                <material:PackIcon Kind="Check" />
+                                    Visibility="{c:Binding Path=IsCustomerService}"
+                                    cal:Message.Attach="[Event Click] = [Action EditServiceLimited]">
+                                <material:PackIcon Kind="Edit" />
                             </Button>
 
-                            <Button ToolTip="Hapus"
+                            <Button ToolTip="Hapus Servisan"
                                     Background="{DynamicResource PrimaryHueMidBrush}"
                                     Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
                                     IsEnabled="{Binding Path=CanDeleteService}"
