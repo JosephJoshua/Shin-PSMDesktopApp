@@ -80,6 +80,7 @@
                               DisplayMember="Nama"
                               EditValue="{Binding SelectedTechnician, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
+        
         <dxlc:LayoutControl x:Name="MainLayoutControl" Grid.Column="0" Grid.Row="2"
                             Grid.ColumnSpan="2" Orientation="Horizontal">
 
