@@ -1,9 +1,12 @@
 using Newtonsoft.Json;
 using PSMDesktopApp.Library.Helpers;
+using PSMDesktopApp.Library.JsonConverters;
 using PSMDesktopApp.Library.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,11 +38,16 @@ namespace PSMDesktopApp.Library.Api
 
         private void InitializeClient()
         {
-            string api = _settings.Get("apiUrl");
+            var jsonFormatter = HttpClientDefaults.MediaTypeFormatters.OfType<JsonMediaTypeFormatter>().FirstOrDefault();
+            jsonFormatter.SerializerSettings = new JsonSerializerSettings 
+            { 
+                Converters = new List<JsonConverter> { new CustomDateTimeConverter() },
+            };
 
+            string api = _settings.Get("apiUrl");
             _apiClient = new HttpClient
             {
-                BaseAddress = new Uri(api)
+                BaseAddress = new Uri(api),
             };
 
             _apiClient.DefaultRequestHeaders.Accept.Clear();

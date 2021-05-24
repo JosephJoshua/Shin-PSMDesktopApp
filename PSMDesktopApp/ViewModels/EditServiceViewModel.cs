@@ -496,6 +496,12 @@ namespace PSMDesktopApp.ViewModels
                 kelengkapan += "Condom ";
             }
 
+            // The DevExpress DateEdit control will set the Kind to Unspecified if the date is selected from
+            // the DateEdit dropdown. To counteract this, we must set it to Local manually before passing it into
+            // the ServiceEndpoint to allow for proper timezone formatting.
+            // https://supportcenter.devexpress.com/ticket/details/b145416/dateedit-datetime-s-kind-is-unspecified-when-a-date-is-selected-from-the-dropdown-calendar
+            DateTime? tanggalKonfirmasi = new DateTime(TanggalKonfirmasi?.Ticks ?? 0, DateTimeKind.Local);
+
             ServiceModel service = new ServiceModel
             {
                 NamaPelanggan = NamaPelanggan,
@@ -511,7 +517,7 @@ namespace PSMDesktopApp.ViewModels
                 TechnicianId = SelectedTechnician.Id,
                 SalesId = _salesId,
                 StatusServisan = SelectedStatus.Description(),
-                TanggalKonfirmasi = SudahKonfirmasi ? TanggalKonfirmasi : null,
+                TanggalKonfirmasi = SudahKonfirmasi ? tanggalKonfirmasi : null,
                 IsiKonfirmasi = SudahKonfirmasi ? IsiKonfirmasi : "",
                 Biaya = (decimal)Biaya,
                 Diskon = Diskon,

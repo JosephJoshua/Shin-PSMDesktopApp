@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Api\ApiException.cs" />
     <Compile Include="Api\ApiHelper.cs" />
+    <Compile Include="Api\HttpClientDefaults.cs" />
     <Compile Include="Api\IApiHelper.cs" />
     <Compile Include="Api\ISalesEndpoint.cs" />
     <Compile Include="Api\IServiceEndpoint.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="Helpers\IStringEncryptionHelper.cs" />
     <Compile Include="Helpers\SettingsHelper.cs" />
     <Compile Include="Helpers\StringEncryptionHelper.cs" />
+    <Compile Include="JsonConverters\CustomDateTimeConverter.cs" />
     <Compile Include="Models\AuthenticatedUser.cs" />
     <Compile Include="Models\ILoggedInUserModel.cs" />
     <Compile Include="Models\LoggedInUserModel.cs" />
