@@ -329,7 +329,6 @@
                     </StackPanel>
 
                     <TextBlock Visibility="{c:Binding Path=!ShowInfo}"
-                               FontSize="18"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
                                Text="Tidak ada servisan yang di-select" />
