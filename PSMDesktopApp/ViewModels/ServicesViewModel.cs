@@ -35,8 +35,8 @@ namespace PSMDesktopApp.ViewModels
         private SearchType _searchTypes;
         private SearchType _selectedSearchType;
 
-        private DateTime _startDate;
-        private DateTime _endDate;
+        private DateTime _startDate = DateTime.Today;
+        private DateTime _endDate = DateTime.Today;
 
         private UserRole LoggedInUserRole
         {
@@ -245,12 +245,6 @@ namespace PSMDesktopApp.ViewModels
             _technicianEndpoint = technicianEndpoint;
             _salesEndpoint = salesEndpoint;
             _sparepartEndpoint = sparepartEndpoint;
-
-            DateTime today = DateTime.Today;
-
-            // Set start and end date to the first and last date of the month, respectively.
-            _startDate = new DateTime(today.Year, today.Month, 1);
-            _endDate = _startDate.AddMonths(1).AddDays(-1);
         }
 
         protected override async void OnViewLoaded(object view)
