@@ -9,17 +9,14 @@
              xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
              xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
              xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+             xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             Loaded="UserControl_Loaded">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="2*" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="7*" />
+            <ColumnDefinition Width="3*" />
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
@@ -37,156 +34,175 @@
                    HorizontalAlignment="Center"
                    Margin="0 0 0 10" />
 
-        <!-- Date range -->
-        <TextBlock Grid.Column="0" Grid.Row="1"
-                   Text="Dari:"
-                   FontSize="18"
-                   Foreground="White"
-                   VerticalAlignment="Center"
-                   Margin="0 0 10 0" />
+        <!-- Filtering options -->
+        <Grid Grid.Column="0" Grid.Row="1" Height="30">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-        <dxe:DateEdit Grid.Column="1" Grid.Row="1"
-                      MinWidth="150"
-                      VerticalAlignment="Center"
-                      MaskType="DateTime"
-                      Mask="dd/MM/yyyy"
-                      MaskUseAsDisplayFormat="True"
-                      DateTime="{Binding StartDate}" />
+            <!-- Date range -->
+            <TextBlock Grid.Column="0" Grid.Row="0"
+                       Text="Dari:"
+                       FontSize="18"
+                       Foreground="White"
+                       VerticalAlignment="Center"
+                       Margin="0 0 10 0" />
 
-        <TextBlock Grid.Column="2" Grid.Row="1"
-                   Text="Sampai:"
-                   FontSize="18"
-                   Foreground="White"
-                   VerticalAlignment="Center"
-                   Margin="20 0 10 0" />
+            <dxe:DateEdit Grid.Column="1" Grid.Row="0"
+                          VerticalAlignment="Center"
+                          MaskType="DateTime"
+                          Mask="dd/MM/yyyy"
+                          MaskUseAsDisplayFormat="True"
+                          DateTime="{Binding StartDate}" />
 
-        <dxe:DateEdit Grid.Column="3" Grid.Row="1"
-                      MinWidth="150"
-                      VerticalAlignment="Center"
-                      MaskType="DateTime"
-                      Mask="dd/MM/yyyy"
-                      MaskUseAsDisplayFormat="True"
-                      DateTime="{Binding EndDate}" />
-        
-        <!-- Technician selector -->
-        <dxe:ComboBoxEdit Grid.Column="4" Grid.Row="1"
-                          MinWidth="150"
-                          Margin="20 0 0 0"
-                          ItemsSource="{Binding Technicians, Mode=OneWay}"
-                          DisplayMember="Nama"
-                          EditValue="{Binding SelectedTechnician, UpdateSourceTrigger=PropertyChanged}" />
+            <TextBlock Grid.Column="2" Grid.Row="0"
+                       Text="Sampai:"
+                       FontSize="18"
+                       Foreground="White"
+                       VerticalAlignment="Center"
+                       Margin="20 0 10 0" />
 
-        <!-- Progress bar -->
-        <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
-                     Grid.Column="0" Grid.Row="2"
-                     Grid.ColumnSpan="6"
-                     Width="40"
-                     Height="40"
-                     HorizontalAlignment="Center"
-                     VerticalAlignment="Center"
-                     Value="0"
-                     IsIndeterminate="True"
-                     Visibility="{c:Binding Path=IsLoading}" />
+            <dxe:DateEdit Grid.Column="3" Grid.Row="0"
+                          VerticalAlignment="Center"
+                          MaskType="DateTime"
+                          Mask="dd/MM/yyyy"
+                          MaskUseAsDisplayFormat="True"
+                          DateTime="{Binding EndDate}" />
 
-        <!-- Data grid -->
-        <dxg:GridControl Grid.Column="0" Grid.Row="2"
-                         Grid.ColumnSpan="6"
-                         Margin="0 10 0 0"
-                         SelectionMode="Row"
-                         ItemsSource="{Binding Path=TechnicianResults}"
-                         Visibility="{c:Binding Path=!IsLoading}">
+            <!-- Technician selector -->
+            <dxe:ComboBoxEdit Grid.Column="4" Grid.Row="0"
+                              Margin="20 0 0 0"
+                              ItemsSource="{Binding Technicians, Mode=OneWay}"
+                              DisplayMember="Nama"
+                              EditValue="{Binding SelectedTechnician, UpdateSourceTrigger=PropertyChanged}" />
+        </Grid>
+        <dxlc:LayoutControl x:Name="MainLayoutControl" Grid.Column="0" Grid.Row="2"
+                            Grid.ColumnSpan="2" Orientation="Horizontal">
 
-            <dxg:GridColumn Header="Nomor Nota" Width="2*" Binding="{Binding Path=NomorNota}">
-                <dxg:GridColumn.EditSettings>
-                    <dxe:TextEditSettings HorizontalContentAlignment="Left" />
-                </dxg:GridColumn.EditSettings>
-            </dxg:GridColumn>
+            <!-- Max width calculation is a workaround so that the layout control resizing respects min width -->
+            <dxlc:LayoutGroup x:Name="GridLayoutGroup" 
+                              dxlc:LayoutControl.AllowHorizontalSizing="True"
+                              UseLayoutRounding="True" 
+                              Orientation="Horizontal" 
+                              MinWidth="250"
+                              MaxWidth="{DXBinding '@e(MainLayoutControl).ActualWidth-@e(InfoLayoutGroup).MinWidth-@e(MainLayoutControl).ItemSpace'}">
+                <Grid>
 
-            <dxg:GridColumn Header="Tanggal Pengambilan" Width="3*" Binding="{Binding Path=TanggalPengambilan}" />
-            <dxg:GridColumn Header="Tipe Hp" Width="2*" Binding="{Binding Path=TipeHp}" />
-            <dxg:GridColumn Header="Kerusakan" Width="2*" Binding="{Binding Path=Kerusakan}" />
+                    <!-- Data grid -->
+                    <dxg:GridControl Margin="0 10 0 0"
+                                     SelectionMode="Row"
+                                     ItemsSource="{Binding Path=TechnicianResults}"
+                                     Visibility="{c:Binding Path=!IsLoading}">
 
-            <dxg:GridColumn Header="Biaya" Width="3*" Binding="{Binding Path=Biaya}">
-                <dxg:GridColumn.EditSettings>
-                    <dxe:TextEditSettings HorizontalContentAlignment="Left" DisplayFormat="C0" />
-                </dxg:GridColumn.EditSettings>
-            </dxg:GridColumn>
+                        <dxg:GridColumn Header="Nomor Nota" Width="2*" Binding="{Binding Path=NomorNota}">
+                            <dxg:GridColumn.EditSettings>
+                                <dxe:TextEditSettings HorizontalContentAlignment="Left" />
+                            </dxg:GridColumn.EditSettings>
+                        </dxg:GridColumn>
 
-            <dxg:GridColumn Header="Harga Sparepart" Width="3*" Binding="{Binding Path=HargaSparepart}">
-                <dxg:GridColumn.EditSettings>
-                    <dxe:TextEditSettings HorizontalContentAlignment="Left" DisplayFormat="C0" />
-                </dxg:GridColumn.EditSettings>
-            </dxg:GridColumn>
+                        <dxg:GridColumn Header="Tanggal Pengambilan" Width="3*" Binding="{Binding Path=TanggalPengambilan}" />
+                        <dxg:GridColumn Header="Tipe Hp" Width="2*" Binding="{Binding Path=TipeHp}" />
+                        <dxg:GridColumn Header="Kerusakan" Width="2*" Binding="{Binding Path=Kerusakan}" />
 
-            <dxg:GridColumn Header="Laba/Rugi" Width="3*" Binding="{Binding Path=LabaRugi}">
-                <dxg:GridColumn.EditSettings>
-                    <dxe:TextEditSettings HorizontalContentAlignment="Left" DisplayFormat="C0" />
-                </dxg:GridColumn.EditSettings>
-            </dxg:GridColumn>
+                        <dxg:GridColumn Header="Biaya" Width="3*" Binding="{Binding Path=Biaya}">
+                            <dxg:GridColumn.EditSettings>
+                                <dxe:TextEditSettings HorizontalContentAlignment="Left" DisplayFormat="C0" />
+                            </dxg:GridColumn.EditSettings>
+                        </dxg:GridColumn>
 
-            <dxg:GridColumn Header="Teknisi" Width="2*" Binding="{Binding Path=NamaTeknisi}" />
+                        <dxg:GridColumn Header="Harga Sparepart" Width="3*" Binding="{Binding Path=HargaSparepart}">
+                            <dxg:GridColumn.EditSettings>
+                                <dxe:TextEditSettings HorizontalContentAlignment="Left" DisplayFormat="C0" />
+                            </dxg:GridColumn.EditSettings>
+                        </dxg:GridColumn>
 
-            <dxg:GridControl.View>
-                <dxg:TableView AllowScrollAnimation="True"
+                        <dxg:GridColumn Header="Laba/Rugi" Width="3*" Binding="{Binding Path=LabaRugi}">
+                            <dxg:GridColumn.EditSettings>
+                                <dxe:TextEditSettings HorizontalContentAlignment="Left" DisplayFormat="C0" />
+                            </dxg:GridColumn.EditSettings>
+                        </dxg:GridColumn>
+
+                        <dxg:GridColumn Header="Teknisi" Width="2*" Binding="{Binding Path=NamaTeknisi}" />
+
+                        <dxg:GridControl.View>
+                            <dxg:TableView AllowScrollAnimation="True"
                                AllowFixedGroups="True"
                                AllowEditing="False" />
-            </dxg:GridControl.View>
-            
-        </dxg:GridControl>
+                        </dxg:GridControl.View>
 
-        <!-- Refresh button -->
-        <Button Style="{StaticResource MaterialDesignFloatingActionButton}"
-                Grid.Column="5"
-                Grid.Row="2"
-                ToolTip="Refresh"
-                Background="{DynamicResource PrimaryHueMidBrush}"
-                Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Bottom"
-                Margin="22"
-                Width="48"
-                Height="48"
-                cal:Message.Attach="[Event Click] = [Action LoadResults]">
-            <material:PackIcon Kind="Refresh" />
-        </Button>
-        
-        <!-- Info box -->
-        <StackPanel Grid.Column="6" Grid.Row="1"
-                    Grid.RowSpan="2"
-                    Orientation="Vertical"
-                    Margin="10 10 0 10"
-                    VerticalAlignment="Bottom"
-                    Visibility="{c:Binding Path=ShowInfo, FalseToVisibility=Hidden}">
-            <TextBlock FontSize="16" Text="{Binding Path=TotalRevenue, StringFormat=Total biaya: Rp{0:N0}}"
-                       TextWrapping="Wrap" />
-            
-            <TextBlock FontSize="16" Text="{Binding Path=TotalCost, StringFormat=Total pengeluaran: Rp{0:N0}}"
-                       TextWrapping="Wrap" Margin="0 5 0 0" />
-            
-            <TextBlock FontSize="16" Text="{Binding Path=TotalProfit, StringFormat=Total laba/rugi: Rp{0:N0}}"
-                       TextWrapping="Wrap" Margin="0 5 0 0" />
-            
-            <TextBlock FontSize="16" Text="{Binding Path=Proceeds, StringFormat=Pendapatan teknisi: Rp{0:N0}}"
-                       TextWrapping="Wrap" Margin="0 5 0 5" />
-            
-            <StackPanel>
-                <TextBlock Text="Persentase pendapatan teknisi:" FontSize="16" />
-                <dxe:TextEdit FontSize="18" Margin="0 5 0 0"
+                    </dxg:GridControl>
+
+                    <!-- Refresh button -->
+                    <Button Style="{StaticResource MaterialDesignFloatingActionButton}"
+                            ToolTip="Refresh"
+                            Background="{DynamicResource PrimaryHueMidBrush}"
+                            Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Bottom"
+                            Margin="22"
+                            Width="48"
+                            Height="48"
+                            cal:Message.Attach="[Event Click] = [Action LoadResults]">
+                        <material:PackIcon Kind="Refresh" />
+                    </Button>
+
+                    <!-- Progress bar -->
+                    <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
+                                 Width="40"
+                                 Height="40"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center"
+                                 Value="0"
+                                 IsIndeterminate="True"
+                                 Visibility="{c:Binding Path=IsLoading}" />
+                </Grid>
+            </dxlc:LayoutGroup>
+
+            <!-- Max width calculation is a workaround so that the layout control resizing respects min width -->
+            <dxlc:LayoutGroup x:Name="InfoLayoutGroup" Orientation="Horizontal" MinWidth="300" 
+                              MaxWidth="{DXBinding '@e(MainLayoutControl).ActualWidth-@e(GridLayoutGroup).MinWidth-@e(MainLayoutControl).ItemSpace'}">
+                <Grid>
+
+                    <!-- Info box -->
+                    <StackPanel Orientation="Vertical"
+                                Margin="10 10 0 10"
+                                VerticalAlignment="Bottom"
+                                Visibility="{c:Binding Path=ShowInfo, FalseToVisibility=Hidden}">
+                        <TextBlock FontSize="16" Text="{Binding Path=TotalRevenue, StringFormat=Total biaya: Rp{0:N0}}"
+                                   TextWrapping="Wrap" />
+
+                        <TextBlock FontSize="16" Text="{Binding Path=TotalCost, StringFormat=Total pengeluaran: Rp{0:N0}}"
+                                   TextWrapping="Wrap" Margin="0 5 0 0" />
+
+                        <TextBlock FontSize="16" Text="{Binding Path=TotalProfit, StringFormat=Total laba/rugi: Rp{0:N0}}"
+                                   TextWrapping="Wrap" Margin="0 5 0 0" />
+
+                        <TextBlock FontSize="16" Text="{Binding Path=Proceeds, StringFormat=Pendapatan teknisi: Rp{0:N0}}"
+                                   TextWrapping="Wrap" Margin="0 5 0 5" />
+
+                        <StackPanel>
+                            <TextBlock Text="Persentase pendapatan teknisi:" FontSize="16" />
+                            <dxe:TextEdit FontSize="18" Margin="0 5 0 0"
                               Text="{Binding Path=TechnicianRate, UpdateSourceTrigger=PropertyChanged}" />
-            </StackPanel>
-            
-            <dx:SimpleButton x:Name="ExportToExcel" 
+                        </StackPanel>
+
+                        <dx:SimpleButton x:Name="ExportToExcel" 
                              Content="Export" FontSize="16"
                              HorizontalAlignment="Left"
                              MaxWidth="150" Padding="20 5" Margin="0 10 0 0" />
-        </StackPanel>
+                    </StackPanel>
 
-        <TextBlock Grid.Column="6" Grid.Row="1"
-                   Grid.RowSpan="2"
-                   Visibility="{c:Binding Path=!ShowInfo}"
-                   FontSize="18"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"
-                   Text="Tidak ditemukan servisan" />
+                    <TextBlock Visibility="{c:Binding Path=!ShowInfo}"
+                               FontSize="18"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Text="Tidak ditemukan servisan" />
+                </Grid>
+            </dxlc:LayoutGroup>
+        </dxlc:LayoutControl>
     </Grid>
 </UserControl>
