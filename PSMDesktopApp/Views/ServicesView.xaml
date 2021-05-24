@@ -9,6 +9,7 @@
     xmlns:cal="http://www.caliburnproject.org"
     xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
     xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+    xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
     xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:converters="clr-namespace:PSMDesktopApp.ValueConverters"
     mc:Ignorable ="d"
@@ -54,7 +55,7 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            
+
             <dxe:TextEdit Grid.Column="0" Grid.Row="0"
                           Margin="0 0 15 0"
                           NullText="Cari.."
@@ -105,221 +106,237 @@
                        Text="Tampilkan semua kolum" />
         </Grid>
 
-        <!-- Progress bar -->
-        <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
-                     Grid.Column="0" Grid.Row="2"
-                     Width="40"
-                     Height="40"
-                     HorizontalAlignment="Center"
-                     VerticalAlignment="Center"
-                     Value="0"
-                     IsIndeterminate="True"
-                     Visibility="{c:Binding Path=IsLoading}" />
+        <dxlc:LayoutControl x:Name="MainLayoutControl" Grid.Column="0" Grid.Row="2"
+                            Grid.ColumnSpan="2" Orientation="Horizontal">
+            
+            <!-- Max width calculation is a workaround so that the layout control resizing respects min width -->
+            <dxlc:LayoutGroup x:Name="GridLayoutGroup" 
+                              dxlc:LayoutControl.AllowHorizontalSizing="True"
+                              UseLayoutRounding="True" 
+                              Orientation="Horizontal" 
+                              MinWidth="250"
+                              MaxWidth="{DXBinding '@e(MainLayoutControl).ActualWidth-@e(InfoLayoutGroup).MinWidth-@e(MainLayoutControl).ItemSpace'}">
+                <Grid>
 
-        <!-- Data grid -->
-        <dxg:GridControl x:Name="ServicesGrid" Grid.Column="0" Grid.Row="2"
-                         Margin="0 10 0 0"
-                         SelectionMode="Row"
-                         CurrentItem="{Binding Path=SelectedService, Mode=OneWayToSource}"
-                         ItemsSource="{Binding Path=Services}"
-                         Visibility="{c:Binding Path=!IsLoading}">
+                    <!-- Data grid -->
+                    <dxg:GridControl x:Name="ServicesGrid"
+                                     Margin="0 10 0 0"
+                                     SelectionMode="Row"
+                                     CurrentItem="{Binding Path=SelectedService, Mode=OneWayToSource}"
+                                     ItemsSource="{Binding Path=Services}"
+                                     Visibility="{c:Binding Path=!IsLoading}">
 
-            <dxg:GridControl.DetailDescriptor>
-                <dxg:DataControlDetailDescriptor ItemsSourceBinding="{Binding Spareparts}" ShowHeader="False">
-                    <dxg:GridControl x:Name="SparepartsGrid" SelectionMode="Row"
+                        <dxg:GridControl.DetailDescriptor>
+                            <dxg:DataControlDetailDescriptor ItemsSourceBinding="{Binding Spareparts}" ShowHeader="False">
+                                <dxg:GridControl x:Name="SparepartsGrid" SelectionMode="Row"
                                      CurrentItem="{Binding Path=SelectedSparepart, Mode=OneWayToSource}">
-                        <dxg:GridControl.Columns>
-                            <dxg:GridColumn FieldName="Id" Header="Id" Width="2*" ReadOnly="True">
-                                <dxg:GridColumn.EditSettings>
-                                    <dxe:TextEditSettings HorizontalContentAlignment="Left" />
-                                </dxg:GridColumn.EditSettings>
-                            </dxg:GridColumn>
+                                    <dxg:GridControl.Columns>
+                                        <dxg:GridColumn FieldName="Id" Header="Id" Width="2*" ReadOnly="True">
+                                            <dxg:GridColumn.EditSettings>
+                                                <dxe:TextEditSettings HorizontalContentAlignment="Left" />
+                                            </dxg:GridColumn.EditSettings>
+                                        </dxg:GridColumn>
 
-                            <dxg:GridColumn FieldName="Nama" Header="Nama" Width="7*" ReadOnly="True" />
-                            <dxg:GridColumn FieldName="Harga" Header="Harga" Width="6*" ReadOnly="True" />
-                            <dxg:GridColumn FieldName="TanggalPembelian" Header="Tanggal Pembelian" Width="3*" ReadOnly="True" />
-                        </dxg:GridControl.Columns>
+                                        <dxg:GridColumn FieldName="Nama" Header="Nama" Width="7*" ReadOnly="True" />
+                                        <dxg:GridColumn FieldName="Harga" Header="Harga" Width="6*" ReadOnly="True" />
+                                        <dxg:GridColumn FieldName="TanggalPembelian" Header="Tanggal Pembelian" Width="3*" ReadOnly="True" />
+                                    </dxg:GridControl.Columns>
 
-                        <dxg:GridControl.TotalSummary>
-                            <dxg:GridSummaryItem SummaryType="Sum" FieldName="Harga" DisplayFormat="Sum: {0:c}" />
-                            <dxg:GridSummaryItem SummaryType="Count" FieldName="Id" DisplayFormat="Count: {0}" />
-                        </dxg:GridControl.TotalSummary>
+                                    <dxg:GridControl.TotalSummary>
+                                        <dxg:GridSummaryItem SummaryType="Sum" FieldName="Harga" DisplayFormat="Sum: {0:c}" />
+                                        <dxg:GridSummaryItem SummaryType="Count" FieldName="Id" DisplayFormat="Count: {0}" />
+                                    </dxg:GridControl.TotalSummary>
 
-                        <dxg:GridControl.View>
-                            <dxg:TableView x:Name="SparepartsView"
+                                    <dxg:GridControl.View>
+                                        <dxg:TableView x:Name="SparepartsView"
                                            DetailHeaderContent="Spareparts"
                                            UseAnimationWhenExpanding="True"
                                            ShowColumnHeaders="True"
                                            ShowTotalSummary="True"
                                            AllowEditing="False" />
-                        </dxg:GridControl.View>
-                    </dxg:GridControl>
-                </dxg:DataControlDetailDescriptor>
-            </dxg:GridControl.DetailDescriptor>
+                                    </dxg:GridControl.View>
+                                </dxg:GridControl>
+                            </dxg:DataControlDetailDescriptor>
+                        </dxg:GridControl.DetailDescriptor>
 
-            <dxg:GridColumn Header="No. Nota" FieldName="NomorNota">
-                <dxg:GridColumn.EditSettings>
-                    <dxe:TextEditSettings HorizontalContentAlignment="Left" />
-                </dxg:GridColumn.EditSettings>
-            </dxg:GridColumn>
+                        <dxg:GridColumn Header="No. Nota" FieldName="NomorNota">
+                            <dxg:GridColumn.EditSettings>
+                                <dxe:TextEditSettings HorizontalContentAlignment="Left" />
+                            </dxg:GridColumn.EditSettings>
+                        </dxg:GridColumn>
 
-            <dxg:GridColumn Header="Tanggal" FieldName="Tanggal" />
-            <dxg:GridColumn Header="Nama Pelanggan" FieldName="NamaPelanggan" />
-            <dxg:GridColumn Header="No Hp" FieldName="NoHp" />
-            <dxg:GridColumn Header="Tipe Hp" FieldName="TipeHp" />
-            <dxg:GridColumn Header="Imei" FieldName="Imei" Visible="{Binding Path=ShowAllColumns}" />
-            <dxg:GridColumn Header="Kerusakan" FieldName="Kerusakan" />
-            <dxg:GridColumn Header="Kondisi Hp" FieldName="KondisiHp" />
-            <dxg:GridColumn Header="Yang Belum Dicek" FieldName="YangBelumDicek" Visible="{Binding Path=ShowAllColumns}" />
-            <dxg:GridColumn Header="Kelengkapan" FieldName="Kelengkapan" Visible="{Binding Path=ShowAllColumns}" />
-            <dxg:GridColumn Header="Warna" FieldName="Warna" Visible="{Binding Path=ShowAllColumns}" />
-            <dxg:GridColumn Header="Kata Sandi/Pola" FieldName="KataSandiPola" Visible="{Binding Path=ShowAllColumns}" />
-            <dxg:GridColumn Header="ID Teknisi" FieldName="TechnicianId" Visible="{Binding Path=ShowAllColumns}" />
-            <dxg:GridColumn Header="ID Sales" FieldName="SalesId" Visible="{Binding Path=ShowAllColumns}" />
-            <dxg:GridColumn Header="Status Servisan" FieldName="StatusServisan" />
-            <dxg:GridColumn Header="Tanggal Konfirmasi" FieldName="TanggalKonfirmasi" Visible="{Binding Path=ShowAllColumns}" />
-            <dxg:GridColumn Header="Isi Konfirmasi" FieldName="IsiKonfirmasi" Visible="{Binding Path=ShowAllColumns}" />
-            <dxg:GridColumn Header="Biaya" FieldName="Biaya" Visible="{Binding Path=ShowAllColumns}" />
-            <dxg:GridColumn Header="Diskon" FieldName="Diskon" Visible="{Binding Path=ShowAllColumns}" />
-            <dxg:GridColumn Header="Dp" FieldName="Dp" Visible="{Binding Path=ShowAllColumns}" />
-            <dxg:GridColumn Header="Tambahan Biaya" FieldName="TambahanBiaya" Visible="{Binding Path=ShowAllColumns}" />
-            <dxg:GridColumn Header="Total Biaya" FieldName="TotalBiaya" Visible="{Binding Path=ShowAllColumns}" />
-            <dxg:GridColumn Header="Harga Sparepart" FieldName="HargaSparepart" Visible="{Binding Path=ShowAllColumns}" />
-            <dxg:GridColumn Header="Sisa" FieldName="Sisa" Visible="{Binding Path=ShowAllColumns}" />
-            <dxg:GridColumn Header="Laba/Rugi" FieldName="LabaRugi" Visible="{c:Binding Path='IsAdmin and ShowAllColumns'}" />
-            <dxg:GridColumn Header="Tanggal Pengambilan" FieldName="TanggalPengambilan" Visible="{Binding Path=ShowAllColumns}" />
+                        <dxg:GridColumn Header="Tanggal" FieldName="Tanggal" />
+                        <dxg:GridColumn Header="Nama Pelanggan" FieldName="NamaPelanggan" />
+                        <dxg:GridColumn Header="No Hp" FieldName="NoHp" />
+                        <dxg:GridColumn Header="Tipe Hp" FieldName="TipeHp" />
+                        <dxg:GridColumn Header="Imei" FieldName="Imei" Visible="{Binding Path=ShowAllColumns}" />
+                        <dxg:GridColumn Header="Kerusakan" FieldName="Kerusakan" />
+                        <dxg:GridColumn Header="Kondisi Hp" FieldName="KondisiHp" />
+                        <dxg:GridColumn Header="Yang Belum Dicek" FieldName="YangBelumDicek" Visible="{Binding Path=ShowAllColumns}" />
+                        <dxg:GridColumn Header="Kelengkapan" FieldName="Kelengkapan" Visible="{Binding Path=ShowAllColumns}" />
+                        <dxg:GridColumn Header="Warna" FieldName="Warna" Visible="{Binding Path=ShowAllColumns}" />
+                        <dxg:GridColumn Header="Kata Sandi/Pola" FieldName="KataSandiPola" Visible="{Binding Path=ShowAllColumns}" />
+                        <dxg:GridColumn Header="ID Teknisi" FieldName="TechnicianId" Visible="{Binding Path=ShowAllColumns}" />
+                        <dxg:GridColumn Header="ID Sales" FieldName="SalesId" Visible="{Binding Path=ShowAllColumns}" />
+                        <dxg:GridColumn Header="Status Servisan" FieldName="StatusServisan" />
+                        <dxg:GridColumn Header="Tanggal Konfirmasi" FieldName="TanggalKonfirmasi" Visible="{Binding Path=ShowAllColumns}" />
+                        <dxg:GridColumn Header="Isi Konfirmasi" FieldName="IsiKonfirmasi" Visible="{Binding Path=ShowAllColumns}" />
+                        <dxg:GridColumn Header="Biaya" FieldName="Biaya" Visible="{Binding Path=ShowAllColumns}" />
+                        <dxg:GridColumn Header="Diskon" FieldName="Diskon" Visible="{Binding Path=ShowAllColumns}" />
+                        <dxg:GridColumn Header="Dp" FieldName="Dp" Visible="{Binding Path=ShowAllColumns}" />
+                        <dxg:GridColumn Header="Tambahan Biaya" FieldName="TambahanBiaya" Visible="{Binding Path=ShowAllColumns}" />
+                        <dxg:GridColumn Header="Total Biaya" FieldName="TotalBiaya" Visible="{Binding Path=ShowAllColumns}" />
+                        <dxg:GridColumn Header="Harga Sparepart" FieldName="HargaSparepart" Visible="{Binding Path=ShowAllColumns}" />
+                        <dxg:GridColumn Header="Sisa" FieldName="Sisa" Visible="{Binding Path=ShowAllColumns}" />
+                        <dxg:GridColumn Header="Laba/Rugi" FieldName="LabaRugi" Visible="{c:Binding Path='IsAdmin and ShowAllColumns'}" />
+                        <dxg:GridColumn Header="Tanggal Pengambilan" FieldName="TanggalPengambilan" Visible="{Binding Path=ShowAllColumns}" />
 
-            <dxg:GridControl.View>
-                <dxg:TableView x:Name="MasterView"
+                        <dxg:GridControl.View>
+                            <dxg:TableView x:Name="MasterView"
                                DetailHeaderContent="Services"
                                AllowScrollAnimation="True"
                                AllowFixedGroups="True"
                                AllowEditing="False" />
-            </dxg:GridControl.View>
+                        </dxg:GridControl.View>
 
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="MasterRowExpanding">
-                    <cal:ActionMessage MethodName="OnMasterRowExpanding">
-                        <cal:Parameter Value="$eventArgs" />
-                    </cal:ActionMessage>
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-    
-        </dxg:GridControl>
-        
-        <!-- Floating action buttons -->
-        <material:PopupBox Style="{StaticResource MaterialDesignMultiFloatingActionPopupBox}"
-                           Grid.Column="0" Grid.Row="1"
-                           Grid.RowSpan="2"
-                           HorizontalAlignment="Right"
-                           VerticalAlignment="Bottom"
-                           Margin="32">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MasterRowExpanding">
+                                <cal:ActionMessage MethodName="OnMasterRowExpanding">
+                                    <cal:Parameter Value="$eventArgs" />
+                                </cal:ActionMessage>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
 
-            <StackPanel>
-                <Button ToolTip="Tambah Servisan"
-                        Background="{DynamicResource PrimaryHueMidBrush}"
-                        Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
-                        IsEnabled="{Binding Path=CanAddService}"
-                        cal:Message.Attach="[Event Click] = [Action AddService]">
-                    <material:PackIcon Kind="Add" />
-                </Button>
+                    </dxg:GridControl>
 
-                <Button ToolTip="Tambah Sparepart"
-                        Background="{DynamicResource PrimaryHueMidBrush}"
-                        Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
-                        IsEnabled="{Binding Path=CanAddSparepart}"
-                        cal:Message.Attach="[Event Click] = [Action AddSparepart]">
-                    <material:PackIcon Kind="AddShoppingCart" />
-                </Button>
+                    <!-- Floating action buttons -->
+                    <material:PopupBox Style="{StaticResource MaterialDesignMultiFloatingActionPopupBox}"
+                                       HorizontalAlignment="Right"
+                                       VerticalAlignment="Bottom"
+                                       Margin="32">
 
-                <Button ToolTip="Edit"
-                        Background="{DynamicResource PrimaryHueMidBrush}"
-                        Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
-                        IsEnabled="{Binding Path=CanEditService}"
-                        cal:Message.Attach="[Event Click] = [Action EditService]">
-                    <material:PackIcon Kind="Edit" />
-                </Button>
+                        <StackPanel>
+                            <Button ToolTip="Tambah Servisan"
+                                    Background="{DynamicResource PrimaryHueMidBrush}"
+                                    Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                                    IsEnabled="{Binding Path=CanAddService}"
+                                    cal:Message.Attach="[Event Click] = [Action AddService]">
+                                <material:PackIcon Kind="Add" />
+                            </Button>
 
-                <Button ToolTip="Edit Status"
-                        Background="{DynamicResource PrimaryHueMidBrush}"
-                        Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
-                        IsEnabled="{Binding Path=CanEditService}"
-                        cal:Message.Attach="[Event Click] = [Action EditStatus]">
-                    <material:PackIcon Kind="Check" />
-                </Button>
+                            <Button ToolTip="Tambah Sparepart"
+                                    Background="{DynamicResource PrimaryHueMidBrush}"
+                                    Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                                    IsEnabled="{Binding Path=CanAddSparepart}"
+                                    cal:Message.Attach="[Event Click] = [Action AddSparepart]">
+                                <material:PackIcon Kind="AddShoppingCart" />
+                            </Button>
 
-                <Button ToolTip="Hapus"
-                        Background="{DynamicResource PrimaryHueMidBrush}"
-                        Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
-                        IsEnabled="{Binding Path=CanDeleteService}"
-                        cal:Message.Attach="[Event Click] = [Action DeleteService]">
-                    <material:PackIcon Kind="Delete" />
-                </Button>
+                            <Button ToolTip="Edit"
+                                    Background="{DynamicResource PrimaryHueMidBrush}"
+                                    Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                                    IsEnabled="{Binding Path=CanEditService}"
+                                    cal:Message.Attach="[Event Click] = [Action EditService]">
+                                <material:PackIcon Kind="Edit" />
+                            </Button>
 
-                <Button ToolTip="Hapus Sparepart"
-                        Background="{DynamicResource PrimaryHueMidBrush}"
-                        Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
-                        IsEnabled="{Binding Path=CanDeleteSparepart}"
-                        cal:Message.Attach="[Event Click] = [Action DeleteSparepart]">
-                    <material:PackIcon Kind="RemoveShoppingCart" />
-                </Button>
+                            <Button ToolTip="Edit Status"
+                                    Background="{DynamicResource PrimaryHueMidBrush}"
+                                    Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                                    IsEnabled="{Binding Path=CanEditService}"
+                                    cal:Message.Attach="[Event Click] = [Action EditStatus]">
+                                <material:PackIcon Kind="Check" />
+                            </Button>
 
-                <Button ToolTip="Refresh"
-                        Background="{DynamicResource PrimaryHueMidBrush}"
-                        Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
-                        cal:Message.Attach="[Event Click] = [Action LoadServices]">
-                    <material:PackIcon Kind="Refresh" />
-                </Button>
+                            <Button ToolTip="Hapus"
+                                    Background="{DynamicResource PrimaryHueMidBrush}"
+                                    Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                                    IsEnabled="{Binding Path=CanDeleteService}"
+                                    cal:Message.Attach="[Event Click] = [Action DeleteService]">
+                                <material:PackIcon Kind="Delete" />
+                            </Button>
 
-                <Button ToolTip="Print"
-                        Background="{DynamicResource PrimaryHueMidBrush}"
-                        Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
-                        cal:Message.Attach="[Event Click] = [Action PrintService]">
-                    <material:PackIcon Kind="Printer" />
-                </Button>
-            </StackPanel>
-        </material:PopupBox>
-        
-        <!-- Info box -->
-        <StackPanel Grid.Column="1" Grid.Row="1"
-                    Grid.RowSpan="2"
-                    Orientation="Vertical"
-                    Margin="10 10 0 0"
-                    Visibility="{c:Binding Path=ShowInfo, FalseToVisibility=Hidden}">
-            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.NomorNota, StringFormat=No. Nota: {0}}" />
-            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.Tanggal, StringFormat=Tanggal: {0}}" />
-            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.NamaPelanggan, StringFormat=Nama Pelanggan: {0}}" />
-            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.NoHp, StringFormat=No Hp: {0}}" />
-            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.TipeHp, StringFormat=Tipe Hp: {0}}" />
-            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.Imei, StringFormat=Imei: {0}}" />
-            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.Kerusakan, StringFormat=Kerusakan: {0}}" />
-            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.KondisiHp, StringFormat=Kondisi Hp: {0}}" />
-            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.YangBelumDicek, StringFormat=Yang Belum Dicek: {0}}" />
-            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.Kelengkapan, StringFormat=Kelengkapan: {0}}" />
-            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.Warna, StringFormat=Warna: {0}}" />
-            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.KataSandiPola, StringFormat=Kata Sandi/Pola: {0}}" />
-            <TextBlock FontSize="14" Text="{Binding Path=SelectedServiceTechnician, StringFormat=Teknisi: {0}}" />
-            <TextBlock FontSize="14" Text="{Binding Path=SelectedServiceSales, StringFormat=Sales: {0}}" />
-            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.StatusServisan, StringFormat=Status Servisan: {0}}" />
-            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.TanggalKonfirmasi, StringFormat=Tanggal Konfirmasi: {0}}" />
-            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.IsiKonfirmasi, StringFormat=Isi Konfirmasi: {0}}" />
-            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.Biaya, StringFormat=Biaya: Rp{0:N0}}" />
-            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.Diskon, StringFormat=Diskon: {0}%}" />
-            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.Dp, StringFormat=Dp: Rp{0:N0}}" />
-            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.TambahanBiaya, StringFormat=Tambahan Biaya: Rp{0:N0}}" />
-            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.TotalBiaya, StringFormat=Total Biaya: Rp{0:N0}}" />
-            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.HargaSparepart, StringFormat=Harga Sparepart: Rp{0:N0}}" />
-            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.Sisa, StringFormat=Sisa: Rp{0:N0}}" />
-            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.LabaRugi, StringFormat=Laba/Rugi: Rp{0:N0}}" Visibility="{c:Binding Path=IsAdmin, FalseToVisibility=Collapsed}" />
-            <TextBlock FontSize="14" Text="{Binding Path=SelectedService.TanggalPengambilan, StringFormat=Tanggal Pengambilan: {0}}" />
-        </StackPanel>
+                            <Button ToolTip="Hapus Sparepart"
+                                    Background="{DynamicResource PrimaryHueMidBrush}"
+                                    Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                                    IsEnabled="{Binding Path=CanDeleteSparepart}"
+                                    cal:Message.Attach="[Event Click] = [Action DeleteSparepart]">
+                                            <material:PackIcon Kind="RemoveShoppingCart" />
+                            </Button>
 
-        <TextBlock Grid.Column="1" Grid.Row="1"
-                   Grid.RowSpan="2"
-                   Visibility="{c:Binding Path=!ShowInfo}"
-                   FontSize="18"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"
-                   Text="Tidak ada servisan yang di-select" />
+                            <Button ToolTip="Refresh"
+                                    Background="{DynamicResource PrimaryHueMidBrush}"
+                                    Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                                    cal:Message.Attach="[Event Click] = [Action LoadServices]">
+                                <material:PackIcon Kind="Refresh" />
+                            </Button>
+
+                            <Button ToolTip="Print"
+                                    Background="{DynamicResource PrimaryHueMidBrush}"
+                                    Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                                    cal:Message.Attach="[Event Click] = [Action PrintService]">
+                                <material:PackIcon Kind="Printer" />
+                            </Button>
+                        </StackPanel>
+                    </material:PopupBox>
+
+                    <!-- Progress bar -->
+                    <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
+                                 Width="40"
+                                 Height="40"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center"
+                                 Value="0"
+                                 IsIndeterminate="True"
+                                 Visibility="{c:Binding Path=IsLoading}" />
+                </Grid>
+            </dxlc:LayoutGroup>
+
+            <!-- Max width calculation is a workaround so that the layout control resizing respects min width -->
+            <dxlc:LayoutGroup x:Name="InfoLayoutGroup" Orientation="Horizontal" MinWidth="300" 
+                              MaxWidth="{DXBinding '@e(MainLayoutControl).ActualWidth-@e(GridLayoutGroup).MinWidth-@e(MainLayoutControl).ItemSpace'}">
+                <Grid>
+                    <!-- Info box -->
+                    <StackPanel Orientation="Vertical"
+                            Margin="10 10 0 0"
+                            Visibility="{c:Binding Path=ShowInfo, FalseToVisibility=Hidden}">
+                        <TextBlock FontSize="14" Text="{Binding Path=SelectedService.NomorNota, StringFormat=No. Nota: {0}}" />
+                        <TextBlock FontSize="14" Text="{Binding Path=SelectedService.Tanggal, StringFormat=Tanggal: {0}}" />
+                        <TextBlock FontSize="14" Text="{Binding Path=SelectedService.NamaPelanggan, StringFormat=Nama Pelanggan: {0}}" />
+                        <TextBlock FontSize="14" Text="{Binding Path=SelectedService.NoHp, StringFormat=No Hp: {0}}" />
+                        <TextBlock FontSize="14" Text="{Binding Path=SelectedService.TipeHp, StringFormat=Tipe Hp: {0}}" />
+                        <TextBlock FontSize="14" Text="{Binding Path=SelectedService.Imei, StringFormat=Imei: {0}}" />
+                        <TextBlock FontSize="14" Text="{Binding Path=SelectedService.Kerusakan, StringFormat=Kerusakan: {0}}" />
+                        <TextBlock FontSize="14" Text="{Binding Path=SelectedService.KondisiHp, StringFormat=Kondisi Hp: {0}}" />
+                        <TextBlock FontSize="14" Text="{Binding Path=SelectedService.YangBelumDicek, StringFormat=Yang Belum Dicek: {0}}" />
+                        <TextBlock FontSize="14" Text="{Binding Path=SelectedService.Kelengkapan, StringFormat=Kelengkapan: {0}}" />
+                        <TextBlock FontSize="14" Text="{Binding Path=SelectedService.Warna, StringFormat=Warna: {0}}" />
+                        <TextBlock FontSize="14" Text="{Binding Path=SelectedService.KataSandiPola, StringFormat=Kata Sandi/Pola: {0}}" />
+                        <TextBlock FontSize="14" Text="{Binding Path=SelectedServiceTechnician, StringFormat=Teknisi: {0}}" />
+                        <TextBlock FontSize="14" Text="{Binding Path=SelectedServiceSales, StringFormat=Sales: {0}}" />
+                        <TextBlock FontSize="14" Text="{Binding Path=SelectedService.StatusServisan, StringFormat=Status Servisan: {0}}" />
+                        <TextBlock FontSize="14" Text="{Binding Path=SelectedService.TanggalKonfirmasi, StringFormat=Tanggal Konfirmasi: {0}}" />
+                        <TextBlock FontSize="14" Text="{Binding Path=SelectedService.IsiKonfirmasi, StringFormat=Isi Konfirmasi: {0}}" />
+                        <TextBlock FontSize="14" Text="{Binding Path=SelectedService.Biaya, StringFormat=Biaya: Rp{0:N0}}" />
+                        <TextBlock FontSize="14" Text="{Binding Path=SelectedService.Diskon, StringFormat=Diskon: {0}%}" />
+                        <TextBlock FontSize="14" Text="{Binding Path=SelectedService.Dp, StringFormat=Dp: Rp{0:N0}}" />
+                        <TextBlock FontSize="14" Text="{Binding Path=SelectedService.TambahanBiaya, StringFormat=Tambahan Biaya: Rp{0:N0}}" />
+                        <TextBlock FontSize="14" Text="{Binding Path=SelectedService.TotalBiaya, StringFormat=Total Biaya: Rp{0:N0}}" />
+                        <TextBlock FontSize="14" Text="{Binding Path=SelectedService.HargaSparepart, StringFormat=Harga Sparepart: Rp{0:N0}}" />
+                        <TextBlock FontSize="14" Text="{Binding Path=SelectedService.Sisa, StringFormat=Sisa: Rp{0:N0}}" />
+                        <TextBlock FontSize="14" Text="{Binding Path=SelectedService.LabaRugi, StringFormat=Laba/Rugi: Rp{0:N0}}" Visibility="{c:Binding Path=IsAdmin, FalseToVisibility=Collapsed}" />
+                        <TextBlock FontSize="14" Text="{Binding Path=SelectedService.TanggalPengambilan, StringFormat=Tanggal Pengambilan: {0}}" />
+                    </StackPanel>
+
+                    <TextBlock Grid.Column="1" Grid.Row="1"
+                               Grid.RowSpan="2"
+                               Visibility="{c:Binding Path=!ShowInfo}"
+                               FontSize="18"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Text="Tidak ada servisan yang di-select" />
+                </Grid>
+            </dxlc:LayoutGroup>
+        </dxlc:LayoutControl>
     </Grid>
 </UserControl>
