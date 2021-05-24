@@ -20,6 +20,7 @@
             <dxlc:LayoutGroup Orientation="Vertical">
                 <dxlc:LayoutItem Label="Status:" Margin="4">
                     <dxe:ComboBoxEdit 
+                        x:Name="StatusComboBox"
                         Height="30" Margin="10 0 0 0"
                         ItemsSource="{Binding Path=ServiceStatuses, Converter={converters:EnumToCollectionConverter}, Mode=OneTime}"
                         ValueMember="Key"
