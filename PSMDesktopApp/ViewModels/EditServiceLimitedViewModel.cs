@@ -5,6 +5,7 @@ using PSMDesktopApp.Library.Models;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace PSMDesktopApp.ViewModels
 {
@@ -131,8 +132,15 @@ namespace PSMDesktopApp.ViewModels
 
             if (SelectedStatus == ServiceStatus.TidakJadiBelumDiambil || SelectedStatus == ServiceStatus.TidakJadiSudahDiambil)
             {
-                DXMessageBox.Show("Biaya harus 0 jika servisan dibatalkan", "Edit servisan");
-                return false;
+                if (DXMessageBox.Show("Biaya harus 0 jika servisan dibatalkan. Apakah anda ingin mengatur biaya menjadi 0?", 
+                    "Edit servisan", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    _oldService.Biaya = 0;
+                }
+                else
+                {
+                    return false;
+                }
             }
 
             // The DevExpress DateEdit control will set the Kind to Unspecified if the date is selected from
