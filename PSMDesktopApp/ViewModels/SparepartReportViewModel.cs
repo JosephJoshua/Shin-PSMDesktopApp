@@ -167,8 +167,8 @@ namespace PSMDesktopApp.ViewModels
 
             List<SparepartModel> sparepartList = await _sparepartEndpoint.GetAll(StartDate, EndDate);
 
-            IsLoading = false;
             Spareparts = new BindableCollection<SparepartModel>(sparepartList);
+            IsLoading = false;
         }
     }
 }
