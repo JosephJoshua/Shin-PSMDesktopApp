@@ -47,7 +47,6 @@
             <!-- Date range -->
             <TextBlock Grid.Column="0" Grid.Row="0"
                        Text="Dari:"
-                       FontSize="18"
                        Foreground="White"
                        VerticalAlignment="Center"
                        Margin="0 0 10 0" />
@@ -61,7 +60,6 @@
 
             <TextBlock Grid.Column="2" Grid.Row="0"
                        Text="Sampai:"
-                       FontSize="18"
                        Foreground="White"
                        VerticalAlignment="Center"
                        Margin="20 0 10 0" />
@@ -198,7 +196,6 @@
                     </StackPanel>
 
                     <TextBlock Visibility="{c:Binding Path=!ShowInfo}"
-                               FontSize="18"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
                                Text="Tidak ditemukan servisan" />
