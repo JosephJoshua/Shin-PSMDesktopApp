@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace PSMDesktopApp.ViewModels
@@ -188,8 +187,9 @@ namespace PSMDesktopApp.ViewModels
 
             IsLoading = true;
 
-            List<ProfitResultModel> resultList = (await _serviceEndpoint.GetAll()).Where((s) => s.StatusServisan == "Jadi (Sudah diambil)" ||
-                s.StatusServisan == "Tidak Jadi (Sudah diambil)")
+            // We can't use the server's date range constraint because the server ignores the date range when searching.
+            List<ProfitResultModel> resultList = (await _serviceEndpoint.GetAll("Sudah diambil", SearchType.Status))
+                .Where(s => s.TanggalPengambilan?.Date >= StartDate.Date && s.TanggalPengambilan?.Date <= EndDate.Date)
                 .Select(s =>
                     new ProfitResultModel
                     {
@@ -202,18 +202,8 @@ namespace PSMDesktopApp.ViewModels
                         Kerusakan = s.Kerusakan,
                     }).ToList();
 
-            List<ProfitResultModel> filteredResultList = new List<ProfitResultModel>();
-
-            foreach (ProfitResultModel result in resultList)
-            {
-                if (result.TanggalPengambilan.Date >= StartDate.Date && result.TanggalPengambilan.Date <= EndDate.Date)
-                {
-                    filteredResultList.Add(result);
-                }
-            }
-
+            ProfitResults = new BindableCollection<ProfitResultModel>(resultList);
             IsLoading = false;
-            ProfitResults = new BindableCollection<ProfitResultModel>(filteredResultList);
         }
     }
 }
