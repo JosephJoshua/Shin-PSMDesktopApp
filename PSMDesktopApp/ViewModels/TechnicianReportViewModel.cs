@@ -268,8 +268,10 @@ namespace PSMDesktopApp.ViewModels
 
             IsLoading = true;
 
-            List<TechnicianResultModel> resultList = (await _serviceEndpoint.GetAll()).Where((s) => s.TechnicianId == SelectedTechnician.Id && 
-                (s.StatusServisan == "Jadi (Sudah diambil)" || s.StatusServisan == "Tidak Jadi (Sudah diambil)"))
+            // We can't use the server's date range constraint because the server ignores the date range when searching.
+            List<TechnicianResultModel> resultList = (await _serviceEndpoint.GetAll("Sudah diambil", SearchType.Status))
+                .Where(s => s.TechnicianId == SelectedTechnician.Id && s.TanggalPengambilan?.Date >= StartDate.Date &&
+                            s.TanggalPengambilan?.Date <= EndDate.Date)
                 .Select(s => new TechnicianResultModel
                 {
                     NomorNota = s.NomorNota,
@@ -282,18 +284,8 @@ namespace PSMDesktopApp.ViewModels
                     NamaTeknisi = Technicians.SingleOrDefault(t => t.Id == s.TechnicianId).Nama
                 }).ToList();
 
-            List<TechnicianResultModel> filteredResultList = new List<TechnicianResultModel>();
-
-            foreach (TechnicianResultModel result in resultList)
-            {
-                if (result.TanggalPengambilan.Date >= StartDate.Date && result.TanggalPengambilan.Date <= EndDate.Date)
-                {
-                    filteredResultList.Add(result);
-                }
-            }
-
+            TechnicianResults = new BindableCollection<TechnicianResultModel>(resultList);
             IsLoading = false;
-            TechnicianResults = new BindableCollection<TechnicianResultModel>(filteredResultList);
         }
     }
 }
