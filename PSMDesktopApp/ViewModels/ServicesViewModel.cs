@@ -381,30 +381,34 @@ namespace PSMDesktopApp.ViewModels
             Services[index].Spareparts = await _sparepartEndpoint.GetByNomorNota(nomorNota);
         }
 
-        public void PrintService()
+        public void PrintSelectedService()
         {
             if (SelectedService == null) return;
+            PrintService(SelectedService);
+        }
 
-            string kelengkapan = SelectedService.Kelengkapan?.Trim().Replace(" ", ", ");
+        private void PrintService(ServiceModel service)
+        {
+            string kelengkapan = service.Kelengkapan?.Trim().Replace(" ", ", ");
 
-            if (kelengkapan != null) kelengkapan = kelengkapan[0].ToString() + kelengkapan.Substring(1).ToLower();
+            if (!string.IsNullOrEmpty(kelengkapan)) kelengkapan = kelengkapan[0].ToString() + kelengkapan.Substring(1).ToLower();
 
             ServiceInvoicePreviewViewModel invoicePreviewVM = IoC.Get<ServiceInvoicePreviewViewModel>();
             invoicePreviewVM.SetInvoiceModel(new ServiceInvoiceModel
             {
-                NomorNota = SelectedService.NomorNota.ToString(),
-                NamaPelanggan = SelectedService.NamaPelanggan,
-                NoHp = SelectedService.NoHp ?? "",
-                TipeHp = SelectedService.TipeHp,
-                Imei = SelectedService.Imei ?? "",
-                Kerusakan = SelectedService.Kerusakan,
-                TotalBiaya = SelectedService.TotalBiaya,
-                Dp = SelectedService.Dp,
-                Sisa = SelectedService.Sisa,
+                NomorNota = service.NomorNota.ToString(),
+                NamaPelanggan = service.NamaPelanggan,
+                NoHp = service.NoHp ?? "",
+                TipeHp = service.TipeHp,
+                Imei = service.Imei ?? "",
+                Kerusakan = service.Kerusakan,
+                TotalBiaya = service.TotalBiaya,
+                Dp = service.Dp,
+                Sisa = service.Sisa,
                 Kelengkapan = kelengkapan ?? "",
-                KondisiHp = SelectedService.KondisiHp ?? "",
-                YangBelumDicek = SelectedService.YangBelumDicek ?? "",
-                Tanggal = SelectedService.Tanggal.ToString("f", DateTimeFormatInfo.InvariantInfo),
+                KondisiHp = service.KondisiHp ?? "",
+                YangBelumDicek = service.YangBelumDicek ?? "",
+                Tanggal = service.Tanggal.ToString("f", DateTimeFormatInfo.InvariantInfo),
             });
 
             _windowManager.ShowDialog(invoicePreviewVM);

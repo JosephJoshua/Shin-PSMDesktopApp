@@ -276,7 +276,7 @@
                             <Button ToolTip="Print"
                                     Background="{DynamicResource PrimaryHueMidBrush}"
                                     Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
-                                    cal:Message.Attach="[Event Click] = [Action PrintService]">
+                                    cal:Message.Attach="[Event Click] = [Action PrintSelectedService]">
                                 <material:PackIcon Kind="Printer" />
                             </Button>
                         </StackPanel>
