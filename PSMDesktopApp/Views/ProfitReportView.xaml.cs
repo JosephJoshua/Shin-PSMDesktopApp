@@ -1,28 +1,23 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace PSMDesktopApp.Views
 {
-    /// <summary>
-    /// Interaction logic for ProfitReportView.xaml
-    /// </summary>
     public partial class ProfitReportView : UserControl
     {
         public ProfitReportView()
         {
             InitializeComponent();
+        }
+
+        private void SetInitialGridWidth()
+        {
+            double lcWidth = MainLayoutControl.ActualWidth;
+            GridLayoutGroup.Width = lcWidth * 0.8d;
+        }
+
+        private void UserControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        {
+            SetInitialGridWidth();
         }
     }
 }
