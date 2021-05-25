@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace PSMDesktopApp.Library.Models
 {
-    public class ServiceModel : INotifyPropertyChanged
+    public class ServiceModel : INotifyPropertyChanged, IEquatable<ServiceModel>
     {
         [JsonProperty(PropertyName = "nomor_nota")]
         public int NomorNota { get; set; }
@@ -104,6 +104,30 @@ namespace PSMDesktopApp.Library.Models
         private void NotifyPropertyChanged(string property)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
+        }
+
+        public bool Equals(ServiceModel other)
+        {
+            if (this == null && other == null) return true;
+
+            return other != null && NomorNota == other.NomorNota && Tanggal == other.Tanggal && NamaPelanggan == other.NamaPelanggan &&
+                   NoHp == other.NoHp && TipeHp == other.TipeHp && Imei == other.Imei && Kerusakan == other.Kerusakan &&
+                   KondisiHp == other.KondisiHp && YangBelumDicek == other.YangBelumDicek && Kelengkapan == other.Kelengkapan &&
+                   Warna == other.Warna && KataSandiPola == other.KataSandiPola && TechnicianId == other.TechnicianId &&
+                   SalesId == other.SalesId && StatusServisan == other.StatusServisan && TanggalKonfirmasi == other.TanggalKonfirmasi &&
+                   IsiKonfirmasi == other.IsiKonfirmasi && Biaya == other.Biaya && Dp == other.Dp && TambahanBiaya == other.TambahanBiaya &&
+                   TotalBiaya == other.TotalBiaya && HargaSparepart == other.HargaSparepart && Sisa == other.Sisa && 
+                   LabaRugi == other.LabaRugi && TanggalPengambilan == other.TanggalPengambilan;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as ServiceModel);
+        }
+
+        public override int GetHashCode()
+        {
+            return NomorNota.GetHashCode();
         }
     }
 }

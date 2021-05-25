@@ -10,6 +10,7 @@ using System.Globalization;
 using DevExpress.Xpf.Grid;
 using System;
 using DevExpress.Data.Extensions;
+using System.Linq;
 
 namespace PSMDesktopApp.ViewModels
 {
@@ -366,8 +367,15 @@ namespace PSMDesktopApp.ViewModels
             EndDate = EndDate.Date.AddDays(1).AddTicks(-1);
 
             List<ServiceModel> serviceList = await _serviceEndpoint.GetAll(searchText, SelectedSearchType, StartDate, EndDate);
+            var serviceCollection = new BindableCollection<ServiceModel>(serviceList);
 
-            Services = new BindableCollection<ServiceModel>(serviceList);
+            if (Services?.SequenceEqual(serviceCollection) ?? false)
+            {
+                IsLoading = false;
+                return;
+            }
+
+            Services = serviceCollection;
             IsLoading = false;
 
             OnRefresh?.Invoke();
