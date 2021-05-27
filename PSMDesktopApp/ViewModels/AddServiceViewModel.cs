@@ -489,9 +489,15 @@ namespace PSMDesktopApp.ViewModels
 
         public async Task<bool> AddService()
         {
-            if ((SelectedStatus == ServiceStatus.TidakJadiSudahDiambil || SelectedStatus == ServiceStatus.TidakJadiBelumDiambil) && Biaya != 0)
+            bool tidakJadi = SelectedStatus == ServiceStatus.TidakJadiBelumDiambil || SelectedStatus == ServiceStatus.TidakJadiSudahDiambil;
+
+            if (tidakJadi && (Biaya != 0 || TambahanBiaya != 0))
             {
-                DXMessageBox.Show("Biaya harus 0 jika servisan dibatalkan. Tolong atur biaya menjadi 0", "Tambah servisan");
+                DXMessageBox.Show(
+                    "Biaya dan tambahan biaya harus 0 jika servisan dibatalkan. Tolong ubah biaya dan tambahan biaya menjadi 0",
+                    "Tambah servisan"
+                );
+
                 return false;
             }
 
