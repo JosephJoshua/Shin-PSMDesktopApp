@@ -170,21 +170,23 @@ namespace PSMDesktopApp.ViewModels
             ServiceStatus oldStatus = Enum.GetValues(ServiceStatuses.GetType()).Cast<ServiceStatus>().Where(e => e.Description() ==
                 _oldService.StatusServisan).FirstOrDefault();
 
-            if (oldStatus == ServiceStatus.JadiSudahDiambil && (SelectedStatus == ServiceStatus.TidakJadiBelumDiambil ||
-                SelectedStatus == ServiceStatus.TidakJadiSudahDiambil))
+            bool wasSudahDiambil = oldStatus == ServiceStatus.JadiSudahDiambil || oldStatus == ServiceStatus.TidakJadiSudahDiambil;
+            bool belumDiambil = SelectedStatus == ServiceStatus.JadiBelumDiambil || SelectedStatus == ServiceStatus.TidakJadiBelumDiambil;
+            bool tidakJadi = SelectedStatus == ServiceStatus.TidakJadiBelumDiambil || SelectedStatus == ServiceStatus.TidakJadiSudahDiambil;
+
+            if (oldStatus == ServiceStatus.JadiSudahDiambil && tidakJadi)
             {
                 DXMessageBox.Show("Tidak bisa ubah servisan dari 'Jadi (Sudah diambil)' menjadi 'Tidak jadi'", "Edit servisan");
                 return false;
             }
 
-            if ((oldStatus == ServiceStatus.JadiSudahDiambil || oldStatus == ServiceStatus.TidakJadiSudahDiambil) &&
-                (SelectedStatus == ServiceStatus.JadiBelumDiambil || SelectedStatus == ServiceStatus.TidakJadiBelumDiambil))
+            if (wasSudahDiambil && belumDiambil)
             {
                 DXMessageBox.Show("Tidak bisa ubah servisan dari 'Sudah diambil' menjadi 'Belum diambil'", "Edit servisan");
                 return false;
             }
 
-            if (SelectedStatus == ServiceStatus.TidakJadiBelumDiambil || SelectedStatus == ServiceStatus.TidakJadiSudahDiambil)
+            if (tidakJadi && _oldService.Biaya != 0)
             {
                 if (DXMessageBox.Show("Biaya harus 0 jika servisan dibatalkan. Apakah anda ingin mengatur biaya menjadi 0?", 
                     "Edit servisan", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
