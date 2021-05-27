@@ -461,14 +461,9 @@ namespace PSMDesktopApp.ViewModels
 
         public async Task<bool> UpdateService()
         {
-            if ((_oldStatus == ServiceStatus.JadiSudahDiambil || _oldStatus == ServiceStatus.TidakJadiSudahDiambil) &&
-                (SelectedStatus == ServiceStatus.JadiBelumDiambil || SelectedStatus == ServiceStatus.TidakJadiBelumDiambil))
-            {
-                DXMessageBox.Show("Tidak bisa ubah servisan dari 'Sudah diambil' menjadi 'Belum diambil'", "Edit servisan");
-                return false;
-            }
+            bool tidakJadi = SelectedStatus == ServiceStatus.TidakJadiBelumDiambil || SelectedStatus == ServiceStatus.TidakJadiSudahDiambil;
 
-            if ((SelectedStatus == ServiceStatus.TidakJadiBelumDiambil || SelectedStatus == ServiceStatus.TidakJadiSudahDiambil) && Biaya != 0)
+            if (tidakJadi && Biaya != 0)
             {
                 DXMessageBox.Show("Biaya harus 0 jika servisan dibatalkan. Tolong atur biaya menjadi 0", "Edit servisan");
                 return false;
