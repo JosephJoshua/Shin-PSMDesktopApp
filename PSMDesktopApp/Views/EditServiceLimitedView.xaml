@@ -11,7 +11,7 @@
     ShowInTaskbar="False"
     ResizeMode="NoResize"
     WindowStartupLocation="CenterOwner"
-    Title="{Binding NomorNota}"
+    Title="{Binding NomorNota, StringFormat=Edit Servisan - {0}}"
     TitleAlignment="Center"
     Height="410" Width="500">
     

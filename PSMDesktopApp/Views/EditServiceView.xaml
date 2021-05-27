@@ -11,7 +11,7 @@
     ShowInTaskbar="False"
     ResizeMode="NoResize"
     WindowStartupLocation="CenterOwner"
-    Title="{Binding NomorNota}"
+    Title="{Binding NomorNota, StringFormat=Edit Servisan - {0}}"
     TitleAlignment="Center"
     Height="530" Width="1025">
 
@@ -20,7 +20,9 @@
             <dxlc:LayoutGroup Orientation="Horizontal">
                 <dxlc:LayoutGroup Orientation="Vertical" ItemSpace="4">
                     <dxlc:LayoutItem Label="Nama Pelanggan:" Margin="4">
-                        <dxe:TextEdit x:Name="NamaPelanggan" Margin="10 0 0 0"                        Height="30"
+                        <dxe:TextEdit x:Name="NamaPelanggan" 
+                                      Margin="10 0 0 0"                        
+                                      Height="30"
                                       AllowNullInput="False"
                                       Text="{Binding Path=NamaPelanggan, UpdateSourceTrigger=PropertyChanged}" />
                     </dxlc:LayoutItem>
