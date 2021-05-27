@@ -463,9 +463,13 @@ namespace PSMDesktopApp.ViewModels
         {
             bool tidakJadi = SelectedStatus == ServiceStatus.TidakJadiBelumDiambil || SelectedStatus == ServiceStatus.TidakJadiSudahDiambil;
 
-            if (tidakJadi && Biaya != 0)
+            if (tidakJadi && (Biaya != 0 || TambahanBiaya != 0))
             {
-                DXMessageBox.Show("Biaya harus 0 jika servisan dibatalkan. Tolong atur biaya menjadi 0", "Edit servisan");
+                DXMessageBox.Show(
+                    "Biaya dan tambahan biaya harus 0 jika servisan dibatalkan. Tolong ubah biaya dan tambahan biaya menjadi 0",
+                    "Edit servisan"
+                );
+
                 return false;
             }
 
