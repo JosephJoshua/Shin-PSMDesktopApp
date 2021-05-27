@@ -477,7 +477,7 @@ namespace PSMDesktopApp.ViewModels
 
             if (IsBatteryChecked)
             {
-                kelengkapan += "Batterai ";
+                kelengkapan += "Baterai ";
             }
 
             if (IsSimChecked)
