@@ -16,23 +16,8 @@
     Closing="Window_Closing">
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="40" />
-        </Grid.RowDefinitions>
-
         <TabControl Grid.Column="0" Grid.Row="0"
                     Name="Items" SelectedIndex="0" />
-
-        <Button x:Name="Recalculate"
-                    Grid.Column="0" Grid.Row="1"
-                    Style="{StaticResource MaterialDesignFlatButton}"
-                    Foreground="White"
-                    FontWeight="Normal"
-                    Margin="0 2 10 0"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Center"
-                    Content="Recalculate" />
     </Grid>
     
 </dx:ThemedWindow>
