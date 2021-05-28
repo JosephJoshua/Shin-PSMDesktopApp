@@ -29,11 +29,11 @@ namespace PSMDesktopApp.Views
             report.Load(reportPath);
 
             // Default to a ' ' (space) so the border around the text don't disappear.
-            if (_invoiceModel.NoHp == null) _invoiceModel.NoHp = " ";
-            if (_invoiceModel.Imei == null) _invoiceModel.Imei = " ";
-            if (_invoiceModel.Kelengkapan == null) _invoiceModel.Kelengkapan = " ";
-            if (_invoiceModel.YangBelumDicek == null) _invoiceModel.YangBelumDicek = " ";
-            if (_invoiceModel.KondisiHp == null) _invoiceModel.KondisiHp = " ";
+            if (string.IsNullOrEmpty(_invoiceModel.NoHp)) _invoiceModel.NoHp = " ";
+            if (string.IsNullOrEmpty(_invoiceModel.Imei)) _invoiceModel.Imei = " ";
+            if (string.IsNullOrEmpty(_invoiceModel.Kelengkapan)) _invoiceModel.Kelengkapan = " ";
+            if (string.IsNullOrEmpty(_invoiceModel.YangBelumDicek)) _invoiceModel.YangBelumDicek = " ";
+            if (string.IsNullOrEmpty(_invoiceModel.KondisiHp)) _invoiceModel.KondisiHp = " ";
 
             report.SetParameterValue("NomorNota", _invoiceModel.NomorNota);
             report.SetParameterValue("NamaPelanggan", _invoiceModel.NamaPelanggan);
