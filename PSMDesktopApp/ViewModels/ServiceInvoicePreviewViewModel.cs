@@ -27,7 +27,7 @@ namespace PSMDesktopApp.ViewModels
 
             if (_invoiceModel != null)
             {
-                v.SetInvoiceModel(_invoiceModel, reportPath);
+                v.SetInvoiceModel(_invoiceModel, reportPath, _settings.Get("noHpToko"), _settings.Get("alamatToko"));
             }
 
             base.OnViewLoaded(view);

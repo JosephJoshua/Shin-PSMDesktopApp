@@ -15,13 +15,13 @@ namespace PSMDesktopApp.Views
             ReportViewer.Owner = GetWindow(this);
         }
 
-        public void SetInvoiceModel(ServiceInvoiceModel model, string reportPath)
+        public void SetInvoiceModel(ServiceInvoiceModel model, string reportPath, string noHpToko, string alamatToko)
         {
             _invoiceModel = model;
-            LoadReport(reportPath);
+            LoadReport(reportPath, noHpToko, alamatToko);
         }
 
-        private void LoadReport(string reportPath)
+        private void LoadReport(string reportPath, string noHpToko, string alamatToko)
         {
             CultureInfo culture = new CultureInfo("id-ID");
 
@@ -48,6 +48,9 @@ namespace PSMDesktopApp.Views
             report.SetParameterValue("KondisiHp", _invoiceModel.KondisiHp);
             report.SetParameterValue("YangBelumDicek", _invoiceModel.YangBelumDicek);
             report.SetParameterValue("Tanggal", _invoiceModel.Tanggal);
+
+            report.SetParameterValue("NoHpToko", noHpToko);
+            report.SetParameterValue("AlamatToko", alamatToko);
 
             ReportViewer.ViewerCore.ReportSource = report;
         }
