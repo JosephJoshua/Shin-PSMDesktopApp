@@ -421,7 +421,7 @@ namespace PSMDesktopApp.ViewModels
 
         public bool CanAdd
         {
-            get => !string.IsNullOrWhiteSpace(NamaPelanggan) && !string.IsNullOrWhiteSpace(TipeHp) && !string.IsNullOrEmpty(Kerusakan);
+            get => !string.IsNullOrWhiteSpace(NamaPelanggan) && !string.IsNullOrWhiteSpace(TipeHp) && !string.IsNullOrWhiteSpace(Kerusakan);
         }
 
         public AddServiceViewModel(IWindowManager windowManager, ISalesEndpoint salesEndpoint,
