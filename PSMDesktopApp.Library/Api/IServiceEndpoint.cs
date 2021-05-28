@@ -7,10 +7,15 @@ namespace PSMDesktopApp.Library.Api
 {
     public interface IServiceEndpoint
     {
-        Task Delete(int id);
+
         Task<List<ServiceModel>> GetAll(string searchText = "", SearchType searchType = SearchType.NamaPelanggan, DateTime? minDate = null, DateTime? maxDate = null);
+
         Task<ServiceModel> GetByNomorNota(int nomorNota); 
-        Task Insert(ServiceModel service);
+
+        Task<int> Insert(ServiceModel service);
+
         Task Update(ServiceModel service, int nomorNota);
+
+        Task Delete(int id);
     }
 }

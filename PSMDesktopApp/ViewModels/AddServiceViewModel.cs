@@ -24,6 +24,8 @@ namespace PSMDesktopApp.ViewModels
         private BindingList<SalesModel> _sales;
         private SalesModel _selectedSales;
 
+        private int _nomorNota = -1;
+
         private string _namaPelanggan;
         private string _noHp;
         private string _tipeHp;
@@ -115,6 +117,16 @@ namespace PSMDesktopApp.ViewModels
         public bool HasSelectedSales
         {
             get => SelectedSales != null;
+        }
+
+        public int NomorNota
+        {
+            get => _nomorNota;
+
+            private set
+            {
+                _nomorNota = value;
+            }
         }
 
         public string NamaPelanggan
@@ -552,7 +564,7 @@ namespace PSMDesktopApp.ViewModels
                 TambahanBiaya = (decimal)TambahanBiaya,
             };
 
-            await _serviceEndpoint.Insert(service);
+            NomorNota = await _serviceEndpoint.Insert(service);
             return true;
         }
     }
