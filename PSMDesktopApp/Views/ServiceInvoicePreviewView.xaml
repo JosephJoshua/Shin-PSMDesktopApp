@@ -4,7 +4,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
     xmlns:reports="clr-namespace:SAPBusinessObjects.WPF.Viewer;assembly=SAPBusinessObjects.WPF.Viewer"
-    xmlns:behaviours="clr-namespace:PSMDesktopApp.Behaviours"
     Style="{StaticResource WindowStyle}"
     ShowTitle="False"
     ShowIcon="False"
@@ -13,10 +12,10 @@
     Height="650" Width="800">
 
     <Grid>
-        <reports:CrystalReportsViewer 
-            x:Name="ReportViewer"
-            ShowLogo="False"
-            ToggleSidePanel="None"
-            behaviours:ReportSourceBehaviour.ReportSource="{Binding Path=Report, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=FrameworkElement}}" />
+        <reports:CrystalReportsViewer x:Name="ReportViewer"
+                                      ShowLogo="False"
+                                      ShowRefreshButton="False"
+                                      ShowToggleSidePanelButton="False"
+                                      ToggleSidePanel="None" />
     </Grid>
 </dx:ThemedWindow>
