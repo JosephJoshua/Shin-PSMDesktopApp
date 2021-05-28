@@ -159,12 +159,7 @@
                             </dxg:DataControlDetailDescriptor>
                         </dxg:GridControl.DetailDescriptor>
 
-                        <dxg:GridColumn Header="No. Nota" FieldName="NomorNota">
-                            <dxg:GridColumn.EditSettings>
-                                <dxe:TextEditSettings HorizontalContentAlignment="Left" />
-                            </dxg:GridColumn.EditSettings>
-                        </dxg:GridColumn>
-
+                        <dxg:GridColumn Header="No. Nota" FieldName="NomorNota" SortIndex="0" SortOrder="Descending" />
                         <dxg:GridColumn Header="Tanggal" FieldName="Tanggal" />
                         <dxg:GridColumn Header="Nama Pelanggan" FieldName="NamaPelanggan" />
                         <dxg:GridColumn Header="No Hp" FieldName="NoHp" />
