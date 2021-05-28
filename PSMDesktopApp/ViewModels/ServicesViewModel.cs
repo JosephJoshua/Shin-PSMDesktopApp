@@ -290,6 +290,13 @@ namespace PSMDesktopApp.ViewModels
 
             if (_windowManager.ShowDialog(addServiceVM) == true)
             {
+                if (addServiceVM.NomorNota != -1 &&
+                    DXMessageBox.Show("Apakah anda ingin mencetak servisan ini?", "Tambah Servisan", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                        ServiceModel newService = await _serviceEndpoint.GetByNomorNota(addServiceVM.NomorNota);
+                        PrintService(newService);
+                }
+
                 await LoadServices();
             }
         }
