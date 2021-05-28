@@ -399,7 +399,7 @@ namespace PSMDesktopApp.ViewModels
         {
             string kelengkapan = service.Kelengkapan?.Trim().Replace(" ", ", ");
 
-            if (!string.IsNullOrEmpty(kelengkapan) && kelengkapan.Length > 1)
+            if (!string.IsNullOrWhiteSpace(kelengkapan) && kelengkapan.Length > 1)
             {
                 kelengkapan = kelengkapan[0].ToString() + kelengkapan.Substring(1).ToLower();
 

@@ -58,7 +58,7 @@ namespace PSMDesktopApp.ViewModels
 
         public bool IsErrorMessageVisible
         {
-            get => !string.IsNullOrEmpty(ErrorMessage);
+            get => !string.IsNullOrWhiteSpace(ErrorMessage);
         }
 
         public bool CanLogin
