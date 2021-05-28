@@ -180,7 +180,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Behaviours\ReportSourceBehaviour.cs" />
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="EnumHelper.cs" />
     <Compile Include="ValueConverters\EnumToCollectionConverter.cs" />
