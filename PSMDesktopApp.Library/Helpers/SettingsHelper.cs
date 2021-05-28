@@ -5,7 +5,7 @@ namespace PSMDesktopApp.Library.Helpers
 {
     public class SettingsHelper : ISettingsHelper
     {
-        private const string FilePath = "settings.txt";
+        private string FilePath => "settings.txt";
 
         private readonly Dictionary<string, string> _settings = new Dictionary<string, string>();
 
@@ -27,6 +27,8 @@ namespace PSMDesktopApp.Library.Helpers
 
                 writer.WriteLine(@"apiUrl: http://localhost:3030/");
                 writer.WriteLine(@"reportPath: Reports/ServiceInvoice.rpt");
+                writer.WriteLine(@"noHpToko: 082398200020");
+                writer.WriteLine(@"alamatToko: Jl. Pendidikan\nSorong, Papua Barat");
 
                 writer.Close();
 
