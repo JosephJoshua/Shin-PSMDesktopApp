@@ -195,7 +195,6 @@
     <Compile Include="ViewModels\ServiceInvoicePreviewViewModel.cs" />
     <Compile Include="ViewModels\SparepartReportViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
-    <Compile Include="ViewModels\RecalculateViewModel.cs" />
     <Compile Include="ViewModels\ServicesViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="ViewModels\TechnicianReportViewModel.cs" />
@@ -223,9 +222,6 @@
     </Compile>
     <Compile Include="Views\ProfitReportView.xaml.cs">
       <DependentUpon>ProfitReportView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\RecalculateView.xaml.cs">
-      <DependentUpon>RecalculateView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SalesView.xaml.cs">
       <DependentUpon>SalesView.xaml</DependentUpon>
@@ -319,10 +315,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ProfitReportView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\RecalculateView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

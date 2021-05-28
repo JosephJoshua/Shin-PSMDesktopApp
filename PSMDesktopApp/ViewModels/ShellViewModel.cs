@@ -38,22 +38,11 @@ namespace PSMDesktopApp.ViewModels
             _technicianReportViewModel = technicianReportViewModel;
         }
 
-        public void Recalculate()
-        {
-            _windowManager.ShowDialog(IoC.Get<RecalculateViewModel>());
-        }
-
         public void OnClose(CancelEventArgs args)
         {
             if (!_loggedIn) return;
 
-            MessageBoxResult result = DXMessageBox.Show("Do you want to recalculate automatic values?", "", MessageBoxButton.YesNoCancel);
-
-            if (result == MessageBoxResult.Yes)
-            {
-                Recalculate();
-            }
-            else if (result == MessageBoxResult.Cancel)
+            if (DXMessageBox.Show("Apakah anda yakin ingin keluar?", "Servisan Manager", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
             {
                 args.Cancel = true;
             }
