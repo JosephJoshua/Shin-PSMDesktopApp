@@ -399,24 +399,38 @@ namespace PSMDesktopApp.ViewModels
         {
             string kelengkapan = service.Kelengkapan?.Trim().Replace(" ", ", ");
 
-            if (!string.IsNullOrEmpty(kelengkapan)) kelengkapan = kelengkapan[0].ToString() + kelengkapan.Substring(1).ToLower();
+            if (!string.IsNullOrEmpty(kelengkapan) && kelengkapan.Length > 1)
+            {
+                kelengkapan = kelengkapan[0].ToString() + kelengkapan.Substring(1).ToLower();
+
+                // Make "SIM" uppercase so it looks better; there's probably a more efficient way of doing this but I don't care.
+                for (int i = 0; i < kelengkapan.Length; i++)
+                {
+                    if (kelengkapan[i].ToString().ToLower() == "s" && kelengkapan.Length - i - 1 >= 2 && kelengkapan[i + 1] == 'i' &&
+                        kelengkapan[i + 2] == 'm')
+                    {
+                        kelengkapan = kelengkapan.Substring(0, i) + "SIM" + kelengkapan.Substring(i + 3);
+                        break;
+                    }
+                }
+            }
 
             ServiceInvoicePreviewViewModel invoicePreviewVM = IoC.Get<ServiceInvoicePreviewViewModel>();
             invoicePreviewVM.SetInvoiceModel(new ServiceInvoiceModel
             {
                 NomorNota = service.NomorNota.ToString(),
                 NamaPelanggan = service.NamaPelanggan,
-                NoHp = service.NoHp ?? "",
+                NoHp = service.NoHp,
                 TipeHp = service.TipeHp,
-                Imei = service.Imei ?? "",
+                Imei = service.Imei,
                 Kerusakan = service.Kerusakan,
                 TotalBiaya = service.TotalBiaya,
                 Dp = service.Dp,
                 Sisa = service.Sisa,
-                Kelengkapan = kelengkapan ?? "",
-                KondisiHp = service.KondisiHp ?? "",
-                YangBelumDicek = service.YangBelumDicek ?? "",
-                Tanggal = service.Tanggal.ToString("f", DateTimeFormatInfo.InvariantInfo),
+                Kelengkapan = kelengkapan,
+                KondisiHp = service.KondisiHp,
+                YangBelumDicek = service.YangBelumDicek,
+                Tanggal = service.Tanggal.ToString(DateTimeFormatInfo.CurrentInfo.LongDatePattern),
             });
 
             _windowManager.ShowDialog(invoicePreviewVM);
