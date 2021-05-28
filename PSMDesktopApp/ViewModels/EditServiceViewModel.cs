@@ -466,7 +466,7 @@ namespace PSMDesktopApp.ViewModels
             if (tidakJadi && (Biaya != 0 || TambahanBiaya != 0))
             {
                 DXMessageBox.Show(
-                    "Biaya dan tambahan biaya harus 0 jika servisan dibatalkan. Tolong ubah biaya dan tambahan biaya menjadi 0",
+                    "Biaya dan tambahan biaya harus 0 jika servisan ini ingin dibatalkan. Tolong ubah biaya dan tambahan biaya menjadi 0",
                     "Edit servisan"
                 );
 

@@ -176,20 +176,20 @@ namespace PSMDesktopApp.ViewModels
 
             if (oldStatus == ServiceStatus.JadiSudahDiambil && tidakJadi)
             {
-                DXMessageBox.Show("Tidak bisa ubah servisan dari 'Jadi (Sudah diambil)' menjadi 'Tidak jadi'", "Edit servisan");
+                DXMessageBox.Show("Tidak bisa mengubah servisan dari 'Jadi (Sudah diambil)' menjadi 'Tidak jadi'", "Edit servisan");
                 return false;
             }
 
             if (wasSudahDiambil && belumDiambil)
             {
-                DXMessageBox.Show("Tidak bisa ubah servisan dari 'Sudah diambil' menjadi 'Belum diambil'", "Edit servisan");
+                DXMessageBox.Show("Tidak bisa mengubah servisan dari 'Sudah diambil' menjadi 'Belum diambil'", "Edit servisan");
                 return false;
             }
 
             if (tidakJadi && (_oldService.Biaya != 0 || TambahanBiaya != 0))
             {
                 if (DXMessageBox.Show(
-                    "Biaya dan tambahan biaya harus 0 jika servisan dibatalkan. Apakah anda ingin mengubahnya menjadi 0 secara otomatis?", 
+                    "Biaya dan tambahan biaya harus 0 jika servisan ini ingin dibatalkan. Apakah anda ingin mengubahnya menjadi 0 secara otomatis?", 
                     "Edit servisan", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
                     _oldService.Biaya = 0;
