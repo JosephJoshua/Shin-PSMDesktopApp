@@ -13,6 +13,7 @@ namespace PSMDesktopApp.ViewModels
 {
     public sealed class ProfitReportViewModel : Screen
     {
+        private readonly ILog _logger;
         private readonly IServiceEndpoint _serviceEndpoint;
 
         private bool _isLoading = false;
@@ -97,6 +98,8 @@ namespace PSMDesktopApp.ViewModels
         public ProfitReportViewModel(IServiceEndpoint serviceEndpoint)
         {
             DisplayName = "Laporan Laba/Rugi";
+
+            _logger = LogManager.GetLog(typeof(ProfitReportViewModel));
             _serviceEndpoint = serviceEndpoint;
         }
 
@@ -187,23 +190,35 @@ namespace PSMDesktopApp.ViewModels
 
             IsLoading = true;
 
-            // We can't use the server's date range constraint because the server ignores the date range when searching.
-            List<ProfitResultModel> resultList = (await _serviceEndpoint.GetAll("Sudah diambil", SearchType.Status))
-                .Where(s => s.TanggalPengambilan?.Date >= StartDate.Date && s.TanggalPengambilan?.Date <= EndDate.Date)
-                .Select(s =>
-                    new ProfitResultModel
-                    {
-                        NomorNota = s.NomorNota,
-                        TanggalPengambilan = s.TanggalPengambilan ?? throw new Exception("Tanggal pengambilan merupakan null walaupun servisan sudah diambil"),
-                        TipeHp = s.TipeHp,
-                        Biaya = s.TotalBiaya,
-                        HargaSparepart = s.HargaSparepart,
-                        LabaRugi = s.LabaRugi,
-                        Kerusakan = s.Kerusakan,
-                    }).ToList();
+            List<ProfitResultModel> resultList = new List<ProfitResultModel>();
 
-            ProfitResults = new BindableCollection<ProfitResultModel>(resultList);
-            IsLoading = false;
+            try
+            {
+                // We can't use the server's date range constraint because the server ignores the date range when searching.
+                resultList = (await _serviceEndpoint.GetAll("Sudah diambil", SearchType.Status))
+                    .Where(s => s.TanggalPengambilan?.Date >= StartDate.Date && s.TanggalPengambilan?.Date <= EndDate.Date)
+                    .Select(s =>
+                        new ProfitResultModel
+                        {
+                            NomorNota = s.NomorNota,
+                            TanggalPengambilan = s.TanggalPengambilan ?? throw new Exception("Tanggal pengambilan merupakan null walaupun servisan sudah diambil"),
+                            TipeHp = s.TipeHp,
+                            Biaya = s.TotalBiaya,
+                            HargaSparepart = s.HargaSparepart,
+                            LabaRugi = s.LabaRugi,
+                            Kerusakan = s.Kerusakan,
+                        }).ToList();
+
+                ProfitResults = new BindableCollection<ProfitResultModel>(resultList);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
+            }
+            finally
+            {
+                IsLoading = false;
+            }
         }
     }
 }

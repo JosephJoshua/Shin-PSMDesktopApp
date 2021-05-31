@@ -2,8 +2,8 @@ using Caliburn.Micro;
 using DevExpress.Xpf.Core;
 using PSMDesktopApp.Library.Api;
 using PSMDesktopApp.Library.Models;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -12,6 +12,8 @@ namespace PSMDesktopApp.ViewModels
 {
     public sealed class TechniciansViewModel : Screen
     {
+        private readonly ILog _logger;
+
         private readonly IWindowManager _windowManager;
         private readonly ITechnicianEndpoint _technicianEndpoint;
 
@@ -86,6 +88,7 @@ namespace PSMDesktopApp.ViewModels
         {
             DisplayName = "Teknisi";
 
+            _logger = LogManager.GetLog(typeof(TechniciansViewModel));
             _windowManager = windowManager;
             _technicianEndpoint = technicianEndpoint;
         }
@@ -117,8 +120,15 @@ namespace PSMDesktopApp.ViewModels
         {
             if (DXMessageBox.Show("Apakah anda yakin ingin menghapus teknisi ini?", "Teknisi", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
-                await _technicianEndpoint.Delete(SelectedTechnician.Id);
-                await LoadTechnicians();
+                try
+                {
+                    await _technicianEndpoint.Delete(SelectedTechnician.Id);
+                    await LoadTechnicians();
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error(ex);
+                }
             }
         }
 
@@ -127,10 +137,20 @@ namespace PSMDesktopApp.ViewModels
             if (IsLoading) return;
 
             IsLoading = true;
-            List<TechnicianModel> technicianList = await _technicianEndpoint.GetAll((SearchText ?? "").Trim());
 
-            IsLoading = false;
-            Technicians = new BindableCollection<TechnicianModel>(technicianList);
+            try
+            {
+                List<TechnicianModel> technicianList = await _technicianEndpoint.GetAll((SearchText ?? "").Trim());
+                Technicians = new BindableCollection<TechnicianModel>(technicianList);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
+            }
+            finally
+            {
+                IsLoading = false;
+            }
         }
     }
 }

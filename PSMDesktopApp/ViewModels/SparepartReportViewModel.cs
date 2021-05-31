@@ -13,6 +13,7 @@ namespace PSMDesktopApp.ViewModels
 {
     public sealed class SparepartReportViewModel : Screen
     {
+        private readonly ILog _logger;
         private readonly ISparepartEndpoint _sparepartEndpoint;
 
         private bool _isLoading = false;
@@ -86,6 +87,7 @@ namespace PSMDesktopApp.ViewModels
         {
             DisplayName = "Laporan Sparepart";
 
+            _logger = LogManager.GetLog(typeof(SparepartReportViewModel));
             _sparepartEndpoint = sparepartEndpoint;
         }
 
@@ -165,10 +167,19 @@ namespace PSMDesktopApp.ViewModels
             // Make sure the end date's time is set to the end of the day
             EndDate = EndDate.Date.AddDays(1).AddTicks(-1);
 
-            List<SparepartModel> sparepartList = await _sparepartEndpoint.GetAll(StartDate, EndDate);
-
-            Spareparts = new BindableCollection<SparepartModel>(sparepartList);
-            IsLoading = false;
+            try
+            {
+                List<SparepartModel> sparepartList = await _sparepartEndpoint.GetAll(StartDate, EndDate);
+                Spareparts = new BindableCollection<SparepartModel>(sparepartList);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
+            }
+            finally
+            {
+                IsLoading = false;
+            }
         }
     }
 }

@@ -16,6 +16,8 @@ namespace PSMDesktopApp.ViewModels
 {
     public sealed class ServicesViewModel : Screen
     {
+        private readonly ILog _logger;
+
         private readonly IWindowManager _windowManager;
         private readonly IApiHelper _apiHelper;
 
@@ -111,7 +113,16 @@ namespace PSMDesktopApp.ViewModels
             {
                 if (SelectedService == null) return null;
 
-                return _technicianEndpoint.GetById(SelectedService.TechnicianId).Result.Nama;
+                try
+                {
+                    return _technicianEndpoint.GetById(SelectedService.TechnicianId).Result.Nama;
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error(ex);
+                }
+
+                return "ERROR";
             }
         }
 
@@ -121,7 +132,16 @@ namespace PSMDesktopApp.ViewModels
             {
                 if (SelectedService == null) return null;
 
-                return _salesEndpoint.GetById(SelectedService.SalesId).Result.Nama;
+                try
+                {
+                    return _salesEndpoint.GetById(SelectedService.SalesId).Result.Nama;
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error(ex);
+                }
+
+                return "ERROR";
             }
         }
 
@@ -245,6 +265,7 @@ namespace PSMDesktopApp.ViewModels
         {
             DisplayName = "Servisan";
 
+            _logger = LogManager.GetLog(typeof(ServicesViewModel));
             _windowManager = windowManager;
             _apiHelper = apiHelper;
             _serviceEndpoint = serviceEndpoint;
@@ -272,7 +293,14 @@ namespace PSMDesktopApp.ViewModels
             if (service.Spareparts == null)
             {
                 // We could use LoadSparepart(service.NomorNota) but doing this eliminates the need for searching through the Services list.
-                service.Spareparts = await _sparepartEndpoint.GetByNomorNota(service.NomorNota);
+                try 
+                {
+                    service.Spareparts = await _sparepartEndpoint.GetByNomorNota(service.NomorNota);
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error(ex);
+                }
             }
         }
 
@@ -293,8 +321,15 @@ namespace PSMDesktopApp.ViewModels
                 if (addServiceVM.NomorNota != -1 &&
                     DXMessageBox.Show("Apakah anda ingin mencetak servisan ini?", "Tambah Servisan", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
+                    try
+                    {
                         ServiceModel newService = await _serviceEndpoint.GetByNomorNota(addServiceVM.NomorNota);
                         PrintService(newService);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.Error(ex);
+                    }
                 }
 
                 await LoadServices();
@@ -344,8 +379,15 @@ namespace PSMDesktopApp.ViewModels
         {
             if (DXMessageBox.Show("Apakah anda yakin ingin menghapus servisan ini?", "Servisan", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
-                await _serviceEndpoint.Delete(SelectedService.NomorNota);
-                await LoadServices();
+                try
+                {
+                    await _serviceEndpoint.Delete(SelectedService.NomorNota);
+                    await LoadServices();
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error(ex);
+                }
             }
         }
 
@@ -355,8 +397,15 @@ namespace PSMDesktopApp.ViewModels
             {
                 int nomorNota = SelectedSparepart.NomorNota;
 
-                await _sparepartEndpoint.Delete(SelectedSparepart.Id);
-                await LoadSparepart(nomorNota);
+                try
+                {
+                    await _sparepartEndpoint.Delete(SelectedSparepart.Id);
+                    await LoadSparepart(nomorNota);
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error(ex);
+                }
             }
         }
 
@@ -373,7 +422,20 @@ namespace PSMDesktopApp.ViewModels
             // Make sure the end date's time is set to the end of the day (at 23:59:59).
             EndDate = EndDate.Date.AddDays(1).AddTicks(-1);
 
-            List<ServiceModel> serviceList = await _serviceEndpoint.GetAll(searchText, SelectedSearchType, StartDate, EndDate);
+            List<ServiceModel> serviceList;
+
+            try 
+            {
+                serviceList = await _serviceEndpoint.GetAll(searchText, SelectedSearchType, StartDate, EndDate);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
+                IsLoading = false;
+
+                return;
+            }
+
             var serviceCollection = new BindableCollection<ServiceModel>(serviceList);
 
             if (Services?.SequenceEqual(serviceCollection) ?? false)
@@ -392,8 +454,15 @@ namespace PSMDesktopApp.ViewModels
         {
             int index = Services.FindIndex(s => s.NomorNota == nomorNota);
 
-            Services[index] = await _serviceEndpoint.GetByNomorNota(nomorNota);
-            Services[index].Spareparts = await _sparepartEndpoint.GetByNomorNota(nomorNota);
+            try
+            {
+                Services[index] = await _serviceEndpoint.GetByNomorNota(nomorNota);
+                Services[index].Spareparts = await _sparepartEndpoint.GetByNomorNota(nomorNota);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
+            }
         }
 
         public void PrintSelectedService()

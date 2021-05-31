@@ -8,6 +8,7 @@ namespace PSMDesktopApp.ViewModels
 {
     public class AddSparepartViewModel : Screen
     {
+        private readonly ILog _logger;
         private readonly ISparepartEndpoint _sparepartEndpoint;
 
         private int _nomorNota;
@@ -49,6 +50,7 @@ namespace PSMDesktopApp.ViewModels
 
         public AddSparepartViewModel(ISparepartEndpoint sparepartEndpoint)
         {
+            _logger = LogManager.GetLog(typeof(AddSparepartViewModel));
             _sparepartEndpoint = sparepartEndpoint;
         }
 
@@ -67,9 +69,15 @@ namespace PSMDesktopApp.ViewModels
                 TanggalPembelian = DateTime.Today,
             };
 
-            await _sparepartEndpoint.Insert(sparepart);
-
-            TryClose(true);
+            try
+            {
+                await _sparepartEndpoint.Insert(sparepart);
+                TryClose(true);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
+            }
         }
 
         public void Cancel()
