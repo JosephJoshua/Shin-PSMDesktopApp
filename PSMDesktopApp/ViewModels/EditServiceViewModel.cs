@@ -12,6 +12,8 @@ namespace PSMDesktopApp.ViewModels
 {
     public class EditServiceViewModel : Screen
     {
+        private readonly ILog _logger;
+
         private readonly IServiceEndpoint _serviceEndpoint;
         private readonly ITechnicianEndpoint _technicianEndpoint;
 
@@ -48,8 +50,6 @@ namespace PSMDesktopApp.ViewModels
 
         private TechnicianModel _selectedTechnician;
         private ServiceStatus _selectedStatus;
-
-        private ServiceStatus _oldStatus;
 
         public int NomorNota
         {
@@ -365,6 +365,8 @@ namespace PSMDesktopApp.ViewModels
 
         public EditServiceViewModel(ITechnicianEndpoint technicianEndpoint, IServiceEndpoint serviceEndpoint)
         {
+            _logger = LogManager.GetLog(typeof(EditServiceViewModel));
+
             _serviceEndpoint = serviceEndpoint;
             _technicianEndpoint = technicianEndpoint;
         }
@@ -378,8 +380,15 @@ namespace PSMDesktopApp.ViewModels
 
         public async Task GetTechnicians()
         {
-            List<TechnicianModel> technicianList = await _technicianEndpoint.GetAll();
-            Technicians = new BindingList<TechnicianModel>(technicianList);
+            try
+            {
+                List<TechnicianModel> technicianList = await _technicianEndpoint.GetAll();
+                Technicians = new BindingList<TechnicianModel>(technicianList);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
+            }
         }
 
         public async Task Save()
@@ -388,12 +397,6 @@ namespace PSMDesktopApp.ViewModels
             {
                 TryClose(true);
             }
-        }
-
-        public async Task Print()
-        {
-            await UpdateService();
-            TryClose(true);
         }
 
         public void Cancel()
@@ -435,8 +438,6 @@ namespace PSMDesktopApp.ViewModels
             _salesId = service.SalesId;
 
             SelectedStatus = Enum.GetValues(ServiceStatuses.GetType()).Cast<ServiceStatus>().Where((e) => e.Description() == service.StatusServisan).FirstOrDefault();
-
-            _oldStatus = SelectedStatus;
 
             if (service.Kelengkapan.Contains("Baterai"))
             {
@@ -524,7 +525,16 @@ namespace PSMDesktopApp.ViewModels
                 TambahanBiaya = (decimal)TambahanBiaya,
             };
 
-            await _serviceEndpoint.Update(service, NomorNota);
+            try
+            {
+                await _serviceEndpoint.Update(service, NomorNota);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
+                return false;
+            }
+
             return true;
         }
     }

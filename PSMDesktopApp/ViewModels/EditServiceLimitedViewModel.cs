@@ -11,6 +11,7 @@ namespace PSMDesktopApp.ViewModels
 {
     public class EditServiceLimitedViewModel : Screen
     {
+        private readonly ILog _logger;
         private readonly IServiceEndpoint _serviceEndpoint;
 
         private ServiceModel _oldService;
@@ -146,6 +147,7 @@ namespace PSMDesktopApp.ViewModels
 
         public EditServiceLimitedViewModel(IServiceEndpoint serviceEndpoint)
         {
+            _logger = LogManager.GetLog(typeof(EditServiceLimitedViewModel));
             _serviceEndpoint = serviceEndpoint;
         }
 
@@ -215,7 +217,16 @@ namespace PSMDesktopApp.ViewModels
             _oldService.Dp = (decimal)Dp;
             _oldService.TambahanBiaya = (decimal)TambahanBiaya;
 
-            await _serviceEndpoint.Update(_oldService, NomorNota);
+            try
+            {
+                await _serviceEndpoint.Update(_oldService, NomorNota);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
+                return false;
+            }
+
             return true;
         }
 

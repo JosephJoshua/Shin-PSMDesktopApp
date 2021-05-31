@@ -2,8 +2,8 @@ using Caliburn.Micro;
 using DevExpress.Xpf.Core;
 using PSMDesktopApp.Library.Api;
 using PSMDesktopApp.Library.Models;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -12,6 +12,8 @@ namespace PSMDesktopApp.ViewModels
 {
     public sealed class SalesViewModel : Screen
     {
+        private readonly ILog _logger;
+
         private readonly IWindowManager _windowManager;
         private readonly ISalesEndpoint _salesEndpoint;
 
@@ -86,6 +88,7 @@ namespace PSMDesktopApp.ViewModels
         {
             DisplayName = "Sales";
 
+            _logger = LogManager.GetLog(typeof(SalesViewModel));
             _windowManager = windowManager;
             _salesEndpoint = salesEndpoint;
         }
@@ -116,8 +119,15 @@ namespace PSMDesktopApp.ViewModels
         {
             if (DXMessageBox.Show("Apakah anda yakin ingin menghapus sales ini?", "Sales", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
-                await _salesEndpoint.Delete(SelectedSales.Id);
-                await LoadSales();
+                try
+                {
+                    await _salesEndpoint.Delete(SelectedSales.Id);
+                    await LoadSales();
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error(ex);
+                }
             }
         }
 
@@ -126,10 +136,20 @@ namespace PSMDesktopApp.ViewModels
             if (IsLoading) return;
 
             IsLoading = true;
-            List<SalesModel> salesList = await _salesEndpoint.GetAll((SearchText ?? "").Trim());
 
-            IsLoading = false;
-            Sales = new BindableCollection<SalesModel>(salesList);
+            try
+            {
+                List<SalesModel> salesList = await _salesEndpoint.GetAll((SearchText ?? "").Trim());
+                Sales = new BindableCollection<SalesModel>(salesList);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
+            }
+            finally
+            {
+                IsLoading = false;
+            }
         }
     }
 }

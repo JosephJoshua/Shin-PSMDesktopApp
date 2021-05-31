@@ -11,6 +11,7 @@ namespace PSMDesktopApp.ViewModels
 {
     public class AddServiceViewModel : Screen
     {
+        private readonly ILog _logger;
         private readonly IWindowManager _windowManager;
 
         private readonly ISalesEndpoint _salesEndpoint;
@@ -23,8 +24,6 @@ namespace PSMDesktopApp.ViewModels
 
         private BindingList<SalesModel> _sales;
         private SalesModel _selectedSales;
-
-        private int _nomorNota = -1;
 
         private string _namaPelanggan;
         private string _noHp;
@@ -119,15 +118,7 @@ namespace PSMDesktopApp.ViewModels
             get => SelectedSales != null;
         }
 
-        public int NomorNota
-        {
-            get => _nomorNota;
-
-            private set
-            {
-                _nomorNota = value;
-            }
-        }
+        public int NomorNota { get; private set; } = -1;
 
         public string NamaPelanggan
         {
@@ -439,6 +430,7 @@ namespace PSMDesktopApp.ViewModels
         public AddServiceViewModel(IWindowManager windowManager, ISalesEndpoint salesEndpoint,
                                    ITechnicianEndpoint technicianEndpoint, IServiceEndpoint serviceEndpoint)
         {
+            _logger = LogManager.GetLog(typeof(AddServiceViewModel));
             _windowManager = windowManager;
 
             _salesEndpoint = salesEndpoint;
@@ -463,8 +455,15 @@ namespace PSMDesktopApp.ViewModels
 
         public async Task GetTechnicians()
         {
-            List<TechnicianModel> technicianList = await _technicianEndpoint.GetAll();
-            Technicians = new BindingList<TechnicianModel>(technicianList);
+            try
+            {
+                List<TechnicianModel> technicianList = await _technicianEndpoint.GetAll();
+                Technicians = new BindingList<TechnicianModel>(technicianList);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
+            }
         }
 
         public void ConfirmSales()
@@ -493,7 +492,19 @@ namespace PSMDesktopApp.ViewModels
             if (IsSalesLoading) return;
 
             IsSalesLoading = true;
-            List<SalesModel> salesList = await _salesEndpoint.GetAll();
+            List<SalesModel> salesList = new List<SalesModel>();
+
+            try
+            {
+                salesList = await _salesEndpoint.GetAll();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
+
+                IsSalesLoading = false;
+                return;
+            }
 
             IsSalesLoading = false;
             Sales = new BindingList<SalesModel>(salesList);
@@ -564,7 +575,16 @@ namespace PSMDesktopApp.ViewModels
                 TambahanBiaya = (decimal)TambahanBiaya,
             };
 
-            NomorNota = await _serviceEndpoint.Insert(service);
+            try
+            {
+                NomorNota = await _serviceEndpoint.Insert(service);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
+                return false;
+            }
+
             return true;
         }
     }

@@ -1,12 +1,14 @@
 using Caliburn.Micro;
 using PSMDesktopApp.Library.Api;
 using PSMDesktopApp.Library.Models;
+using System;
 using System.Threading.Tasks;
 
 namespace PSMDesktopApp.ViewModels
 {
     public class AddSalesViewModel : Screen
     {
+        private readonly ILog _logger;
         private ISalesEndpoint _salesEndpoint;
 
         private string _nama;
@@ -31,19 +33,23 @@ namespace PSMDesktopApp.ViewModels
 
         public AddSalesViewModel(ISalesEndpoint salesEndpoint)
         {
+            _logger = LogManager.GetLog(typeof(AddSalesViewModel));
             _salesEndpoint = salesEndpoint;
         }
 
         public async Task Add()
         {
-            SalesModel sales = new SalesModel
+            SalesModel sales = new SalesModel { Nama = Nama, };
+
+            try
             {
-                Nama = Nama,
-            };
-
-            await _salesEndpoint.Insert(sales);
-
-            TryClose(true);
+                await _salesEndpoint.Insert(sales);
+                TryClose(true);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
+            }
         }
 
         public void Cancel()

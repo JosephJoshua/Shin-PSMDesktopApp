@@ -4,7 +4,6 @@ using PSMDesktopApp.Library.Api;
 using PSMDesktopApp.Library.Models;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -15,6 +14,8 @@ namespace PSMDesktopApp.ViewModels
 {
     public sealed class TechnicianReportViewModel : Screen
     {
+        private readonly ILog _logger;
+
         private readonly IServiceEndpoint _serviceEndpoint;
         private readonly ITechnicianEndpoint _technicianEndpoint;
 
@@ -156,7 +157,8 @@ namespace PSMDesktopApp.ViewModels
         public TechnicianReportViewModel(IServiceEndpoint serviceEndpoint, ITechnicianEndpoint technicianEndpoint)
         {
             DisplayName = "Laporan Teknisi";
-            
+
+            _logger = LogManager.GetLog(typeof(TechnicianReportViewModel));
             _serviceEndpoint = serviceEndpoint;
             _technicianEndpoint = technicianEndpoint;
         }
@@ -258,8 +260,15 @@ namespace PSMDesktopApp.ViewModels
 
         public async Task LoadTechnicians()
         {
-            List<TechnicianModel> technicianList = await _technicianEndpoint.GetAll();
-            Technicians = new BindableCollection<TechnicianModel>(technicianList);
+            try
+            {
+                List<TechnicianModel> technicianList = await _technicianEndpoint.GetAll();
+                Technicians = new BindableCollection<TechnicianModel>(technicianList);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
+            }
         }
 
         public async void LoadResults()
@@ -268,24 +277,34 @@ namespace PSMDesktopApp.ViewModels
 
             IsLoading = true;
 
-            // We can't use the server's date range constraint because the server ignores the date range when searching.
-            List<TechnicianResultModel> resultList = (await _serviceEndpoint.GetAll("Sudah diambil", SearchType.Status))
-                .Where(s => s.TechnicianId == SelectedTechnician.Id && s.TanggalPengambilan?.Date >= StartDate.Date &&
-                            s.TanggalPengambilan?.Date <= EndDate.Date)
-                .Select(s => new TechnicianResultModel
-                {
-                    NomorNota = s.NomorNota,
-                    TanggalPengambilan = s.TanggalPengambilan ?? throw new Exception("Tanggal pengambilan is null even though the servisan was already taken"),
-                    TipeHp = s.TipeHp,
-                    Biaya = s.TotalBiaya,
-                    HargaSparepart = s.HargaSparepart,
-                    LabaRugi = s.LabaRugi,
-                    Kerusakan = s.Kerusakan,
-                    NamaTeknisi = Technicians.SingleOrDefault(t => t.Id == s.TechnicianId).Nama
-                }).ToList();
+            try
+            {
+                // We can't use the server's date range constraint because the server ignores the date range when searching.
+                List<TechnicianResultModel> resultList = (await _serviceEndpoint.GetAll("Sudah diambil", SearchType.Status))
+                    .Where(s => s.TechnicianId == SelectedTechnician.Id)
+                    .Where(s => s.TanggalPengambilan?.Date >= StartDate.Date && s.TanggalPengambilan?.Date <= EndDate.Date)
+                    .Select(s => new TechnicianResultModel
+                    {
+                        NomorNota = s.NomorNota,
+                        TanggalPengambilan = s.TanggalPengambilan ?? throw new Exception("Tanggal pengambilan is null even though the servisan was already taken"),
+                        TipeHp = s.TipeHp,
+                        Biaya = s.TotalBiaya,
+                        HargaSparepart = s.HargaSparepart,
+                        LabaRugi = s.LabaRugi,
+                        Kerusakan = s.Kerusakan,
+                        NamaTeknisi = Technicians.SingleOrDefault(t => t.Id == s.TechnicianId).Nama
+                    }).ToList();
 
-            TechnicianResults = new BindableCollection<TechnicianResultModel>(resultList);
-            IsLoading = false;
+                TechnicianResults = new BindableCollection<TechnicianResultModel>(resultList);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
+            }
+            finally
+            {
+                IsLoading = false;
+            }
         }
     }
 }
