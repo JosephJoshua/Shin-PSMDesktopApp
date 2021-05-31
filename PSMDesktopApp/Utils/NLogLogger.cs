@@ -1,6 +1,7 @@
 ﻿using Caliburn.Micro;
 using PSMDesktopApp.Library.Api;
 using System;
+using System.Windows;
 
 namespace PSMDesktopApp.Utils
 {
@@ -25,21 +26,37 @@ namespace PSMDesktopApp.Utils
 
         public void Error(Exception exception)
         {
+            string message;
+
             if (exception is ApiException)
             {
                 var apiException = exception as ApiException;
                 bool hasDetails = !string.IsNullOrEmpty(apiException.Details);
 
                 Write(
-                    NLog.LogLevel.Error, "{0}{1}{2}",
+                    NLog.LogLevel.Error, "{0}{1}{2}" + Environment.NewLine + "{3}",
                     apiException.Message,
                     hasDetails ? ": " : "",
-                    hasDetails ? apiException.Details : ""
+                    hasDetails ? apiException.Details : "",
+                    exception.StackTrace
                 );
+
+                message = $"Terjadi error. { apiException.Message }{ (hasDetails ? ": " : "") }{ apiException.Details }" +
+                    Environment.NewLine + exception.StackTrace;
             }
             else
             {
-                Write(NLog.LogLevel.Error, exception.ToString());
+                Write(NLog.LogLevel.Error, exception.ToString()); 
+                message = $"Terjadi error: { exception.ToString() }";
+            }
+
+            try
+            {
+                MessageBox.Show(message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (Exception ex)
+            {
+                Write(NLog.LogLevel.Error, ex.ToString());
             }
         }
 
