@@ -286,7 +286,7 @@ namespace PSMDesktopApp.ViewModels
                     .Select(s => new TechnicianResultModel
                     {
                         NomorNota = s.NomorNota,
-                        TanggalPengambilan = s.TanggalPengambilan ?? throw new Exception("Tanggal pengambilan is null even though the servisan was already taken"),
+                        TanggalPengambilan = s.TanggalPengambilan ?? throw new Exception("Tanggal pengambilan merupakan null walaupun servisan sudah diambil"),
                         TipeHp = s.TipeHp,
                         Biaya = s.TotalBiaya,
                         HargaSparepart = s.HargaSparepart,
