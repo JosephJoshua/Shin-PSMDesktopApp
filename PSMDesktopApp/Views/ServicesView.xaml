@@ -171,8 +171,8 @@
                         <dxg:GridColumn Header="Kelengkapan" FieldName="Kelengkapan" Visible="{Binding Path=ShowAllColumns}" />
                         <dxg:GridColumn Header="Warna" FieldName="Warna" Visible="{Binding Path=ShowAllColumns}" />
                         <dxg:GridColumn Header="Kata Sandi/Pola" FieldName="KataSandiPola" Visible="{Binding Path=ShowAllColumns}" />
-                        <dxg:GridColumn Header="ID Teknisi" FieldName="TechnicianId" Visible="{Binding Path=ShowAllColumns}" />
-                        <dxg:GridColumn Header="ID Sales" FieldName="SalesId" Visible="{Binding Path=ShowAllColumns}" />
+                        <dxg:GridColumn Header="Nama Teknisi" FieldName="NamaTeknisi" Visible="{Binding Path=ShowAllColumns}" />
+                        <dxg:GridColumn Header="Nama Sales" FieldName="NamaSales" Visible="{Binding Path=ShowAllColumns}" />
                         <dxg:GridColumn Header="Status Servisan" FieldName="StatusServisan" />
                         <dxg:GridColumn Header="Tanggal Konfirmasi" FieldName="TanggalKonfirmasi" Visible="{Binding Path=ShowAllColumns}" />
                         <dxg:GridColumn Header="Isi Konfirmasi" FieldName="IsiKonfirmasi" Visible="{Binding Path=ShowAllColumns}" />
@@ -309,8 +309,8 @@
                         <TextBlock FontSize="14" Text="{Binding Path=SelectedService.Kelengkapan, StringFormat=Kelengkapan: {0}}" />
                         <TextBlock FontSize="14" Text="{Binding Path=SelectedService.Warna, StringFormat=Warna: {0}}" />
                         <TextBlock FontSize="14" Text="{Binding Path=SelectedService.KataSandiPola, StringFormat=Kata Sandi/Pola: {0}}" />
-                        <TextBlock FontSize="14" Text="{Binding Path=SelectedServiceTechnician, StringFormat=Teknisi: {0}}" />
-                        <TextBlock FontSize="14" Text="{Binding Path=SelectedServiceSales, StringFormat=Sales: {0}}" />
+                        <TextBlock FontSize="14" Text="{Binding Path=SelectedService.NamaTeknisi, StringFormat=Teknisi: {0}}" />
+                        <TextBlock FontSize="14" Text="{Binding Path=SelectedService.NamaSales, StringFormat=Sales: {0}}" />
                         <TextBlock FontSize="14" Text="{Binding Path=SelectedService.StatusServisan, StringFormat=Status Servisan: {0}}" />
                         <TextBlock FontSize="14" Text="{Binding Path=SelectedService.TanggalKonfirmasi, StringFormat=Tanggal Konfirmasi: {0}}" />
                         <TextBlock FontSize="14" Text="{Binding Path=SelectedService.IsiKonfirmasi, StringFormat=Isi Konfirmasi: {0}}" />
