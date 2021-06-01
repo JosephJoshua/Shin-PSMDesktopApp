@@ -377,7 +377,15 @@ namespace PSMDesktopApp.ViewModels
 
         public async Task DeleteService()
         {
-            if (DXMessageBox.Show("Apakah anda yakin ingin menghapus servisan ini?", "Servisan", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            if (DXMessageBox.Show(
+                    "Apakah anda yakin ingin menghapus servisan ini? Sparepart-sparepart yang ditambah dibawah servisan ini akan dihapus juga.",
+                    "Servisan", MessageBoxButton.YesNo) == MessageBoxResult.Yes &&
+                DXMessageBox.Show(
+                    "Apakah anda YAKIN ingin menghapus servisan ini? Sparepart-sparepart yang ditambah dibawah servisan ini akan dihapus juga.",
+                    "Servisan", MessageBoxButton.YesNo) == MessageBoxResult.Yes &&
+                DXMessageBox.Show(
+                    "Apakah anda SANGAT YAKIN ingin menghapus servisan ini? Sparepart-sparepart yang ditambah dibawah servisan ini akan dihapus juga.",
+                    "Servisan", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 try
                 {
