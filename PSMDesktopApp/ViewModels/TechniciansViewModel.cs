@@ -125,6 +125,17 @@ namespace PSMDesktopApp.ViewModels
                     await _technicianEndpoint.Delete(SelectedTechnician.Id);
                     await LoadTechnicians();
                 }
+                catch (ApiException ex)
+                {
+                    // Check the error message sent by the server.
+                    if (!string.IsNullOrWhiteSpace(ex.Details) && ex.Details.ToLower().Contains("violates foreign key constraint"))
+                    {
+                        DXMessageBox.Show("Tidak dapat menghapus teknisi ini karena masih terdapat servisan dengan teknisi ini.", "Sales", MessageBoxButton.OK);
+                        return;
+                    }
+
+                    _logger.Error(ex);
+                }
                 catch (Exception ex)
                 {
                     _logger.Error(ex);

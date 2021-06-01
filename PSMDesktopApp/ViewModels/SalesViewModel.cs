@@ -124,6 +124,17 @@ namespace PSMDesktopApp.ViewModels
                     await _salesEndpoint.Delete(SelectedSales.Id);
                     await LoadSales();
                 }
+                catch (ApiException ex)
+                {
+                    // Check the error message sent by the server.
+                    if (!string.IsNullOrWhiteSpace(ex.Details) && ex.Details.ToLower().Contains("violates foreign key constraint"))
+                    {
+                        DXMessageBox.Show("Tidak dapat menghapus sales ini karena masih terdapat servisan dengan sales ini.", "Sales", MessageBoxButton.OK);
+                        return;
+                    }
+
+                    _logger.Error(ex);
+                }
                 catch (Exception ex)
                 {
                     _logger.Error(ex);
