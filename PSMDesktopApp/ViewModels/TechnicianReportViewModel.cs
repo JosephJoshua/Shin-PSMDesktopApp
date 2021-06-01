@@ -292,7 +292,7 @@ namespace PSMDesktopApp.ViewModels
                         HargaSparepart = s.HargaSparepart,
                         LabaRugi = s.LabaRugi,
                         Kerusakan = s.Kerusakan,
-                        NamaTeknisi = Technicians.SingleOrDefault(t => t.Id == s.TechnicianId).Nama
+                        NamaTeknisi = s.NamaTeknisi,
                     }).ToList();
 
                 TechnicianResults = new BindableCollection<TechnicianResultModel>(resultList);

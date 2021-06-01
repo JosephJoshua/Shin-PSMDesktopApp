@@ -49,6 +49,12 @@ namespace PSMDesktopApp.Library.Models
         [JsonProperty(PropertyName = "id_sales")]
         public int SalesId { get; set; }
 
+        [JsonProperty(PropertyName = "nama_teknisi")]
+        public string NamaTeknisi { get; set; }
+
+        [JsonProperty(PropertyName = "nama_sales")]
+        public string NamaSales { get; set; }
+
         [JsonProperty(PropertyName = "status")]
         public string StatusServisan { get; set; }
 
