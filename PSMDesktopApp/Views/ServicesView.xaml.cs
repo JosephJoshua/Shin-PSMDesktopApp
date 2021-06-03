@@ -18,6 +18,9 @@ namespace PSMDesktopApp.Views
 
             foreach (GridColumn column in ServicesGrid.Columns)
             {
+                // I know that hardcoding "NomorNota" in here isn't a good idea but it will do for now.
+                if (column.FieldName == "NomorNota") continue;
+
                 column.Width = column.Width.Value + 20;
             }
         }
