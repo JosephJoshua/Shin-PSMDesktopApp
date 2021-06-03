@@ -97,51 +97,11 @@ namespace PSMDesktopApp.ViewModels
                 _selectedService = value;
 
                 NotifyOfPropertyChange(() => SelectedService);
-                NotifyOfPropertyChange(() => SelectedServiceTechnician);
-                NotifyOfPropertyChange(() => SelectedServiceSales);
                 NotifyOfPropertyChange(() => CanAddSparepart);
                 NotifyOfPropertyChange(() => CanEditService);
                 NotifyOfPropertyChange(() => CanDeleteService);
                 NotifyOfPropertyChange(() => CanPrintService);
                 NotifyOfPropertyChange(() => ShowInfo);
-            }
-        }
-
-        public string SelectedServiceTechnician
-        {
-            get
-            {
-                if (SelectedService == null) return null;
-
-                try
-                {
-                    return _technicianEndpoint.GetById(SelectedService.TechnicianId).Result.Nama;
-                }
-                catch (Exception ex)
-                {
-                    _logger.Error(ex);
-                }
-
-                return "ERROR";
-            }
-        }
-
-        public string SelectedServiceSales
-        {
-            get
-            {
-                if (SelectedService == null) return null;
-
-                try
-                {
-                    return _salesEndpoint.GetById(SelectedService.SalesId).Result.Nama;
-                }
-                catch (Exception ex)
-                {
-                    _logger.Error(ex);
-                }
-
-                return "ERROR";
             }
         }
 
