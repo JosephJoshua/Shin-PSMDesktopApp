@@ -48,6 +48,11 @@ namespace PSMDesktopApp.ViewModels
             }
         }
 
+        public bool CanAdd
+        {
+            get => !string.IsNullOrWhiteSpace(Nama) && Harga > 0;
+        }
+
         public AddSparepartViewModel(ISparepartEndpoint sparepartEndpoint)
         {
             _logger = LogManager.GetLog(typeof(AddSparepartViewModel));

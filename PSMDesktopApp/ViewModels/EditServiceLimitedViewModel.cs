@@ -145,6 +145,11 @@ namespace PSMDesktopApp.ViewModels
             }
         }
 
+        public bool CanSave
+        {
+            get => !string.IsNullOrEmpty(Kerusakan) && TambahanBiaya > 0 && Dp > 0;
+        }
+
         public EditServiceLimitedViewModel(IServiceEndpoint serviceEndpoint)
         {
             _logger = LogManager.GetLog(typeof(EditServiceLimitedViewModel));

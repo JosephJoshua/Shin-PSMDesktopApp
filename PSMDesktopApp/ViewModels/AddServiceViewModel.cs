@@ -424,7 +424,8 @@ namespace PSMDesktopApp.ViewModels
 
         public bool CanAdd
         {
-            get => !string.IsNullOrWhiteSpace(NamaPelanggan) && !string.IsNullOrWhiteSpace(TipeHp) && !string.IsNullOrWhiteSpace(Kerusakan);
+            get => !string.IsNullOrWhiteSpace(NamaPelanggan) && !string.IsNullOrWhiteSpace(TipeHp) && !string.IsNullOrWhiteSpace(Kerusakan) &&
+                    Biaya > 0 && TambahanBiaya > 0 && Dp > 0;
         }
 
         public AddServiceViewModel(IWindowManager windowManager, ISalesEndpoint salesEndpoint,
@@ -512,6 +513,16 @@ namespace PSMDesktopApp.ViewModels
 
         public async Task<bool> AddService()
         {
+            if (Diskon > 100)
+            {
+                DXMessageBox.Show("Diskon tidak boleh lebih dari 100%", "Tambah servisan");
+                return false;
+            }
+            else if (Diskon < 0)
+            {
+                DXMessageBox.Show("Diskon tidak boleh negatif", "Tambah servisan");
+            }
+
             bool tidakJadi = SelectedStatus == ServiceStatus.TidakJadiBelumDiambil || SelectedStatus == ServiceStatus.TidakJadiSudahDiambil;
 
             if (tidakJadi && (Biaya != 0 || TambahanBiaya != 0))
