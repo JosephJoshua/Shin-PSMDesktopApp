@@ -22,8 +22,6 @@ namespace PSMDesktopApp.ViewModels
         private readonly IApiHelper _apiHelper;
 
         private readonly IServiceEndpoint _serviceEndpoint;
-        private readonly ITechnicianEndpoint _technicianEndpoint;
-        private readonly ISalesEndpoint _salesEndpoint;
         private readonly ISparepartEndpoint _sparepartEndpoint;
 
         private bool _showAllColumns = false;
@@ -45,6 +43,9 @@ namespace PSMDesktopApp.ViewModels
         {
             get => _apiHelper.LoggedInUser.role;
         }
+
+        public delegate void BeforeRefreshEventHandler();
+        public event BeforeRefreshEventHandler BeforeRefresh;
 
         public delegate void OnRefreshEventHandler();
         public event OnRefreshEventHandler OnRefresh;
@@ -220,7 +221,6 @@ namespace PSMDesktopApp.ViewModels
         }
 
         public ServicesViewModel(IApiHelper apiHelper, IWindowManager windowManager, IServiceEndpoint serviceEndpoint,
-                                 ITechnicianEndpoint technicianEndpoint, ISalesEndpoint salesEndpoint,
                                  ISparepartEndpoint sparepartEndpoint)
         {
             DisplayName = "Servisan";
@@ -229,8 +229,6 @@ namespace PSMDesktopApp.ViewModels
             _windowManager = windowManager;
             _apiHelper = apiHelper;
             _serviceEndpoint = serviceEndpoint;
-            _technicianEndpoint = technicianEndpoint;
-            _salesEndpoint = salesEndpoint;
             _sparepartEndpoint = sparepartEndpoint;
 
             DateTime today = DateTime.Today;
@@ -381,6 +379,8 @@ namespace PSMDesktopApp.ViewModels
         {
             if (IsLoading) return;
 
+            BeforeRefresh?.Invoke();
+
             IsLoading = true;
             string searchText = (SearchText ?? "").Trim();
 
@@ -390,11 +390,21 @@ namespace PSMDesktopApp.ViewModels
             // Make sure the end date's time is set to the end of the day (at 23:59:59).
             EndDate = EndDate.Date.AddDays(1).AddTicks(-1);
 
-            List<ServiceModel> serviceList;
-
             try 
             {
-                serviceList = await _serviceEndpoint.GetAll(searchText, SelectedSearchType, StartDate, EndDate);
+                List<ServiceModel> serviceList = await _serviceEndpoint.GetAll(searchText, SelectedSearchType, StartDate, EndDate);
+                var serviceCollection = new BindableCollection<ServiceModel>(serviceList);
+
+                if (Services?.SequenceEqual(serviceCollection) ?? false)
+                {
+                    IsLoading = false;
+                    return;
+                }
+
+                Services = serviceCollection;
+                IsLoading = false;
+
+                OnRefresh?.Invoke();
             }
             catch (Exception ex)
             {
@@ -403,19 +413,6 @@ namespace PSMDesktopApp.ViewModels
 
                 return;
             }
-
-            var serviceCollection = new BindableCollection<ServiceModel>(serviceList);
-
-            if (Services?.SequenceEqual(serviceCollection) ?? false)
-            {
-                IsLoading = false;
-                return;
-            }
-
-            Services = serviceCollection;
-            IsLoading = false;
-
-            OnRefresh?.Invoke();
         }
 
         public async Task LoadSparepart(int nomorNota)

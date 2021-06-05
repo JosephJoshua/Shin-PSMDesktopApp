@@ -149,11 +149,11 @@
 
                                     <dxg:GridControl.View>
                                         <dxg:TableView x:Name="SparepartsView"
-                                           DetailHeaderContent="Spareparts"
-                                           UseAnimationWhenExpanding="True"
-                                           ShowColumnHeaders="True"
-                                           ShowTotalSummary="True"
-                                           AllowEditing="False" />
+                                                       DetailHeaderContent="Spareparts"
+                                                       UseAnimationWhenExpanding="True"
+                                                       ShowColumnHeaders="True"
+                                                       ShowTotalSummary="True"
+                                                       AllowEditing="False" />
                                     </dxg:GridControl.View>
                                 </dxg:GridControl>
                             </dxg:DataControlDetailDescriptor>
@@ -188,10 +188,11 @@
 
                         <dxg:GridControl.View>
                             <dxg:TableView x:Name="MasterView"
-                               DetailHeaderContent="Services"
-                               AllowScrollAnimation="True"
-                               AllowFixedGroups="True"
-                               AllowEditing="False" />
+                                           DetailHeaderContent="Services"
+                                           AllowScrollAnimation="True"
+                                           AllowFixedGroups="True"
+                                           AllowEditing="False"
+                                           AllowScrollToFocusedRow="True" />
                         </dxg:GridControl.View>
 
                         <i:Interaction.Triggers>

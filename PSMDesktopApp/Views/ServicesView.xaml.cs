@@ -6,9 +6,18 @@ namespace PSMDesktopApp.Views
 {
     public partial class ServicesView : UserControl
     {
+        private int _serviceFocusedRowHandle;
+        private bool _wasFocusedRowExpanded;
+
         public ServicesView()
         {
             InitializeComponent();
+        }
+
+        private void BeforeRefresh()
+        {
+            _serviceFocusedRowHandle = MasterView.FocusedRowHandle;
+            _wasFocusedRowExpanded = ServicesGrid.IsMasterRowExpanded(_serviceFocusedRowHandle);
         }
 
         private void OnRefresh()
@@ -23,6 +32,13 @@ namespace PSMDesktopApp.Views
 
                 column.Width = column.Width.Value + 20;
             }
+
+            MasterView.FocusedRowHandle = _serviceFocusedRowHandle;
+
+            if (_wasFocusedRowExpanded)
+            {
+                ServicesGrid.ExpandMasterRow(_serviceFocusedRowHandle);
+            }
         }
 
         private void SetInitialGridWidth()
@@ -34,6 +50,8 @@ namespace PSMDesktopApp.Views
         private void View_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
             ServicesViewModel vm = (ServicesViewModel)DataContext;
+
+            vm.BeforeRefresh += BeforeRefresh;
             vm.OnRefresh += OnRefresh;
 
             SetInitialGridWidth();
