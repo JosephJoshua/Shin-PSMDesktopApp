@@ -12,7 +12,7 @@ namespace PSMDesktopApp.Views
         private void SetInitialGridWidth()
         {
             double lcWidth = MainLayoutControl.ActualWidth;
-            GridLayoutGroup.Width = lcWidth * 0.8d;
+            GridLayoutGroup.Width = lcWidth * 0.7d;
         }
 
         private void UserControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
