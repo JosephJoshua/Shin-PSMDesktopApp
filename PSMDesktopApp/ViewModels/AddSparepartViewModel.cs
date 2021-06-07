@@ -44,7 +44,9 @@ namespace PSMDesktopApp.ViewModels
             set
             {
                 _harga = value;
+
                 NotifyOfPropertyChange(() => Harga);
+                NotifyOfPropertyChange(() => CanAdd);
             }
         }
 
