@@ -52,6 +52,7 @@
                        Margin="0 0 10 0" />
 
             <dxe:DateEdit Grid.Column="1" Grid.Row="0"
+                          Height="30"
                           VerticalAlignment="Center"
                           MaskType="DateTime"
                           Mask="dd/MM/yyyy"
@@ -65,6 +66,7 @@
                        Margin="20 0 10 0" />
 
             <dxe:DateEdit Grid.Column="3" Grid.Row="0"
+                          Height="30"
                           VerticalAlignment="Center"
                           MaskType="DateTime"
                           Mask="dd/MM/yyyy"
@@ -73,6 +75,7 @@
 
             <!-- Technician selector -->
             <dxe:ComboBoxEdit Grid.Column="4" Grid.Row="0"
+                              Height="30"
                               Margin="20 0 0 0"
                               ItemsSource="{Binding Technicians, Mode=OneWay}"
                               DisplayMember="Nama"
