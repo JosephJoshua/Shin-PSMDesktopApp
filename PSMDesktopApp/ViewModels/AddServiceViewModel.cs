@@ -12,7 +12,6 @@ namespace PSMDesktopApp.ViewModels
     public class AddServiceViewModel : Screen
     {
         private readonly ILog _logger;
-        private readonly IWindowManager _windowManager;
 
         private readonly ISalesEndpoint _salesEndpoint;
         private readonly IServiceEndpoint _serviceEndpoint;
@@ -429,11 +428,9 @@ namespace PSMDesktopApp.ViewModels
                     && Biaya > 0;
         }
 
-        public AddServiceViewModel(IWindowManager windowManager, ISalesEndpoint salesEndpoint,
-                                   ITechnicianEndpoint technicianEndpoint, IServiceEndpoint serviceEndpoint)
+        public AddServiceViewModel(ISalesEndpoint salesEndpoint, ITechnicianEndpoint technicianEndpoint, IServiceEndpoint serviceEndpoint)
         {
             _logger = LogManager.GetLog(typeof(AddServiceViewModel));
-            _windowManager = windowManager;
 
             _salesEndpoint = salesEndpoint;
             _serviceEndpoint = serviceEndpoint;
@@ -494,22 +491,20 @@ namespace PSMDesktopApp.ViewModels
             if (IsSalesLoading) return;
 
             IsSalesLoading = true;
-            List<SalesModel> salesList = new List<SalesModel>();
 
             try
             {
-                salesList = await _salesEndpoint.GetAll();
+                List<SalesModel> salesList = await _salesEndpoint.GetAll();
+                Sales = new BindingList<SalesModel>(salesList);
             }
             catch (Exception ex)
             {
                 _logger.Error(ex);
-
-                IsSalesLoading = false;
-                return;
             }
-
-            IsSalesLoading = false;
-            Sales = new BindingList<SalesModel>(salesList);
+            finally
+            {
+                IsSalesLoading = false;
+            }
         }
 
         public async Task<bool> AddService()

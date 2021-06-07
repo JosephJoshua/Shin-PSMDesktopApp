@@ -10,7 +10,6 @@ using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web.Script.Serialization;
 
 namespace PSMDesktopApp.Library.Api
 {
@@ -20,12 +19,9 @@ namespace PSMDesktopApp.Library.Api
 
         private readonly ISettingsHelper _settings;
 
-        private HttpClient _apiClient { get; set; }
+        private HttpClient _apiClient;
 
-        public HttpClient ApiClient
-        {
-            get => _apiClient;
-        }
+        public HttpClient ApiClient => _apiClient;
 
         public ApiHelper(ILoggedInUserModel loggedInUser, ISettingsHelper settings)
         {
