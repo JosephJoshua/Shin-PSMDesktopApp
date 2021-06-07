@@ -73,15 +73,9 @@ namespace PSMDesktopApp.ViewModels
             }
         }
 
-        public bool ShowInfo
-        {
-            get => Spareparts != null && Spareparts.Count > 0;
-        }
+        public bool ShowInfo => Spareparts != null && Spareparts.Count > 0;
 
-        public decimal TotalCost
-        {
-            get => Spareparts?.Sum(t => t.Harga) ?? 0;
-        }
+        public decimal TotalCost => Spareparts?.Sum(t => t.Harga) ?? 0;
 
         public SparepartReportViewModel(ISparepartEndpoint sparepartEndpoint)
         {

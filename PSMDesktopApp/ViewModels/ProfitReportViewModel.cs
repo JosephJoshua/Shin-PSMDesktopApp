@@ -75,25 +75,13 @@ namespace PSMDesktopApp.ViewModels
             }
         }
 
-        public bool ShowInfo
-        {
-            get => ProfitResults != null && ProfitResults.Count > 0;
-        }
-        
-        public decimal TotalRevenue
-        {
-            get => ProfitResults?.Sum(t => t.Biaya) ?? 0;
-        }
+        public bool ShowInfo => ProfitResults != null && ProfitResults.Count > 0;
 
-        public decimal TotalCost
-        {
-            get => ProfitResults?.Sum(t => t.HargaSparepart) ?? 0;
-        }
+        public decimal TotalRevenue => ProfitResults?.Sum(t => t.Biaya) ?? 0;
 
-        public decimal TotalProfit
-        {
-            get => ProfitResults?.Sum(t => t.LabaRugi) ?? 0;
-        }
+        public decimal TotalCost => ProfitResults?.Sum(t => t.HargaSparepart) ?? 0;
+
+        public decimal TotalProfit => ProfitResults?.Sum(t => t.LabaRugi) ?? 0;
 
         public ProfitReportViewModel(IServiceEndpoint serviceEndpoint)
         {

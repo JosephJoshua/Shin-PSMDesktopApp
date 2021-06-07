@@ -50,10 +50,7 @@ namespace PSMDesktopApp.ViewModels
             }
         }
 
-        public bool CanAdd
-        {
-            get => !string.IsNullOrWhiteSpace(Nama) && Harga > 0;
-        }
+        public bool CanAdd => !string.IsNullOrWhiteSpace(Nama) && Harga > 0;
 
         public AddSparepartViewModel(ISparepartEndpoint sparepartEndpoint)
         {

@@ -147,10 +147,7 @@ namespace PSMDesktopApp.ViewModels
             }
         }
 
-        public bool CanSave
-        {
-            get => !string.IsNullOrEmpty(Kerusakan);
-        }
+        public bool CanSave => !string.IsNullOrEmpty(Kerusakan);
 
         public EditServiceLimitedViewModel(IServiceEndpoint serviceEndpoint)
         {

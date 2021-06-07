@@ -74,15 +74,9 @@ namespace PSMDesktopApp.ViewModels
             }
         }
 
-        public bool CanAddSales
-        {
-            get => !IsLoading;
-        }
+        public bool CanAddSales => !IsLoading;
 
-        public bool CanDeleteSales
-        {
-            get => !IsLoading && SelectedSales != null;
-        }
+        public bool CanDeleteSales => !IsLoading && SelectedSales != null;
 
         public SalesViewModel(IWindowManager windowManager, ISalesEndpoint salesEndpoint)
         {
