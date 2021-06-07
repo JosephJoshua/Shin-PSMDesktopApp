@@ -48,7 +48,9 @@ namespace PSMDesktopApp.ViewModels
             set
             {
                 _kerusakan = value;
+
                 NotifyOfPropertyChange(() => Kerusakan);
+                NotifyOfPropertyChange(() => CanSave);
             }
         }
 
@@ -147,7 +149,7 @@ namespace PSMDesktopApp.ViewModels
 
         public bool CanSave
         {
-            get => !string.IsNullOrEmpty(Kerusakan) && TambahanBiaya > 0 && Dp > 0;
+            get => !string.IsNullOrEmpty(Kerusakan);
         }
 
         public EditServiceLimitedViewModel(IServiceEndpoint serviceEndpoint)

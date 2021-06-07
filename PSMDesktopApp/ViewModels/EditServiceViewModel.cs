@@ -189,6 +189,7 @@ namespace PSMDesktopApp.ViewModels
                 NotifyOfPropertyChange(() => Biaya);
                 NotifyOfPropertyChange(() => TotalBiaya);
                 NotifyOfPropertyChange(() => Sisa);
+                NotifyOfPropertyChange(() => CanSave);
             }
         }
 
@@ -235,7 +236,7 @@ namespace PSMDesktopApp.ViewModels
 
         public double TotalBiaya
         {
-            get => (Biaya - (Biaya * ((double)Diskon / 100))) + TambahanBiaya;
+            get => Biaya - (Biaya * ((double)Diskon / 100)) + TambahanBiaya;
         }
 
         public double Sisa
@@ -360,8 +361,8 @@ namespace PSMDesktopApp.ViewModels
 
         public bool CanSave
         {
-            get => !string.IsNullOrWhiteSpace(NamaPelanggan) && !string.IsNullOrWhiteSpace(TipeHp) && !string.IsNullOrWhiteSpace(Kerusakan) &&
-                    Biaya > 0 && TambahanBiaya > 0 && Dp > 0;
+            get => !string.IsNullOrWhiteSpace(NamaPelanggan) && !string.IsNullOrWhiteSpace(TipeHp) && !string.IsNullOrWhiteSpace(Kerusakan) 
+                    && Biaya > 0;
         }
 
         public EditServiceViewModel(ITechnicianEndpoint technicianEndpoint, IServiceEndpoint serviceEndpoint)
