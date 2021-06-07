@@ -51,11 +51,12 @@
                    Margin="0 0 10 0" />
 
             <dxe:DateEdit Grid.Column="1" Grid.Row="0"
-                      VerticalAlignment="Center"
-                      MaskType="DateTime"
-                      Mask="dd/MM/yyyy"
-                      MaskUseAsDisplayFormat="True"
-                      DateTime="{Binding StartDate}"/>
+                          Height="30"
+                          VerticalAlignment="Center"
+                          MaskType="DateTime"
+                          Mask="dd/MM/yyyy"
+                          MaskUseAsDisplayFormat="True"
+                          DateTime="{Binding StartDate}"/>
 
             <TextBlock Grid.Column="2" Grid.Row="0"
                    Text="Sampai:"
@@ -64,11 +65,12 @@
                    Margin="20 0 10 0" />
 
             <dxe:DateEdit Grid.Column="3" Grid.Row="0"
-                      VerticalAlignment="Center"
-                      MaskType="DateTime"
-                      Mask="dd/MM/yyyy"
-                      MaskUseAsDisplayFormat="True"
-                      DateTime="{Binding EndDate}"/>
+                          Height="30"
+                          VerticalAlignment="Center"
+                          MaskType="DateTime"
+                          Mask="dd/MM/yyyy"
+                          MaskUseAsDisplayFormat="True"
+                          DateTime="{Binding EndDate}"/>
         </Grid>
 
         <dxlc:LayoutControl x:Name="MainLayoutControl" Grid.Column="0" Grid.Row="2"
