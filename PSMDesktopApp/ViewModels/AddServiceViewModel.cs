@@ -112,10 +112,7 @@ namespace PSMDesktopApp.ViewModels
             }
         }
 
-        public bool HasSelectedSales
-        {
-            get => SelectedSales != null;
-        }
+        public bool HasSelectedSales => SelectedSales != null;
 
         public int NomorNota { get; private set; } = -1;
 
@@ -302,15 +299,9 @@ namespace PSMDesktopApp.ViewModels
             }
         }
 
-        public double TotalBiaya
-        {
-            get => (100.0 - Diskon) / 100.0 * Biaya + TambahanBiaya;
-        }
+        public double TotalBiaya => (100.0 - Diskon) / 100.0 * Biaya + TambahanBiaya;
 
-        public double Sisa
-        {
-            get => TotalBiaya - Dp;
-        }
+        public double Sisa => TotalBiaya - Dp;
 
         public bool IsBatteryChecked
         {
@@ -422,11 +413,7 @@ namespace PSMDesktopApp.ViewModels
             }
         }
 
-        public bool CanAdd
-        {
-            get => !string.IsNullOrWhiteSpace(NamaPelanggan) && !string.IsNullOrWhiteSpace(TipeHp) && !string.IsNullOrWhiteSpace(Kerusakan) 
-                    && Biaya > 0;
-        }
+        public bool CanAdd => !string.IsNullOrWhiteSpace(NamaPelanggan) && !string.IsNullOrWhiteSpace(TipeHp) && !string.IsNullOrWhiteSpace(Kerusakan) && Biaya > 0;
 
         public AddServiceViewModel(ISalesEndpoint salesEndpoint, ITechnicianEndpoint technicianEndpoint, IServiceEndpoint serviceEndpoint)
         {

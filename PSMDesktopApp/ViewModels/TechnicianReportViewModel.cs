@@ -125,31 +125,19 @@ namespace PSMDesktopApp.ViewModels
             }
         }
 
-        public bool ShowInfo
-        {
-            get => TechnicianResults != null && TechnicianResults.Count > 0;
-        }
+        public bool ShowInfo => TechnicianResults != null && TechnicianResults.Count > 0;
 
-        public decimal TotalRevenue
-        {
-            get => TechnicianResults?.Sum(t => t.Biaya) ?? 0;
-        }
+        public decimal TotalRevenue => TechnicianResults?.Sum(t => t.Biaya) ?? 0;
 
-        public decimal TotalCost
-        {
-            get => TechnicianResults?.Sum(t => t.HargaSparepart) ?? 0;
-        }
+        public decimal TotalCost => TechnicianResults?.Sum(t => t.HargaSparepart) ?? 0;
 
-        public decimal TotalProfit
-        {
-            get => TechnicianResults?.Sum(t => t.LabaRugi) ?? 0;
-        }
+        public decimal TotalProfit => TechnicianResults?.Sum(t => t.LabaRugi) ?? 0;
 
         public decimal Proceeds
         {
             get
             {
-                decimal proceeds = ((decimal)TechnicianRate / 100) * TotalProfit;
+                decimal proceeds = (decimal)TechnicianRate / 100 * TotalProfit;
                 return proceeds;
             }
         }

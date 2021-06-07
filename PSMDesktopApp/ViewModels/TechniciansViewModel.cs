@@ -74,15 +74,9 @@ namespace PSMDesktopApp.ViewModels
             }
         }
 
-        public bool CanAddTechnician
-        {
-            get => !IsLoading;
-        }
+        public bool CanAddTechnician => !IsLoading;
 
-        public bool CanDeleteTechnician
-        {
-            get => !IsLoading && SelectedTechnician != null;
-        }
+        public bool CanDeleteTechnician => !IsLoading && SelectedTechnician != null;
 
         public TechniciansViewModel(IWindowManager windowManager, ITechnicianEndpoint technicianEndpoint)
         {

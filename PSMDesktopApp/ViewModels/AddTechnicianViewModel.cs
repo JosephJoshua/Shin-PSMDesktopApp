@@ -26,10 +26,7 @@ namespace PSMDesktopApp.ViewModels
             }
         }
 
-        public bool CanAdd
-        {
-            get => !string.IsNullOrWhiteSpace(Nama);
-        }
+        public bool CanAdd => !string.IsNullOrWhiteSpace(Nama);
 
         public AddTechnicianViewModel(ITechnicianEndpoint technicianEndpoint)
         {

@@ -56,15 +56,9 @@ namespace PSMDesktopApp.ViewModels
             }
         }
 
-        public bool IsErrorMessageVisible
-        {
-            get => !string.IsNullOrWhiteSpace(ErrorMessage);
-        }
+        public bool IsErrorMessageVisible => !string.IsNullOrWhiteSpace(ErrorMessage);
 
-        public bool CanLogin
-        {
-            get => !string.IsNullOrWhiteSpace(Email) && !string.IsNullOrWhiteSpace(Password);
-        }
+        public bool CanLogin => !string.IsNullOrWhiteSpace(Email) && !string.IsNullOrWhiteSpace(Password);
 
         public LoginViewModel(IApiHelper apiHelper)
         {

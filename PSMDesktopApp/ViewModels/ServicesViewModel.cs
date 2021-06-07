@@ -39,10 +39,7 @@ namespace PSMDesktopApp.ViewModels
         private DateTime _startDate;
         private DateTime _endDate;
 
-        private UserRole LoggedInUserRole
-        {
-            get => _apiHelper.LoggedInUser.role;
-        }
+        private UserRole LoggedInUserRole => _apiHelper.LoggedInUser.role;
 
         public delegate void BeforeRefreshEventHandler();
         public event BeforeRefreshEventHandler BeforeRefresh;
@@ -175,50 +172,23 @@ namespace PSMDesktopApp.ViewModels
             }
         }
 
-        public bool CanAddService
-        {
-            get => !IsLoading;
-        }
+        public bool CanAddService => !IsLoading;
 
-        public bool CanAddSparepart
-        {
-            get => !IsLoading && (SelectedService != null || SelectedSparepart != null);
-        }
+        public bool CanAddSparepart => !IsLoading && (SelectedService != null || SelectedSparepart != null);
 
-        public bool CanEditService
-        {
-            get => !IsLoading && SelectedService != null;
-        }
+        public bool CanEditService => !IsLoading && SelectedService != null;
 
-        public bool CanDeleteService
-        {
-            get => IsAdmin && !IsLoading && SelectedService != null;
-        }
+        public bool CanDeleteService => IsAdmin && !IsLoading && SelectedService != null;
 
-        public bool CanDeleteSparepart
-        {
-            get => IsAdmin && !IsLoading && SelectedSparepart != null;
-        }
-        
-        public bool CanPrintService
-        {
-            get => !IsLoading && SelectedService != null;
-        }
+        public bool CanDeleteSparepart => IsAdmin && !IsLoading && SelectedSparepart != null;
 
-        public bool ShowInfo
-        {
-            get => SelectedService != null;
-        }
+        public bool CanPrintService => !IsLoading && SelectedService != null;
 
-        public bool IsAdmin
-        {
-            get => LoggedInUserRole == UserRole.Admin;
-        }
+        public bool ShowInfo => SelectedService != null;
 
-        public bool IsCustomerService
-        {
-            get => LoggedInUserRole == UserRole.CustomerService;
-        }
+        public bool IsAdmin => LoggedInUserRole == UserRole.Admin;
+
+        public bool IsCustomerService => LoggedInUserRole == UserRole.CustomerService;
 
         public ServicesViewModel(IApiHelper apiHelper, IWindowManager windowManager, IServiceEndpoint serviceEndpoint,
                                  ISparepartEndpoint sparepartEndpoint)
