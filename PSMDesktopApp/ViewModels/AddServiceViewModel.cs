@@ -258,6 +258,7 @@ namespace PSMDesktopApp.ViewModels
                 NotifyOfPropertyChange(() => Biaya);
                 NotifyOfPropertyChange(() => TotalBiaya);
                 NotifyOfPropertyChange(() => Sisa);
+                NotifyOfPropertyChange(() => CanAdd);
             }
         }
 
@@ -424,8 +425,8 @@ namespace PSMDesktopApp.ViewModels
 
         public bool CanAdd
         {
-            get => !string.IsNullOrWhiteSpace(NamaPelanggan) && !string.IsNullOrWhiteSpace(TipeHp) && !string.IsNullOrWhiteSpace(Kerusakan) &&
-                    Biaya > 0 && TambahanBiaya > 0 && Dp > 0;
+            get => !string.IsNullOrWhiteSpace(NamaPelanggan) && !string.IsNullOrWhiteSpace(TipeHp) && !string.IsNullOrWhiteSpace(Kerusakan) 
+                    && Biaya > 0;
         }
 
         public AddServiceViewModel(IWindowManager windowManager, ISalesEndpoint salesEndpoint,
