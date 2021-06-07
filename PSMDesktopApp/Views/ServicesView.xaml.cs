@@ -6,6 +6,8 @@ namespace PSMDesktopApp.Views
 {
     public partial class ServicesView : UserControl
     {
+        private bool _isFirstLoad = true;
+
         private int _serviceFocusedRowHandle;
         private bool _wasFocusedRowExpanded;
 
@@ -54,7 +56,12 @@ namespace PSMDesktopApp.Views
             vm.BeforeRefresh += BeforeRefresh;
             vm.OnRefresh += OnRefresh;
 
-            SetInitialGridWidth();
+            if (_isFirstLoad)
+            {
+                SetInitialGridWidth();
+            }
+
+            _isFirstLoad = true;
         }
     }
 }

@@ -4,6 +4,8 @@ namespace PSMDesktopApp.Views
 {
     public partial class TechnicianReportView : UserControl
     {
+        private bool _isFirstLoad = true;
+
         public TechnicianReportView()
         {
             InitializeComponent();
@@ -17,7 +19,12 @@ namespace PSMDesktopApp.Views
 
         private void UserControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
-            SetInitialGridWidth();
+            if (_isFirstLoad)
+            {
+                SetInitialGridWidth();
+            }
+
+            _isFirstLoad = false;
         }
     }
 }

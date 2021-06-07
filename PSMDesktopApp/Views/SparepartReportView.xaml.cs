@@ -4,6 +4,8 @@ namespace PSMDesktopApp.Views
 {
     public partial class SparepartReportView : UserControl
     {
+        private bool _isFirstLoad = true;
+
         public SparepartReportView()
         {
             InitializeComponent();
@@ -17,7 +19,12 @@ namespace PSMDesktopApp.Views
 
         private void UserControl_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
-            SetInitialGridWidth();
+            if (_isFirstLoad)
+            {
+                SetInitialGridWidth();
+            }
+
+            _isFirstLoad = false;
         }
     }
 }
