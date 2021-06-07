@@ -16,11 +16,7 @@ namespace PSMDesktopApp.Library.Helpers
 
         private void Init()
         {
-            if (File.Exists(FilePath))
-            {
-                GetSettings();
-            }
-            else
+            if (!File.Exists(FilePath))
             {
                 // Create default settings file if it doesn't exist
                 TextWriter writer = new StreamWriter(FilePath);
@@ -31,30 +27,45 @@ namespace PSMDesktopApp.Library.Helpers
                 writer.WriteLine(@"alamatToko: Jl. Pendidikan\nSorong, Papua Barat");
 
                 writer.Close();
+            }
 
-                GetSettings();
+            if (!GetSettings())
+            {
+                throw new System.Exception("Gagal membaca " + FilePath);
             }
         }
 
-        private void GetSettings()
+        private bool GetSettings()
         {
             foreach (string line in File.ReadAllLines(FilePath))
             {
-                string key = line.Split(':')[0];
+                string[] keyValue = line.Split(':');
+                if (keyValue.Length < 1)
+                {
+                    return false;
+                }
+
+                string key = keyValue[0];
                 string val = line.Substring(key.Length + 1);
+
+                if (val.Length < 1)
+                {
+                    return false;
+                }
+                else if (val[0] == ' ')
+                {
+                    val = val.Remove(0);
+                }
 
                 _settings.Add(key, val);
             }
+
+            return true;
         }
 
         public string Get(string key)
         {
-            if (_settings.TryGetValue(key, out string val))
-            {
-                return val;
-            }
-
-            return "";
+            return _settings.TryGetValue(key, out string val) ? val : "";
         }
     }
 }
