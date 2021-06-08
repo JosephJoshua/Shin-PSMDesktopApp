@@ -37,9 +37,9 @@ namespace PSMDesktopApp.Views
 
             MasterView.FocusedRowHandle = _serviceFocusedRowHandle;
 
-            if (_wasFocusedRowExpanded)
+            if (_wasFocusedRowExpanded && MasterView.GetSelectedRows().Count > 0)
             {
-                ServicesGrid.ExpandMasterRow(_serviceFocusedRowHandle);
+                ServicesGrid.ExpandMasterRow(MasterView.FocusedRowHandle);
             }
         }
 
