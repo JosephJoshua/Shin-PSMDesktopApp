@@ -21,7 +21,7 @@ namespace PSMDesktopApp.Library.Helpers
                 // Create default settings file if it doesn't exist
                 TextWriter writer = new StreamWriter(FilePath);
 
-                writer.WriteLine(@"apiUrl: http://localhost:3030/");
+                writer.WriteLine(@"apiUrl: https://jointcell.online/");
                 writer.WriteLine(@"reportPath: Reports/ServiceInvoice.rpt");
                 writer.WriteLine(@"noHpToko: 082398200020");
                 writer.WriteLine(@"alamatToko: Jl. Pendidikan\nSorong, Papua Barat");
@@ -54,7 +54,7 @@ namespace PSMDesktopApp.Library.Helpers
                 }
                 else if (val[0] == ' ')
                 {
-                    val = val.Remove(0);
+                    val = val.Remove(0, 1);
                 }
 
                 _settings.Add(key, val);
