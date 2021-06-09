@@ -413,7 +413,7 @@ namespace PSMDesktopApp.ViewModels
             }
         }
 
-        public bool CanAdd => !string.IsNullOrWhiteSpace(NamaPelanggan) && !string.IsNullOrWhiteSpace(TipeHp) && !string.IsNullOrWhiteSpace(Kerusakan) && Biaya > 0;
+        public bool CanAdd => !string.IsNullOrWhiteSpace(NamaPelanggan) && !string.IsNullOrWhiteSpace(TipeHp) && !string.IsNullOrWhiteSpace(Kerusakan);
 
         public AddServiceViewModel(ISalesEndpoint salesEndpoint, ITechnicianEndpoint technicianEndpoint, IServiceEndpoint serviceEndpoint)
         {
