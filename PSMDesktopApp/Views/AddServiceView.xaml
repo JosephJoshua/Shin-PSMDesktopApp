@@ -121,18 +121,18 @@
 
                     <dxlc:LayoutItem Label="Kelengkapan:" Margin="4">
                         <dxlc:LayoutGroup Orientation="Horizontal" Margin="10 0 0 0" Height="25">
-                            <dxe:CheckEdit Content=" Baterai" HorizontalAlignment="Stretch" 
+                            <dxe:CheckEdit Content=" Baterai"
                                            IsChecked="{Binding Path=IsBatteryChecked, UpdateSourceTrigger=PropertyChanged}" />
                             
-                            <dxe:CheckEdit Content=" SIM" HorizontalAlignment="Stretch"
+                            <dxe:CheckEdit Content=" SIM"
                                            Margin="8 0 0 0"
                                            IsChecked="{Binding Path=IsSimChecked, UpdateSourceTrigger=PropertyChanged}" />
                             
-                            <dxe:CheckEdit Content=" Memori" HorizontalAlignment="Stretch" 
+                            <dxe:CheckEdit Content=" Memori"
                                            Margin="0 0 5 0"
                                            IsChecked="{Binding Path=IsMemoryChecked, UpdateSourceTrigger=PropertyChanged}" />
                             
-                            <dxe:CheckEdit Content=" Condom" HorizontalAlignment="Stretch" 
+                            <dxe:CheckEdit Content=" Condom"
                                            IsChecked="{Binding Path=IsCondomChecked, UpdateSourceTrigger=PropertyChanged}" />
                         </dxlc:LayoutGroup>
                     </dxlc:LayoutItem>
