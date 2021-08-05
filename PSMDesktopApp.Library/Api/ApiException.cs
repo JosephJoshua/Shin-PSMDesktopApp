@@ -25,8 +25,10 @@ namespace PSMDesktopApp.Library.Api
             Details = details;
         }
 
-        public static async Task<ApiException> FromHttpResponse(HttpResponseMessage response)
+        public static async Task<Exception> FromHttpResponse(HttpResponseMessage response)
         {
+            if (response.IsSuccessStatusCode) return new Exception("Attempting to create an ApiException from a successful request");
+
             // To avoid InvalidDataContract and UnsupportedMediaType exceptions when reading an
             // response body returned by gin-gonic or gin-jwt.
             if (response.Content.Headers.ContentType.MediaType == "application/json")
