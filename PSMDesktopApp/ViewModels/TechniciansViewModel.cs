@@ -104,7 +104,7 @@ namespace PSMDesktopApp.ViewModels
 
         public async Task AddTechnician()
         {
-            if (_windowManager.ShowDialog(IoC.Get<AddTechnicianViewModel>()) == true)
+            if (await _windowManager.ShowDialogAsync(IoC.Get<AddTechnicianViewModel>()) == true)
             {
                 await LoadTechnicians();
             }

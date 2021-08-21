@@ -103,7 +103,7 @@ namespace PSMDesktopApp.ViewModels
 
         public async Task AddSales()
         {
-            if (_windowManager.ShowDialog(IoC.Get<AddSalesViewModel>()) == true)
+            if (await _windowManager.ShowDialogAsync(IoC.Get<AddSalesViewModel>()) == true)
             {
                 await LoadSales();
             }

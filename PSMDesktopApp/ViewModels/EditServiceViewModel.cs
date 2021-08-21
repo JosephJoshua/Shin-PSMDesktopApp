@@ -387,13 +387,13 @@ namespace PSMDesktopApp.ViewModels
         {
             if (await UpdateService())
             {
-                TryClose(true);
+                await TryCloseAsync(true);
             }
         }
 
-        public void Cancel()
+        public async Task Cancel()
         {
-            TryClose(false);
+            await TryCloseAsync(false);
         }
 
         public async Task LoadComboboxes()

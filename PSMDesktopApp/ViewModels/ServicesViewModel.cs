@@ -203,7 +203,7 @@ namespace PSMDesktopApp.ViewModels
 
             DateTime today = DateTime.Today;
 
-            // Set start and end date to the start and end of the month, respectively
+            // Set start and end date to the start and end of the month, respectively.
             _startDate = new DateTime(today.Year, today.Month, 1);
             _endDate = _startDate.AddMonths(1).AddTicks(-1);
         }
@@ -244,7 +244,7 @@ namespace PSMDesktopApp.ViewModels
         {
             AddServiceViewModel addServiceVM = IoC.Get<AddServiceViewModel>();
 
-            if (_windowManager.ShowDialog(addServiceVM) == true)
+            if (await _windowManager.ShowDialogAsync(addServiceVM) == true)
             {
                 if (addServiceVM.NomorNota != -1 &&
                     DXMessageBox.Show("Apakah anda ingin mencetak servisan ini?", "Tambah Servisan", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
@@ -252,7 +252,7 @@ namespace PSMDesktopApp.ViewModels
                     try
                     {
                         ServiceModel newService = await _serviceEndpoint.GetByNomorNota(addServiceVM.NomorNota);
-                        PrintService(newService);
+                        await PrintService(newService);
                     }
                     catch (Exception ex)
                     {
@@ -271,7 +271,7 @@ namespace PSMDesktopApp.ViewModels
             AddSparepartViewModel addSparepartVM = IoC.Get<AddSparepartViewModel>();
             addSparepartVM.SetNomorNota(nomorNota);
 
-            if (_windowManager.ShowDialog(addSparepartVM) == true)
+            if (await _windowManager.ShowDialogAsync(addSparepartVM) == true)
             {
                 await LoadSparepart(nomorNota);
             }
@@ -284,7 +284,7 @@ namespace PSMDesktopApp.ViewModels
             EditServiceViewModel editServiceVM = IoC.Get<EditServiceViewModel>();
             editServiceVM.SetFieldValues(service);
 
-            if (_windowManager.ShowDialog(editServiceVM) == true)
+            if (await _windowManager.ShowDialogAsync(editServiceVM) == true)
             {
                 await LoadServices();
             }
@@ -297,7 +297,7 @@ namespace PSMDesktopApp.ViewModels
             EditServiceLimitedViewModel editServiceVM = IoC.Get<EditServiceLimitedViewModel>();
             editServiceVM.SetFieldValues(service);
 
-            if (_windowManager.ShowDialog(editServiceVM) == true)
+            if (await _windowManager.ShowDialogAsync(editServiceVM) == true)
             {
                 await LoadServices();
             }
@@ -400,13 +400,13 @@ namespace PSMDesktopApp.ViewModels
             }
         }
 
-        public void PrintSelectedService()
+        public async Task PrintSelectedService()
         {
             if (SelectedService == null) return;
-            PrintService(SelectedService);
+            await PrintService(SelectedService);
         }
 
-        private void PrintService(ServiceModel service)
+        private async Task PrintService(ServiceModel service)
         {
             string kelengkapan = service.Kelengkapan?.Trim().Replace(" ", ", ");
 
@@ -444,7 +444,7 @@ namespace PSMDesktopApp.ViewModels
                 Tanggal = service.Tanggal.ToString(DateTimeFormatInfo.CurrentInfo.LongDatePattern),
             });
 
-            _windowManager.ShowDialog(invoicePreviewVM);
+            await _windowManager.ShowDialogAsync(invoicePreviewVM);
         }
     }
 }

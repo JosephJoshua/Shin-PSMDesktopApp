@@ -76,7 +76,7 @@ namespace PSMDesktopApp.ViewModels
                 var result = await _apiHelper.Authenticate(Email, Password);
                 await _apiHelper.GetLoggedInUserInfo(result.token);
 
-                Application.Current.Dispatcher.Invoke(() => TryClose(true));
+                await Application.Current.Dispatcher.Invoke(async () => await TryCloseAsync(true));
             }
             catch (Exception ex)
             {
