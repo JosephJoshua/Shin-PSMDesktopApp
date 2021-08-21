@@ -10,6 +10,8 @@
     xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
     xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
     mc:Ignorable="d"
+    xmlns:viewmodels="clr-namespace:PSMDesktopApp.ViewModels"
+    d:DataContext="{d:DesignInstance Type=viewmodels:TechniciansViewModel}"
     d:DesignHeight="450" d:DesignWidth="800">
 
     <UserControl.Resources>
