@@ -12,8 +12,7 @@
     WindowStartupLocation="CenterScreen"
     WindowState="Maximized"
     Title="Servisan Manager"
-    Height="728" Width="1080"
-    Closing="Window_Closing">
+    Height="728" Width="1080">
 
     <Grid>
         <TabControl Grid.Column="0" Grid.Row="0"

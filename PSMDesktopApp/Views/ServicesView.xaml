@@ -5,7 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:c="clr-namespace:CalcBinding;assembly=CalcBinding"
-    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:behaviours="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:cal="http://www.caliburnproject.org"
     xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
     xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
@@ -195,13 +195,13 @@
                                            AllowScrollToFocusedRow="True" />
                         </dxg:GridControl.View>
 
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="MasterRowExpanding">
+                        <behaviours:Interaction.Triggers>
+                            <behaviours:EventTrigger EventName="MasterRowExpanding">
                                 <cal:ActionMessage MethodName="OnMasterRowExpanding">
                                     <cal:Parameter Value="$eventArgs" />
                                 </cal:ActionMessage>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
+                            </behaviours:EventTrigger>
+                        </behaviours:Interaction.Triggers>
 
                     </dxg:GridControl>
 

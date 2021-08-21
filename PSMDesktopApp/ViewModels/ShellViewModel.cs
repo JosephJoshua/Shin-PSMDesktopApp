@@ -2,7 +2,7 @@ using Caliburn.Micro;
 using DevExpress.Xpf.Core;
 using PSMDesktopApp.Library.Api;
 using PSMDesktopApp.Library.Models;
-using System.ComponentModel;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -38,14 +38,12 @@ namespace PSMDesktopApp.ViewModels
             _technicianReportViewModel = technicianReportViewModel;
         }
 
-        public void OnClose(CancelEventArgs args)
+        public override Task<bool> CanCloseAsync(CancellationToken cancellationToken)
         {
-            if (!_loggedIn) return;
+            if (!_loggedIn) return Task.FromResult(true);
 
-            if (DXMessageBox.Show("Apakah anda yakin ingin keluar?", "Servisan Manager", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
-            {
-                args.Cancel = true;
-            }
+            bool canClose = DXMessageBox.Show("Apakah anda yakin ingin keluar?", "Servisan Manager", MessageBoxButton.YesNo) == MessageBoxResult.Yes;
+            return Task.FromResult(canClose);
         }
 
         protected override async void OnViewLoaded(object view)
@@ -54,9 +52,9 @@ namespace PSMDesktopApp.ViewModels
 
             await Task.Delay(1000);
 
-            if (_windowManager.ShowDialog(IoC.Get<LoginViewModel>()) == false)
+            if (await _windowManager.ShowDialogAsync(IoC.Get<LoginViewModel>()) == false)
             {
-                TryClose();
+                await TryCloseAsync();
             }
             else
             {

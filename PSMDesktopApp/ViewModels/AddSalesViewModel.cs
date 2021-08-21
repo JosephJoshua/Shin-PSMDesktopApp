@@ -44,7 +44,7 @@ namespace PSMDesktopApp.ViewModels
             try
             {
                 await _salesEndpoint.Insert(sales);
-                TryClose(true);
+                await TryCloseAsync(true);
             }
             catch (Exception ex)
             {
@@ -52,9 +52,9 @@ namespace PSMDesktopApp.ViewModels
             }
         }
 
-        public void Cancel()
+        public async Task Cancel()
         {
-            TryClose(false);
+            await TryCloseAsync(false);
         }
     }
 }
