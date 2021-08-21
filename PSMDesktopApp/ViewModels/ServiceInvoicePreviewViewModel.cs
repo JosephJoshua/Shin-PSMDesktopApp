@@ -9,13 +9,13 @@ namespace PSMDesktopApp.ViewModels
 {
     public sealed class ServiceInvoicePreviewViewModel : Screen
     {
-        private readonly ISettingsHelper _settings;
+        private readonly ISettingsHelper _settingsHelper;
 
         private ServiceInvoiceModel _invoiceModel;
 
         public ServiceInvoicePreviewViewModel(ISettingsHelper settings)
         {
-            _settings = settings;
+            _settingsHelper = settings;
         }
 
         protected override void OnViewLoaded(object view)
@@ -23,11 +23,11 @@ namespace PSMDesktopApp.ViewModels
             ServiceInvoicePreviewView v = GetView() as ServiceInvoicePreviewView;
 
             string basePath = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
-            string reportPath = basePath + @"\" + _settings.Get("reportPath").Replace("/", "\\").Trim();
+            string reportPath = basePath + @"\" + _settingsHelper.Settings.ReportPath.Replace("/", "\\").Trim();
 
             if (_invoiceModel != null)
             {
-                v.SetInvoiceModel(_invoiceModel, reportPath, _settings.Get("noHpToko"), _settings.Get("alamatToko"));
+                v.SetInvoiceModel(_invoiceModel, reportPath, _settingsHelper.Settings.NoHpToko, _settingsHelper.Settings.AlamatToko);
             }
 
             base.OnViewLoaded(view);

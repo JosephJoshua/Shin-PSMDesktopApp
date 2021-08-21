@@ -1,71 +1,55 @@
-using System.Collections.Generic;
+using Newtonsoft.Json;
 using System.IO;
 
 namespace PSMDesktopApp.Library.Helpers
 {
+    public class Settings
+    {
+        public string ApiUrl { get; set; }
+
+        public string ReportPath { get; set; }
+
+        public string NoHpToko { get; set; }
+
+        public string AlamatToko { get; set; }
+    }
+
     public class SettingsHelper : ISettingsHelper
     {
-        private string FilePath => "settings.txt";
+        public Settings Settings { get; private set; } = new Settings();
 
-        private readonly Dictionary<string, string> _settings = new Dictionary<string, string>();
+        private const string FilePath = "settings.json";
 
         public SettingsHelper()
         {
             Init();
         }
 
+        public void ReadSettingsFromFile()
+        {
+            string content = File.ReadAllText(FilePath);
+            Settings = JsonConvert.DeserializeObject<Settings>(content);
+        }
+
+        public void SaveSettingsToFile()
+        {
+            string data = JsonConvert.SerializeObject(Settings);
+            File.WriteAllText(FilePath, data);
+        }
+
         private void Init()
         {
             if (!File.Exists(FilePath))
             {
-                // Create default settings file if it doesn't exist
-                TextWriter writer = new StreamWriter(FilePath);
+                Settings.ApiUrl = "https://jointcell.online";
+                Settings.ReportPath = "Reports/ServiceInvoice.rpt";
+                Settings.NoHpToko = "082398200020";
+                Settings.AlamatToko = "Jl. Pendidikan\nSorong, Papua Barat";
 
-                writer.WriteLine(@"apiUrl: https://jointcell.online/");
-                writer.WriteLine(@"reportPath: Reports/ServiceInvoice.rpt");
-                writer.WriteLine(@"noHpToko: 082398200020");
-                writer.WriteLine(@"alamatToko: Jl. Pendidikan\nSorong, Papua Barat");
-
-                writer.Close();
+                SaveSettingsToFile();
             }
 
-            if (!GetSettings())
-            {
-                throw new System.Exception("Gagal membaca " + FilePath);
-            }
-        }
-
-        private bool GetSettings()
-        {
-            foreach (string line in File.ReadAllLines(FilePath))
-            {
-                string[] keyValue = line.Split(':');
-                if (keyValue.Length < 1)
-                {
-                    return false;
-                }
-
-                string key = keyValue[0];
-                string val = line.Substring(key.Length + 1);
-
-                if (val.Length < 1)
-                {
-                    return false;
-                }
-                else if (val[0] == ' ')
-                {
-                    val = val.Remove(0, 1);
-                }
-
-                _settings.Add(key, val);
-            }
-
-            return true;
-        }
-
-        public string Get(string key)
-        {
-            return _settings.TryGetValue(key, out string val) ? val : "";
+            ReadSettingsFromFile();
         }
     }
 }

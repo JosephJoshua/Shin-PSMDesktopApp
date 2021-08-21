@@ -2,6 +2,10 @@ namespace PSMDesktopApp.Library.Helpers
 {
     public interface ISettingsHelper
     {
-        string Get(string key);
+        Settings Settings { get; }
+
+        void ReadSettingsFromFile();
+
+        void SaveSettingsToFile();
     }
 }
