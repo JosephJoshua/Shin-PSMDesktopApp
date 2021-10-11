@@ -384,11 +384,6 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="settings.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\PSMDesktopApp.Library\PSMDesktopApp.Library.csproj">
       <Project>{43c59d6e-1549-43f5-9528-460b1a3c4111}</Project>
       <Name>PSMDesktopApp.Library</Name>
