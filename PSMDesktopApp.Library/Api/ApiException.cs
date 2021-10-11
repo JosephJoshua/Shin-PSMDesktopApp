@@ -29,7 +29,7 @@ namespace PSMDesktopApp.Library.Api
         {
             if (response.IsSuccessStatusCode) return new Exception("Attempting to create an ApiException from a successful request");
 
-            // To avoid InvalidDataContract and UnsupportedMediaType exceptions when reading an
+            // To avoid InvalidDataContract and UnsupportedMediaType exceptions when reading a
             // response body returned by gin-gonic or gin-jwt.
             if (response.Content.Headers.ContentType.MediaType == "application/json")
             {
