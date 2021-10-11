@@ -70,6 +70,8 @@
     <Compile Include="Api\TechnicianEndpoint.cs" />
     <Compile Include="AppValues.cs" />
     <Compile Include="Helpers\Constants.cs" />
+    <Compile Include="Helpers\IConnectionHelper.cs" />
+    <Compile Include="Helpers\ConnectionHelper.cs" />
     <Compile Include="Helpers\ISettingsHelper.cs" />
     <Compile Include="Helpers\SettingsHelper.cs" />
     <Compile Include="JsonConverters\CustomDateTimeConverter.cs" />
