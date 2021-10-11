@@ -1,4 +1,0 @@
-apiUrl: https://jointcell.online
-reportPath: Reports/ServiceInvoice.rpt
-noHpToko: 082398200020
-alamatToko: Jl. Pendidikan\nSorong, Papua Barat
