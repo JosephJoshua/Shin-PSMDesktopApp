@@ -1,5 +1,4 @@
 using PSMDesktopApp.Library.Models;
-using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -18,7 +17,7 @@ namespace PSMDesktopApp.Library.Api
 
         public async Task<List<SalesModel>> GetAll(string searchText = "")
         {
-            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/sales?q=" + WebUtility.UrlEncode(searchText))
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("sales/?q=" + WebUtility.UrlEncode(searchText))
                     .ConfigureAwait(false))
             {
                 if (response.IsSuccessStatusCode)
@@ -35,7 +34,7 @@ namespace PSMDesktopApp.Library.Api
 
         public async Task<SalesModel> GetById(int id)
         {
-            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/sales/" + id).ConfigureAwait(false))
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("sales/" + id).ConfigureAwait(false))
             {
                 if (response.IsSuccessStatusCode)
                 {
@@ -51,7 +50,7 @@ namespace PSMDesktopApp.Library.Api
 
         public async Task Insert(SalesModel sales)
         {
-            using (HttpResponseMessage response = await _apiHelper.ApiClient.PostAsJsonAsync("/api/sales", sales).ConfigureAwait(false))
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.PostAsJsonAsync("sales/", sales).ConfigureAwait(false))
             {
                 if (!response.IsSuccessStatusCode)
                 {
@@ -62,7 +61,7 @@ namespace PSMDesktopApp.Library.Api
 
         public async Task Delete(int id)
         {
-            using (HttpResponseMessage response = await _apiHelper.ApiClient.DeleteAsync("/api/sales/" + id).ConfigureAwait(false))
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.DeleteAsync("sales/" + id).ConfigureAwait(false))
             {
                 if (!response.IsSuccessStatusCode)
                 {

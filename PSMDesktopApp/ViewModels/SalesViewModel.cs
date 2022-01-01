@@ -1,6 +1,7 @@
 using Caliburn.Micro;
 using DevExpress.Xpf.Core;
 using PSMDesktopApp.Library.Api;
+using PSMDesktopApp.Library.Helpers;
 using PSMDesktopApp.Library.Models;
 using System;
 using System.Collections.Generic;
@@ -16,8 +17,10 @@ namespace PSMDesktopApp.ViewModels
 
         private readonly IWindowManager _windowManager;
         private readonly ISalesEndpoint _salesEndpoint;
+        private readonly IConnectionHelper _connectionHelper;
 
         private bool _isLoading = false;
+        private bool _isFirstLoad = true;
 
         private BindableCollection<SalesModel> _sales;
         private SalesModel _selectedSales;
@@ -78,13 +81,14 @@ namespace PSMDesktopApp.ViewModels
 
         public bool CanDeleteSales => !IsLoading && SelectedSales != null;
 
-        public SalesViewModel(IWindowManager windowManager, ISalesEndpoint salesEndpoint)
+        public SalesViewModel(IWindowManager windowManager, ISalesEndpoint salesEndpoint, IConnectionHelper connectionHelper)
         {
             DisplayName = "Sales";
 
             _logger = LogManager.GetLog(typeof(SalesViewModel));
             _windowManager = windowManager;
             _salesEndpoint = salesEndpoint;
+            _connectionHelper = connectionHelper;
         }
 
         protected override async void OnViewLoaded(object view)
@@ -138,7 +142,7 @@ namespace PSMDesktopApp.ViewModels
 
         public async Task LoadSales()
         {
-            if (IsLoading) return;
+            if (IsLoading || (!_isFirstLoad && !_connectionHelper.WasConnectionSuccessful)) return;
 
             IsLoading = true;
 
@@ -146,6 +150,8 @@ namespace PSMDesktopApp.ViewModels
             {
                 List<SalesModel> salesList = await _salesEndpoint.GetAll((SearchText ?? "").Trim());
                 Sales = new BindableCollection<SalesModel>(salesList);
+
+                _isFirstLoad = false;
             }
             catch (Exception ex)
             {

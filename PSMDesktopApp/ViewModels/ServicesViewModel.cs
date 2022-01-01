@@ -11,6 +11,7 @@ using DevExpress.Xpf.Grid;
 using System;
 using DevExpress.Data.Extensions;
 using System.Linq;
+using PSMDesktopApp.Library.Helpers;
 
 namespace PSMDesktopApp.ViewModels
 {
@@ -20,6 +21,7 @@ namespace PSMDesktopApp.ViewModels
 
         private readonly IWindowManager _windowManager;
         private readonly IApiHelper _apiHelper;
+        private readonly IConnectionHelper _connectionHelper;
 
         private readonly IServiceEndpoint _serviceEndpoint;
         private readonly ISparepartEndpoint _sparepartEndpoint;
@@ -40,6 +42,8 @@ namespace PSMDesktopApp.ViewModels
         private DateTime _endDate;
 
         private UserRole LoggedInUserRole => _apiHelper.LoggedInUser.role;
+
+        private bool _isFirstLoad = true;
 
         public delegate void BeforeRefreshEventHandler();
         public event BeforeRefreshEventHandler BeforeRefresh;
@@ -172,17 +176,17 @@ namespace PSMDesktopApp.ViewModels
             }
         }
 
-        public bool CanAddService => !IsLoading;
+        public bool CanAddService => !IsBuyer && !IsLoading;
 
-        public bool CanAddSparepart => !IsLoading && (SelectedService != null || SelectedSparepart != null);
+        public bool CanAddSparepart => !IsCustomerService && !IsLoading && (SelectedService != null || SelectedSparepart != null);
 
-        public bool CanEditService => !IsLoading && SelectedService != null;
+        public bool CanEditService => !IsBuyer && !IsLoading && SelectedService != null;
 
         public bool CanDeleteService => IsAdmin && !IsLoading && SelectedService != null;
 
-        public bool CanDeleteSparepart => IsAdmin && !IsLoading && SelectedSparepart != null;
+        public bool CanDeleteSparepart => !IsCustomerService && !IsLoading && SelectedSparepart != null;
 
-        public bool CanPrintService => !IsLoading && SelectedService != null;
+        public bool CanPrintService => !IsBuyer && !IsLoading && SelectedService != null;
 
         public bool ShowInfo => SelectedService != null;
 
@@ -190,14 +194,17 @@ namespace PSMDesktopApp.ViewModels
 
         public bool IsCustomerService => LoggedInUserRole == UserRole.CustomerService;
 
-        public ServicesViewModel(IApiHelper apiHelper, IWindowManager windowManager, IServiceEndpoint serviceEndpoint,
-                                 ISparepartEndpoint sparepartEndpoint)
+        public bool IsBuyer => LoggedInUserRole == UserRole.Buyer;
+
+        public ServicesViewModel(IApiHelper apiHelper, IWindowManager windowManager, IConnectionHelper connectionHelper,
+                                 IServiceEndpoint serviceEndpoint, ISparepartEndpoint sparepartEndpoint)
         {
             DisplayName = "Servisan";
 
             _logger = LogManager.GetLog(typeof(ServicesViewModel));
             _windowManager = windowManager;
             _apiHelper = apiHelper;
+            _connectionHelper = connectionHelper;
             _serviceEndpoint = serviceEndpoint;
             _sparepartEndpoint = sparepartEndpoint;
 
@@ -347,7 +354,7 @@ namespace PSMDesktopApp.ViewModels
 
         public async Task LoadServices()
         {
-            if (IsLoading) return;
+            if (IsLoading || (!_isFirstLoad && !_connectionHelper.WasConnectionSuccessful)) return;
 
             BeforeRefresh?.Invoke();
 
@@ -375,6 +382,8 @@ namespace PSMDesktopApp.ViewModels
                 IsLoading = false;
 
                 OnRefresh?.Invoke();
+
+                _isFirstLoad = false;
             }
             catch (Exception ex)
             {

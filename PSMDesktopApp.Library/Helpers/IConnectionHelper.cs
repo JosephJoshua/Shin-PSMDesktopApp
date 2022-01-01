@@ -6,6 +6,8 @@ namespace PSMDesktopApp.Library.Helpers
     {
         Action OnConnectionFailed { set; }
 
+        bool WasConnectionSuccessful { get; }
+
         bool CanConnectToApi();
     }
 }

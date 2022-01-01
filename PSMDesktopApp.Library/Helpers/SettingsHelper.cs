@@ -7,6 +7,8 @@ namespace PSMDesktopApp.Library.Helpers
     {
         public string ApiUrl { get; set; }
 
+        public string ApiRequestPrefix { get; set; }
+
         public string ReportPath { get; set; }
 
         public string NoHpToko { get; set; }
@@ -42,6 +44,7 @@ namespace PSMDesktopApp.Library.Helpers
             if (!File.Exists(FilePath))
             {
                 Settings.ApiUrl = "https://jointcell.online";
+                Settings.ApiRequestPrefix = "api";
                 Settings.ReportPath = "Reports/ServiceInvoice.rpt";
                 Settings.NoHpToko = "082398200020";
                 Settings.AlamatToko = "Jl. Pendidikan\nSorong, Papua Barat";

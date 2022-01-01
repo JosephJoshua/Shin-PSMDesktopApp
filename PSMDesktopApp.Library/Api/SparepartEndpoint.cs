@@ -25,7 +25,7 @@ namespace PSMDesktopApp.Library.Api
             if (maxDate != null) queryParams.Add(new KeyValuePair<string, string>("max_date", maxDate?.ToString(Constants.DateTimeFormat)));
 
             string query = await new FormUrlEncodedContent(queryParams).ReadAsStringAsync();
-            string url = "/api/sparepart?" + query;
+            string url = "sparepart/?" + query;
 
             using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync(url).ConfigureAwait(false))
             {
@@ -43,7 +43,7 @@ namespace PSMDesktopApp.Library.Api
 
         public async Task<List<SparepartModel>> GetByNomorNota(int nomorNota)
         {
-            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/sparepart/" + nomorNota).ConfigureAwait(false))
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("sparepart/" + nomorNota).ConfigureAwait(false))
             {
                 if (response.IsSuccessStatusCode)
                 {
@@ -59,7 +59,7 @@ namespace PSMDesktopApp.Library.Api
 
         public async Task Insert(SparepartModel sparepart)
         {
-            using (HttpResponseMessage response = await _apiHelper.ApiClient.PostAsJsonAsync("/api/sparepart", sparepart).ConfigureAwait(false))
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.PostAsJsonAsync("sparepart/", sparepart).ConfigureAwait(false))
             {
                 if (!response.IsSuccessStatusCode)
                 {
@@ -70,7 +70,7 @@ namespace PSMDesktopApp.Library.Api
 
         public async Task Delete(int id)
         {
-            using (HttpResponseMessage response = await _apiHelper.ApiClient.DeleteAsync("/api/sparepart/" + id).ConfigureAwait(false))
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.DeleteAsync("sparepart/" + id).ConfigureAwait(false))
             {
                 if (!response.IsSuccessStatusCode)
                 {

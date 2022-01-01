@@ -40,13 +40,19 @@ namespace PSMDesktopApp.Library.Api
                 Converters = new List<JsonConverter> { new CustomDateTimeConverter() },
             };
 
-            string apiUrl = _settingsHelper.Settings.ApiUrl;
+            string apiUrl = CombineURL(_settingsHelper.Settings.ApiUrl, _settingsHelper.Settings.ApiRequestPrefix);
+
+            if (apiUrl.Last() != '/')
+            {
+                apiUrl += '/';
+            }
 
             _apiClient = new HttpClient
             {
                 BaseAddress = new Uri(apiUrl),
+                Timeout = TimeSpan.FromSeconds(30),
             };
-
+                
             _apiClient.DefaultRequestHeaders.Accept.Clear();
             _apiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
@@ -59,7 +65,7 @@ namespace PSMDesktopApp.Library.Api
                 password,
             });
 
-            using (HttpResponseMessage response = await _apiClient.PostAsync("/api/login", new StringContent(jsonReq, Encoding.UTF8, "application/json")))
+            using (HttpResponseMessage response = await _apiClient.PostAsync("login", new StringContent(jsonReq, Encoding.UTF8, "application/json")))
             {
                 if (response.IsSuccessStatusCode)
                 {
@@ -77,7 +83,7 @@ namespace PSMDesktopApp.Library.Api
         {
             _apiClient.DefaultRequestHeaders.Add("Authorization", $"Bearer { token }");
 
-            using (HttpResponseMessage response = await _apiClient.GetAsync("/api/users/current"))
+            using (HttpResponseMessage response = await _apiClient.GetAsync("users/current"))
             {
                 if (response.IsSuccessStatusCode)
                 {
@@ -94,6 +100,17 @@ namespace PSMDesktopApp.Library.Api
                     throw await ApiException.FromHttpResponse(response);
                 }
             }
+        }
+
+        private string CombineURL(string url1, string url2)
+        {
+            if (url1.Length == 0) return url2;
+            if (url2.Length == 0) return url1;
+
+            url1 = url1.TrimEnd('/', '\\');
+            url2 = url2.TrimStart('/', '\\');
+
+            return string.Format("{0}/{1}", url1, url2);
         }
     }
 }

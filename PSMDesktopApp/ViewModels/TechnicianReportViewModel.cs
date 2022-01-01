@@ -1,6 +1,7 @@
 using Caliburn.Micro;
 using DevExpress.Xpf.Core;
 using PSMDesktopApp.Library.Api;
+using PSMDesktopApp.Library.Helpers;
 using PSMDesktopApp.Library.Models;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace PSMDesktopApp.ViewModels
     public sealed class TechnicianReportViewModel : Screen
     {
         private readonly ILog _logger;
+        private readonly IConnectionHelper _connectionHelper;
 
         private readonly IServiceEndpoint _serviceEndpoint;
         private readonly ITechnicianEndpoint _technicianEndpoint;
@@ -29,6 +31,8 @@ namespace PSMDesktopApp.ViewModels
         private DateTime _endDate = DateTime.Today;
 
         private int _technicianRate;
+
+        private bool _isFirstLoad = true;
 
         public BindableCollection<TechnicianResultModel> TechnicianResults
         {
@@ -142,13 +146,15 @@ namespace PSMDesktopApp.ViewModels
             }
         }
 
-        public TechnicianReportViewModel(IServiceEndpoint serviceEndpoint, ITechnicianEndpoint technicianEndpoint)
+        public TechnicianReportViewModel(IServiceEndpoint serviceEndpoint, ITechnicianEndpoint technicianEndpoint, IConnectionHelper connectionHelper)
         {
             DisplayName = "Laporan Teknisi";
 
             _logger = LogManager.GetLog(typeof(TechnicianReportViewModel));
+
             _serviceEndpoint = serviceEndpoint;
             _technicianEndpoint = technicianEndpoint;
+            _connectionHelper = connectionHelper;
         }
 
         protected override async void OnViewLoaded(object view)
@@ -261,7 +267,7 @@ namespace PSMDesktopApp.ViewModels
 
         public async void LoadResults()
         {
-            if (IsLoading || SelectedTechnician == null) return;
+            if (IsLoading || SelectedTechnician == null || (!_isFirstLoad && !_connectionHelper.WasConnectionSuccessful)) return;
 
             IsLoading = true;
 
@@ -284,6 +290,8 @@ namespace PSMDesktopApp.ViewModels
                     }).ToList();
 
                 TechnicianResults = new BindableCollection<TechnicianResultModel>(resultList);
+
+                _isFirstLoad = false;
             }
             catch (Exception ex)
             {

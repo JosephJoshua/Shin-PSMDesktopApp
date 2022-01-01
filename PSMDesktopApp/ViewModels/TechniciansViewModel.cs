@@ -1,6 +1,7 @@
 using Caliburn.Micro;
 using DevExpress.Xpf.Core;
 using PSMDesktopApp.Library.Api;
+using PSMDesktopApp.Library.Helpers;
 using PSMDesktopApp.Library.Models;
 using System;
 using System.Collections.Generic;
@@ -13,11 +14,13 @@ namespace PSMDesktopApp.ViewModels
     public sealed class TechniciansViewModel : Screen
     {
         private readonly ILog _logger;
+        private readonly IConnectionHelper _connectionHelper;
 
         private readonly IWindowManager _windowManager;
         private readonly ITechnicianEndpoint _technicianEndpoint;
 
         private bool _isLoading = false;
+        private bool _isFirstLoad = true;
 
         private BindableCollection<TechnicianModel> _technicians;
         private TechnicianModel _selectedTechnician;
@@ -78,13 +81,15 @@ namespace PSMDesktopApp.ViewModels
 
         public bool CanDeleteTechnician => !IsLoading && SelectedTechnician != null;
 
-        public TechniciansViewModel(IWindowManager windowManager, ITechnicianEndpoint technicianEndpoint)
+        public TechniciansViewModel(IWindowManager windowManager, ITechnicianEndpoint technicianEndpoint, IConnectionHelper connectionHelper)
         {
             DisplayName = "Teknisi";
 
             _logger = LogManager.GetLog(typeof(TechniciansViewModel));
+
             _windowManager = windowManager;
             _technicianEndpoint = technicianEndpoint;
+            _connectionHelper = connectionHelper;
         }
 
         protected override async void OnViewLoaded(object view)
@@ -139,7 +144,7 @@ namespace PSMDesktopApp.ViewModels
 
         public async Task LoadTechnicians()
         {
-            if (IsLoading) return;
+            if (IsLoading || (!_isFirstLoad && !_connectionHelper.WasConnectionSuccessful)) return;
 
             IsLoading = true;
 
@@ -147,6 +152,8 @@ namespace PSMDesktopApp.ViewModels
             {
                 List<TechnicianModel> technicianList = await _technicianEndpoint.GetAll((SearchText ?? "").Trim());
                 Technicians = new BindableCollection<TechnicianModel>(technicianList);
+
+                _isFirstLoad = false;
             }
             catch (Exception ex)
             {
