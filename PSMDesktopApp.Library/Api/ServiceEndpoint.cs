@@ -29,7 +29,7 @@ namespace PSMDesktopApp.Library.Api
             if (maxDate != null) queryParams.Add(new KeyValuePair<string, string>("max_date", maxDate?.ToString(Constants.DateTimeFormat)));
 
             string query = await new FormUrlEncodedContent(queryParams).ReadAsStringAsync();
-            string url = "/api/servisan?" + query;
+            string url = "servisan/?" + query;
 
             using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync(url).ConfigureAwait(false))
             {
@@ -47,7 +47,7 @@ namespace PSMDesktopApp.Library.Api
 
         public async Task<ServiceModel> GetByNomorNota(int nomorNota)
         {
-            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/servisan/" + nomorNota).ConfigureAwait(false))
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("servisan/" + nomorNota).ConfigureAwait(false))
             {
                 if (response.IsSuccessStatusCode)
                 {
@@ -63,7 +63,7 @@ namespace PSMDesktopApp.Library.Api
 
         public async Task<int> Insert(ServiceModel service)
         {
-            using (HttpResponseMessage response = await _apiHelper.ApiClient.PostAsJsonAsync("/api/servisan", service).ConfigureAwait(false))
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.PostAsJsonAsync("servisan/", service).ConfigureAwait(false))
             {
                 if (response.IsSuccessStatusCode)
                 {
@@ -85,7 +85,7 @@ namespace PSMDesktopApp.Library.Api
 
         public async Task Update(ServiceModel service, int nomorNota)
         {
-            using (HttpResponseMessage response = await _apiHelper.ApiClient.PutAsJsonAsync("/api/servisan/" + nomorNota, service).ConfigureAwait(false))
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.PutAsJsonAsync("servisan/" + nomorNota, service).ConfigureAwait(false))
             {
                 if (!response.IsSuccessStatusCode)
                 {
@@ -96,7 +96,7 @@ namespace PSMDesktopApp.Library.Api
 
         public async Task Delete(int nomorNota)
         {
-            using (HttpResponseMessage response = await _apiHelper.ApiClient.DeleteAsync("/api/servisan/" + nomorNota).ConfigureAwait(false))
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.DeleteAsync("servisan/" + nomorNota).ConfigureAwait(false))
             {
                 if (!response.IsSuccessStatusCode)
                 {

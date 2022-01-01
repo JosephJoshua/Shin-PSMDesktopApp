@@ -1,6 +1,7 @@
 using Caliburn.Micro;
 using DevExpress.Xpf.Core;
 using PSMDesktopApp.Library.Api;
+using PSMDesktopApp.Library.Helpers;
 using PSMDesktopApp.Library.Models;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace PSMDesktopApp.ViewModels
     public sealed class ProfitReportViewModel : Screen
     {
         private readonly ILog _logger;
+        private readonly IConnectionHelper _connectionHelper;
         private readonly IServiceEndpoint _serviceEndpoint;
 
         private bool _isLoading = false;
@@ -21,6 +23,8 @@ namespace PSMDesktopApp.ViewModels
 
         private DateTime _startDate = DateTime.Today;
         private DateTime _endDate = DateTime.Today;
+
+        private bool _isFirstLoad = true;
 
         public BindableCollection<ProfitResultModel> ProfitResults
         {
@@ -83,12 +87,13 @@ namespace PSMDesktopApp.ViewModels
 
         public decimal TotalProfit => ProfitResults?.Sum(t => t.LabaRugi) ?? 0;
 
-        public ProfitReportViewModel(IServiceEndpoint serviceEndpoint)
+        public ProfitReportViewModel(IServiceEndpoint serviceEndpoint, IConnectionHelper connectionHelper)
         {
             DisplayName = "Laporan Laba/Rugi";
 
             _logger = LogManager.GetLog(typeof(ProfitReportViewModel));
             _serviceEndpoint = serviceEndpoint;
+            _connectionHelper = connectionHelper;
         }
 
         protected override void OnViewLoaded(object view)
@@ -174,7 +179,7 @@ namespace PSMDesktopApp.ViewModels
 
         public async void LoadResults()
         {
-            if (IsLoading) return;
+            if (IsLoading || (!_isFirstLoad && !_connectionHelper.WasConnectionSuccessful)) return;
 
             IsLoading = true;
 
@@ -198,6 +203,8 @@ namespace PSMDesktopApp.ViewModels
                         }).ToList();
 
                 ProfitResults = new BindableCollection<ProfitResultModel>(resultList);
+
+                _isFirstLoad = false;
             }
             catch (Exception ex)
             {

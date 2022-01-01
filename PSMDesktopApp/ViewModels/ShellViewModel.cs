@@ -13,6 +13,8 @@ namespace PSMDesktopApp.ViewModels
 {
     public class ShellViewModel : Conductor<IScreen>.Collection.OneActive
     {
+        private const int ReconnectInterval = 30;
+
         private readonly IApiHelper _apiHelper;
         private readonly IConnectionHelper _connectionHelper;
         private readonly IWindowManager _windowManager;
@@ -24,19 +26,21 @@ namespace PSMDesktopApp.ViewModels
         private readonly ProfitReportViewModel _profitReportViewModel;
         private readonly TechnicianReportViewModel _technicianReportViewModel;
 
-        private readonly DispatcherTimer _reconnectTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(30) };
+        private readonly DispatcherTimer _reconnectCountdownTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
 
+        private int _secondsBeforeReconnect = ReconnectInterval;
         private bool _loggedIn = false;
-        private bool _wasConnectionSuccessful = true;
 
-        public bool WasConnectionSuccessful
+        public bool WasConnectionSuccessful => _connectionHelper.WasConnectionSuccessful;
+
+        public int SecondsBeforeReconnect
         {
-            get => _wasConnectionSuccessful;
+            get => _secondsBeforeReconnect;
 
             set
             {
-                _wasConnectionSuccessful = value;
-                NotifyOfPropertyChange(() => WasConnectionSuccessful);
+                _secondsBeforeReconnect = value;
+                NotifyOfPropertyChange(() => SecondsBeforeReconnect);
             }
         }
 
@@ -56,11 +60,11 @@ namespace PSMDesktopApp.ViewModels
             _profitReportViewModel = profitReportViewModel;
             _technicianReportViewModel = technicianReportViewModel;
 
-            _reconnectTimer.Tick += TryReconnect;
+            _reconnectCountdownTimer.Tick += ReconnectTimerCountdown;
             _connectionHelper.OnConnectionFailed = () =>
             {
-                WasConnectionSuccessful = false;
-                _reconnectTimer.Start();
+                _reconnectCountdownTimer.Start();
+                NotifyOfPropertyChange(() => WasConnectionSuccessful);
             };
         }
 
@@ -71,7 +75,7 @@ namespace PSMDesktopApp.ViewModels
             bool canClose = DXMessageBox.Show("Apakah anda yakin ingin keluar?", "Servisan Manager", MessageBoxButton.YesNo) == MessageBoxResult.Yes;
             if (!_loggedIn || canClose)
             {
-                _reconnectTimer.Stop();
+                _reconnectCountdownTimer.Stop();
             }
 
             return Task.FromResult(canClose);
@@ -81,6 +85,7 @@ namespace PSMDesktopApp.ViewModels
         {
             base.OnViewLoaded(view);
 
+            // We can't show a dialog immediately after the window's loaded for some reason.
             await Task.Delay(1000);
 
             if (await _windowManager.ShowDialogAsync(IoC.Get<LoginViewModel>()) == false)
@@ -106,15 +111,39 @@ namespace PSMDesktopApp.ViewModels
                 {
                     Items.Add(_servicesViewModel);
                 }
+                else if (role == UserRole.Buyer)
+                {
+                    Items.Add(_servicesViewModel);
+                    Items.Add(_sparepartReportViewModel);
+                }
             }
         }
 
-        private void TryReconnect(object sender, EventArgs e)
+        public bool TryReconnect()
         {
             if (_connectionHelper.CanConnectToApi())
             {
-                WasConnectionSuccessful = true;
-                _reconnectTimer.Stop();
+                // We want to reset the SecondsBeforeReconnect variable after trying to reconnect.
+                SecondsBeforeReconnect = ReconnectInterval;
+
+                _reconnectCountdownTimer.Stop();
+                NotifyOfPropertyChange(() => WasConnectionSuccessful);
+
+                return true;
+            }
+
+            SecondsBeforeReconnect = ReconnectInterval;
+            return false;
+        }
+
+        private void ReconnectTimerCountdown(object sender, EventArgs e)
+        {
+            --SecondsBeforeReconnect;
+
+            // We don't want to restart the timer again if we successfully reconnected to the API.
+            if (!(SecondsBeforeReconnect <= 0 && TryReconnect()))
+            {
+                _reconnectCountdownTimer.Start();
             }
         }
     }

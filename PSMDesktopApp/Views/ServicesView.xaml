@@ -274,6 +274,7 @@
                             <Button ToolTip="Print"
                                     Background="{DynamicResource PrimaryHueMidBrush}"
                                     Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                                    IsEnabled="{Binding Path=CanPrintService}"
                                     cal:Message.Attach="[Event Click] = [Action PrintSelectedService]">
                                 <material:PackIcon Kind="Printer" />
                             </Button>

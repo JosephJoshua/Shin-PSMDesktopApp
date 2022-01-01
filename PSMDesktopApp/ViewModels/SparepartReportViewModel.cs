@@ -1,6 +1,7 @@
 using Caliburn.Micro;
 using DevExpress.Xpf.Core;
 using PSMDesktopApp.Library.Api;
+using PSMDesktopApp.Library.Helpers;
 using PSMDesktopApp.Library.Models;
 using System;
 using System.Collections.Generic;
@@ -15,12 +16,15 @@ namespace PSMDesktopApp.ViewModels
     {
         private readonly ILog _logger;
         private readonly ISparepartEndpoint _sparepartEndpoint;
+        private readonly IConnectionHelper _connectionHelper;
 
         private bool _isLoading = false;
         private BindableCollection<SparepartModel> _spareparts;
 
         private DateTime _startDate = DateTime.Today;
         private DateTime _endDate = DateTime.Today;
+
+        private bool _isFirstLoad = true;
 
         public BindableCollection<SparepartModel> Spareparts
         {
@@ -77,12 +81,13 @@ namespace PSMDesktopApp.ViewModels
 
         public decimal TotalCost => Spareparts?.Sum(t => t.Harga) ?? 0;
 
-        public SparepartReportViewModel(ISparepartEndpoint sparepartEndpoint)
+        public SparepartReportViewModel(ISparepartEndpoint sparepartEndpoint, IConnectionHelper connectionHelper)
         {
             DisplayName = "Laporan Sparepart";
 
             _logger = LogManager.GetLog(typeof(SparepartReportViewModel));
             _sparepartEndpoint = sparepartEndpoint;
+            _connectionHelper = connectionHelper;
         }
 
         protected override void OnViewLoaded(object view)
@@ -151,7 +156,7 @@ namespace PSMDesktopApp.ViewModels
 
         public async void LoadSpareparts()
         {
-            if (IsLoading) return;
+            if (IsLoading || (!_isFirstLoad && !_connectionHelper.WasConnectionSuccessful)) return;
 
             IsLoading = true;
 
@@ -165,6 +170,8 @@ namespace PSMDesktopApp.ViewModels
             {
                 List<SparepartModel> sparepartList = await _sparepartEndpoint.GetAll(StartDate, EndDate);
                 Spareparts = new BindableCollection<SparepartModel>(sparepartList);
+
+                _isFirstLoad = false;
             }
             catch (Exception ex)
             {

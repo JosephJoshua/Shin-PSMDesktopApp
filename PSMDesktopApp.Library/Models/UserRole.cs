@@ -12,5 +12,8 @@ namespace PSMDesktopApp.Library.Models
 
         [EnumMember(Value = "customer_service")]
         CustomerService,
+
+        [EnumMember(Value = "buyer")]
+        Buyer,
     }
 }

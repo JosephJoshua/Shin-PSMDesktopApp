@@ -1,5 +1,4 @@
 using PSMDesktopApp.Library.Models;
-using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -18,8 +17,8 @@ namespace PSMDesktopApp.Library.Api
 
         public async Task<List<TechnicianModel>> GetAll(string searchText = "")
         {
-            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/teknisi/?q=" + WebUtility.UrlEncode(searchText))
-                    .ConfigureAwait(false))
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("teknisi/?q=" + WebUtility.UrlEncode(searchText))
+                .ConfigureAwait(false))
             {
                 if (response.IsSuccessStatusCode)
                 {
@@ -35,7 +34,7 @@ namespace PSMDesktopApp.Library.Api
 
         public async Task<TechnicianModel> GetById(int id)
         {
-            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/teknisi/" + id).ConfigureAwait(false))
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("teknisi/" + id).ConfigureAwait(false))
             {
                 if (response.IsSuccessStatusCode)
                 {
@@ -51,7 +50,7 @@ namespace PSMDesktopApp.Library.Api
 
         public async Task Insert(TechnicianModel technician)
         {
-            using (HttpResponseMessage response = await _apiHelper.ApiClient.PostAsJsonAsync("/api/teknisi", technician).ConfigureAwait(false))
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.PostAsJsonAsync("teknisi/", technician).ConfigureAwait(false))
             {
                 if (!response.IsSuccessStatusCode)
                 {
@@ -62,7 +61,7 @@ namespace PSMDesktopApp.Library.Api
 
         public async Task Delete(int id)
         {
-            using (HttpResponseMessage response = await _apiHelper.ApiClient.DeleteAsync("/api/teknisi/" + id).ConfigureAwait(false))
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.DeleteAsync("teknisi/" + id).ConfigureAwait(false))
             {
                 if (!response.IsSuccessStatusCode)
                 {
