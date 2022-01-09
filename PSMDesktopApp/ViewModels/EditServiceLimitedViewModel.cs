@@ -1,8 +1,11 @@
 using Caliburn.Micro;
 using DevExpress.Xpf.Core;
+using Newtonsoft.Json;
 using PSMDesktopApp.Library.Api;
 using PSMDesktopApp.Library.Models;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,10 +15,14 @@ namespace PSMDesktopApp.ViewModels
     public class EditServiceLimitedViewModel : Screen
     {
         private readonly ILog _logger;
+
         private readonly IServiceEndpoint _serviceEndpoint;
+        private readonly ITechnicianEndpoint _technicianEndpoint;
 
         private ServiceModel _oldService;
         private int _nomorNota;
+
+        private int _technicianId;
 
         private string _kerusakan;
         private string _noHp;
@@ -29,6 +36,9 @@ namespace PSMDesktopApp.ViewModels
 
         private double _dp;
         private double _tambahanBiaya;
+
+        private BindingList<TechnicianModel> _technicians;
+        private TechnicianModel _selectedTechnician;
 
         public int NomorNota
         {
@@ -147,17 +157,67 @@ namespace PSMDesktopApp.ViewModels
             }
         }
 
+        public BindingList<TechnicianModel> Technicians
+        {
+            get => _technicians;
+
+            set
+            {
+                _technicians = value;
+                NotifyOfPropertyChange(() => Technicians);
+            }
+        }
+
+        public TechnicianModel SelectedTechnician
+        {
+            get => _selectedTechnician;
+
+            set
+            {
+                _selectedTechnician = value;
+                NotifyOfPropertyChange(() => SelectedTechnician);
+            }
+        }
+
         public bool CanSave => !string.IsNullOrEmpty(Kerusakan);
 
-        public EditServiceLimitedViewModel(IServiceEndpoint serviceEndpoint)
+        public EditServiceLimitedViewModel(IServiceEndpoint serviceEndpoint, ITechnicianEndpoint technicianEndpoint)
         {
             _logger = LogManager.GetLog(typeof(EditServiceLimitedViewModel));
             _serviceEndpoint = serviceEndpoint;
+            _technicianEndpoint = technicianEndpoint;
+        }
+
+        protected override async void OnViewLoaded(object view)
+        {
+            base.OnViewLoaded(view);
+
+            await LoadTechnicians();
+        }
+
+        public async Task LoadTechnicians()
+        {
+            try
+            {
+                List<TechnicianModel> technicianList = await _technicianEndpoint.GetAll();
+                Technicians = new BindingList<TechnicianModel>(technicianList);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex);
+            }
+
+            if (Technicians.Count > 0)
+            {
+                SelectedTechnician = Technicians.Where(t => t.Id == _technicianId).FirstOrDefault() ?? Technicians[0];
+            }
         }
 
         public void SetFieldValues(ServiceModel service)
         {
-            _oldService = service;
+            // Clone service object without changes being reflected
+            string json = JsonConvert.SerializeObject(service);
+            _oldService = JsonConvert.DeserializeObject<ServiceModel>(json);
 
             NomorNota = service.NomorNota;
             Kerusakan = service.Kerusakan;
@@ -167,6 +227,8 @@ namespace PSMDesktopApp.ViewModels
             TanggalKonfirmasi = service.TanggalKonfirmasi;
             Dp = (double)service.Dp;
             TambahanBiaya = (double)service.TambahanBiaya;
+
+            _technicianId = service.TechnicianId;
 
             SelectedStatus = Enum.GetValues(ServiceStatuses.GetType()).Cast<ServiceStatus>().Where((e) => e.Description() == service.StatusServisan).FirstOrDefault();
         }
@@ -220,6 +282,7 @@ namespace PSMDesktopApp.ViewModels
             _oldService.TanggalKonfirmasi = SudahKonfirmasi ? tanggalKonfirmasi : null;
             _oldService.Dp = (decimal)Dp;
             _oldService.TambahanBiaya = (decimal)TambahanBiaya;
+            _oldService.TechnicianId = SelectedTechnician.Id;
 
             try
             {
