@@ -18,7 +18,7 @@
     WindowStartupLocation="CenterOwner"
     Title="{Binding NomorNota, StringFormat=Edit Servisan - {0}}"
     TitleAlignment="Center"
-    Height="410" Width="500">
+    Height="450" Width="500">
     
     <Grid>
         <dxlc:LayoutControl Orientation="Vertical" dxe:ValidationService.IsValidationContainer="True">
@@ -33,6 +33,16 @@
                     <dxe:TextEdit x:Name="NoHp" Margin="10 0 0 0" Height="30"
                                   AllowNullInput="False"
                                   Text="{Binding Path=NoHp, UpdateSourceTrigger=PropertyChanged}" />
+                </dxlc:LayoutItem>
+
+                <dxlc:LayoutItem Label="Teknisi:" Margin="4">
+                    <dxe:ComboBoxEdit 
+                            Height="30" Margin="10 0 0 0"
+                            AutoComplete="True"
+                            IncrementalFiltering="True"
+                            ItemsSource="{Binding Path=Technicians, Mode=OneWay}"
+                            DisplayMember="Nama"
+                            EditValue="{Binding SelectedTechnician, UpdateSourceTrigger=PropertyChanged}" />
                 </dxlc:LayoutItem>
 
                 <dxlc:LayoutItem Label="Status:" Margin="4">
