@@ -26,7 +26,6 @@ namespace PSMDesktopApp.ViewModels
         private readonly IServiceEndpoint _serviceEndpoint;
         private readonly ISparepartEndpoint _sparepartEndpoint;
 
-        private bool _showAllColumns = false;
         private bool _isLoading = false;
 
         private BindableCollection<ServiceModel> _services;
@@ -50,17 +49,6 @@ namespace PSMDesktopApp.ViewModels
 
         public delegate void OnRefreshEventHandler();
         public event OnRefreshEventHandler OnRefresh;
-
-        public bool ShowAllColumns
-        {
-            get => _showAllColumns;
-
-            set
-            {
-                _showAllColumns = value;
-                NotifyOfPropertyChange(() => ShowAllColumns);
-            }
-        }
 
         public bool IsLoading
         {
@@ -422,17 +410,7 @@ namespace PSMDesktopApp.ViewModels
             if (!string.IsNullOrWhiteSpace(kelengkapan) && kelengkapan.Length > 1)
             {
                 kelengkapan = kelengkapan[0].ToString() + kelengkapan.Substring(1).ToLower();
-
-                // Make "SIM" uppercase so it looks better; there's probably a more efficient way of doing this but I don't care.
-                for (int i = 0; i < kelengkapan.Length; i++)
-                {
-                    if (kelengkapan[i].ToString().ToLower() == "s" && kelengkapan.Length - i - 1 >= 2 && kelengkapan[i + 1] == 'i' &&
-                        kelengkapan[i + 2] == 'm')
-                    {
-                        kelengkapan = kelengkapan.Substring(0, i) + "SIM" + kelengkapan.Substring(i + 3);
-                        break;
-                    }
-                }
+                kelengkapan = kelengkapan.Replace("sim", "SIM").Replace("Sim", "SIM");
             }
 
             ServiceInvoicePreviewViewModel invoicePreviewVM = IoC.Get<ServiceInvoicePreviewViewModel>();
