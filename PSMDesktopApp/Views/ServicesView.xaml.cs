@@ -29,7 +29,6 @@ namespace PSMDesktopApp.Views
 
             foreach (GridColumn column in ServicesGrid.Columns)
             {
-                // I know that hardcoding "NomorNota" in here isn't a good idea but it will do for now.
                 if (column.FieldName == "NomorNota") continue;
 
                 column.Width = column.Width.Value + 20;
@@ -59,9 +58,22 @@ namespace PSMDesktopApp.Views
             if (_isFirstLoad)
             {
                 SetInitialGridWidth();
+                WIPCheckbox.IsChecked = true;
             }
 
-            _isFirstLoad = true;
+            _isFirstLoad = false;
+        }
+
+        private void OnlyShowWIP_Checked(object sender, System.Windows.RoutedEventArgs e)
+        {
+            ServicesGrid.FilterString = "[StatusServisan] = 'Sedang dikerjakan'";
+            ServicesGrid.GroupBy("NamaTeknisi");
+        }
+
+        private void OnlyShowWIP_Unchecked(object sender, System.Windows.RoutedEventArgs e)
+        {
+            ServicesGrid.UngroupBy("NamaTeknisi");
+            ServicesGrid.ClearColumnFilter("StatusServisan");
         }
     }
 }
