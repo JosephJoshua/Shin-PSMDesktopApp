@@ -27,6 +27,7 @@ namespace PSMDesktopApp.ViewModels
         private readonly ISparepartEndpoint _sparepartEndpoint;
 
         private bool _isLoading = false;
+        private bool _onlyShowWIP = true;
 
         private BindableCollection<ServiceModel> _services;
         private ServiceModel _selectedService;
@@ -64,6 +65,34 @@ namespace PSMDesktopApp.ViewModels
                 NotifyOfPropertyChange(() => CanEditService);
                 NotifyOfPropertyChange(() => CanDeleteService);
                 NotifyOfPropertyChange(() => CanPrintService);
+            }
+        }
+
+        public bool OnlyShowWIP
+        {
+            get => _onlyShowWIP;
+
+            set
+            {
+                _onlyShowWIP = value;
+                NotifyOfPropertyChange(() => OnlyShowWIP);
+
+                DateTime today = DateTime.Today;
+
+                if (_isFirstLoad) return;
+
+                if (value)
+                {
+                    StartDate = new DateTime(today.Year, 1, 1);
+                    EndDate = StartDate.AddMonths(12).AddTicks(-1);
+                }
+                else
+                {
+                    StartDate = new DateTime(today.Year, today.Month, 1);
+                    EndDate = _startDate.AddMonths(1).AddTicks(-1);
+                }
+
+                _ = LoadServices();
             }
         }
 
@@ -198,9 +227,8 @@ namespace PSMDesktopApp.ViewModels
 
             DateTime today = DateTime.Today;
 
-            // Set start and end date to the start and end of the month, respectively.
-            _startDate = new DateTime(today.Year, today.Month, 1);
-            _endDate = _startDate.AddMonths(1).AddTicks(-1);
+            StartDate = new DateTime(today.Year, 1, 1);
+            EndDate = StartDate.AddMonths(12).AddTicks(-1);
         }
 
         protected override async void OnViewLoaded(object view)

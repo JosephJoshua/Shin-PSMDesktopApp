@@ -81,6 +81,7 @@
                           VerticalAlignment="Center"
                           Mask="dd/MM/yyyy"
                           MaskUseAsDisplayFormat="True"
+                          IsEnabled="{c:Binding Path=!OnlyShowWIP}"
                           DateTime="{Binding StartDate}" />
 
             <TextBlock Grid.Column="4" Grid.Row="0"
@@ -94,11 +95,13 @@
                           VerticalAlignment="Center"
                           Mask="dd/MM/yyyy"
                           MaskUseAsDisplayFormat="True"
+                          IsEnabled="{c:Binding Path=!OnlyShowWIP}"
                           DateTime="{Binding EndDate}" />
 
             <dxe:CheckEdit x:Name="WIPCheckbox" Grid.Column="6" Grid.Row="0"
                            Height="30"
                            VerticalAlignment="Center"
+                           IsChecked="{Binding OnlyShowWIP}"
                            Checked="OnlyShowWIP_Checked"
                            Unchecked="OnlyShowWIP_Unchecked"
                            Margin="15 0 8 0" />
