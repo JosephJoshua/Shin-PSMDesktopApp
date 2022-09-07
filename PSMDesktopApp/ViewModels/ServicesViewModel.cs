@@ -375,7 +375,11 @@ namespace PSMDesktopApp.ViewModels
             BeforeRefresh?.Invoke();
 
             IsLoading = true;
-            string searchText = (SearchText ?? "").Trim();
+
+            bool shouldForceStatus = OnlyShowWIP && string.IsNullOrWhiteSpace(SearchText);
+
+            SearchType searchType = shouldForceStatus ? SearchType.Status : SelectedSearchType;
+            string searchText = shouldForceStatus ? "Sedang dikerjakan" : (SearchText ?? "").Trim();
 
             // Make sure the start date's time is set to the start of the day (at 00:00:00).
             StartDate = StartDate.Date;
@@ -385,7 +389,7 @@ namespace PSMDesktopApp.ViewModels
 
             try 
             {
-                List<ServiceModel> serviceList = await _serviceEndpoint.GetAll(searchText, SelectedSearchType, StartDate, EndDate);
+                List<ServiceModel> serviceList = await _serviceEndpoint.GetAll(searchText, searchType, StartDate, EndDate);
                 var serviceCollection = new BindableCollection<ServiceModel>(serviceList);
 
                 if (Services?.SequenceEqual(serviceCollection) ?? false)
