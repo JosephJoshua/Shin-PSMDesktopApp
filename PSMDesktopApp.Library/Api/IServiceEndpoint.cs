@@ -10,6 +10,10 @@ namespace PSMDesktopApp.Library.Api
 
         Task<List<ServiceModel>> GetAll(string searchText = "", SearchType searchType = SearchType.NamaPelanggan, DateTime? minDate = null, DateTime? maxDate = null);
 
+        Task<List<ProfitResultModel>> GetLabaRugiReport(DateTime? minDate = null, DateTime? maxDate = null);
+
+        Task<List<TechnicianResultModel>> GetTeknisiReport(int idTeknisi, DateTime? minDate = null, DateTime? maxDate = null);
+
         Task<ServiceModel> GetByNomorNota(int nomorNota); 
 
         Task<int> Insert(ServiceModel service);

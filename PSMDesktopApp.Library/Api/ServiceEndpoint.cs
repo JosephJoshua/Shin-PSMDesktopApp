@@ -45,6 +45,59 @@ namespace PSMDesktopApp.Library.Api
             }
         }
 
+        public async Task<List<ProfitResultModel>> GetLabaRugiReport(DateTime? minDate = null, DateTime? maxDate = null)
+        {
+            var queryParams = new List<KeyValuePair<string, string>>();
+
+            // We have to use the null conditional operator so we can use it as a normal DateTime, as opposed to a nullable one.
+            if (minDate != null) queryParams.Add(new KeyValuePair<string, string>("min_date", minDate?.ToString(Constants.DateTimeFormat)));
+            if (maxDate != null) queryParams.Add(new KeyValuePair<string, string>("max_date", maxDate?.ToString(Constants.DateTimeFormat)));
+
+            string query = await new FormUrlEncodedContent(queryParams).ReadAsStringAsync();
+            string url = "servisan-reports/laba-rugi?" + query;
+
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync(url).ConfigureAwait(false))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsAsync<List<ProfitResultModel>>();
+                    return result;
+                }
+                else
+                {
+                    throw await ApiException.FromHttpResponse(response);
+                }
+            }
+        }
+
+        public async Task<List<TechnicianResultModel>> GetTeknisiReport(int idTeknisi, DateTime? minDate = null, DateTime? maxDate = null)
+        {
+            var queryParams = new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>("id_teknisi", idTeknisi.ToString()),
+            };
+
+            // We have to use the null conditional operator so we can use it as a normal DateTime, as opposed to a nullable one.
+            if (minDate != null) queryParams.Add(new KeyValuePair<string, string>("min_date", minDate?.ToString(Constants.DateTimeFormat)));
+            if (maxDate != null) queryParams.Add(new KeyValuePair<string, string>("max_date", maxDate?.ToString(Constants.DateTimeFormat)));
+
+            string query = await new FormUrlEncodedContent(queryParams).ReadAsStringAsync();
+            string url = "servisan-reports/teknisi?" + query;
+
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync(url).ConfigureAwait(false))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsAsync<List<TechnicianResultModel>>();
+                    return result;
+                }
+                else
+                {
+                    throw await ApiException.FromHttpResponse(response);
+                }
+            }
+        }
+
         public async Task<ServiceModel> GetByNomorNota(int nomorNota)
         {
             using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("servisan/" + nomorNota).ConfigureAwait(false))
