@@ -271,23 +271,9 @@ namespace PSMDesktopApp.ViewModels
 
             IsLoading = true;
 
-            try
+            try 
             {
-                // We can't use the server's date range constraint because the server ignores the date range when searching.
-                List<TechnicianResultModel> resultList = (await _serviceEndpoint.GetAll("Sudah diambil", SearchType.Status))
-                    .Where(s => s.TechnicianId == SelectedTechnician.Id)
-                    .Where(s => s.TanggalPengambilan?.Date >= StartDate.Date && s.TanggalPengambilan?.Date <= EndDate.Date)
-                    .Select(s => new TechnicianResultModel
-                    {
-                        NomorNota = s.NomorNota,
-                        TanggalPengambilan = s.TanggalPengambilan ?? throw new Exception("Tanggal pengambilan merupakan null walaupun servisan sudah diambil"),
-                        TipeHp = s.TipeHp,
-                        Biaya = s.TotalBiaya,
-                        HargaSparepart = s.HargaSparepart,
-                        LabaRugi = s.LabaRugi,
-                        Kerusakan = s.Kerusakan,
-                        NamaTeknisi = s.NamaTeknisi,
-                    }).ToList();
+                List<TechnicianResultModel> resultList = await _serviceEndpoint.GetTeknisiReport(SelectedTechnician.Id, StartDate.Date, EndDate.Date);
 
                 TechnicianResults = new BindableCollection<TechnicianResultModel>(resultList);
 
