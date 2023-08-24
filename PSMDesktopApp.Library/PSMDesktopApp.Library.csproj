@@ -109,6 +109,7 @@
     <Compile Include="Models\ILoggedInUserModel.cs" />
     <Compile Include="Models\LoggedInUserModel.cs" />
     <Compile Include="Models\ProfitResultModel.cs" />
+    <Compile Include="Models\SisaResultModel.cs" />
     <Compile Include="Models\SalesModel.cs" />
     <Compile Include="Models\SearchType.cs" />
     <Compile Include="Models\ServiceInvoiceModel.cs" />

@@ -12,6 +12,8 @@ namespace PSMDesktopApp.Library.Api
 
         Task<List<ProfitResultModel>> GetLabaRugiReport(DateTime? minDate = null, DateTime? maxDate = null);
 
+        Task<List<SisaResultModel>> GetSisaReport(DateTime? minDate = null, DateTime? maxDate = null);
+
         Task<List<TechnicianResultModel>> GetTeknisiReport(int idTeknisi, DateTime? minDate = null, DateTime? maxDate = null);
 
         Task<ServiceModel> GetByNomorNota(int nomorNota); 

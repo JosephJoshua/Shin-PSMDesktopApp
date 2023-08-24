@@ -210,6 +210,7 @@
     <Compile Include="ViewModels\EditServiceViewModel.cs" />
     <Compile Include="ViewModels\EditServiceLimitedViewModel.cs" />
     <Compile Include="ViewModels\ProfitReportViewModel.cs" />
+    <Compile Include="ViewModels\SisaReportViewModel.cs" />
     <Compile Include="ViewModels\SalesViewModel.cs" />
     <Compile Include="ViewModels\ServiceInvoicePreviewViewModel.cs" />
     <Compile Include="ViewModels\SparepartReportViewModel.cs" />
@@ -241,6 +242,9 @@
     </Compile>
     <Compile Include="Views\ProfitReportView.xaml.cs">
       <DependentUpon>ProfitReportView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SisaReportView.xaml.cs">
+      <DependentUpon>SisaReportView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SalesView.xaml.cs">
       <DependentUpon>SalesView.xaml</DependentUpon>
@@ -340,6 +344,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ProfitReportView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SisaReportView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

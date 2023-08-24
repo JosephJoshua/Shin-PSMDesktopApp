@@ -1,0 +1,191 @@
+﻿<UserControl 
+    x:Class="PSMDesktopApp.Views.SisaReportView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:c="clr-namespace:CalcBinding;assembly=CalcBinding"
+    xmlns:cal="http://www.caliburnproject.org"
+    xmlns:material="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+    xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+    xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+    xmlns:viewmodels="clr-namespace:PSMDesktopApp.ViewModels" 
+    d:DataContext="{d:DesignInstance Type=viewmodels:SisaReportViewModel}"
+    mc:Ignorable="d" 
+    d:DesignHeight="450" d:DesignWidth="800"
+    Loaded="UserControl_Loaded">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="7*" />
+            <ColumnDefinition Width="3*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Title -->
+        <TextBlock Grid.Column="0" Grid.Row="0"
+                   Grid.ColumnSpan="5"
+                   Text="Laporan Sisa"
+                   FontSize="24"
+                   Foreground="White"
+                   HorizontalAlignment="Center"
+                   Margin="0 0 0 10" />
+
+        <!-- Filtering options -->
+        <Grid Grid.Column="0" Grid.Row="1" Height="30">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            
+            <!-- Date range -->
+            <TextBlock Grid.Column="0" Grid.Row="0"
+                       Text="Dari:"
+                       Foreground="White"
+                       VerticalAlignment="Center"
+                       Margin="0 0 10 0" />
+
+            <dxe:DateEdit Grid.Column="1" Grid.Row="0"
+                          Height="30"
+                          VerticalAlignment="Center"
+                          MaskType="DateTime"
+                          Mask="dd/MM/yyyy"
+                          MaskUseAsDisplayFormat="True"
+                          DateTime="{Binding StartDate}" />
+
+            <TextBlock Grid.Column="2" Grid.Row="0"
+                       Text="Sampai:"
+                       Foreground="White"
+                       VerticalAlignment="Center"
+                       Margin="20 0 10 0" />
+
+            <dxe:DateEdit Grid.Column="3" Grid.Row="0"
+                          Height="30"
+                          VerticalAlignment="Center"
+                          MaskType="DateTime"
+                          Mask="dd/MM/yyyy"
+                          MaskUseAsDisplayFormat="True"
+                          DateTime="{Binding EndDate}" />
+
+        </Grid>
+
+        <dxlc:LayoutControl x:Name="MainLayoutControl" Grid.Column="0" Grid.Row="2"
+                            Grid.ColumnSpan="2" Orientation="Horizontal">
+
+            <!-- Max width calculation is a workaround so that the layout control resizing respects min width -->
+            <dxlc:LayoutGroup x:Name="GridLayoutGroup" 
+                              dxlc:LayoutControl.AllowHorizontalSizing="True"
+                              UseLayoutRounding="True" 
+                              Orientation="Horizontal" 
+                              MinWidth="250"
+                              MaxWidth="{DXBinding '@e(MainLayoutControl).ActualWidth-@e(InfoLayoutGroup).MinWidth-@e(MainLayoutControl).ItemSpace'}">
+                <Grid>
+
+                    <!-- Data grid -->
+                    <dxg:GridControl Margin="0 10 0 0"
+                                     SelectionMode="Row"
+                                     ItemsSource="{Binding Path=SisaResults}"
+                                     Visibility="{c:Binding Path=!IsLoading}">
+
+                        <dxg:GridColumn Header="Nomor Nota" Width="2*" Binding="{Binding Path=NomorNota}">
+                            <dxg:GridColumn.EditSettings>
+                                <dxe:TextEditSettings HorizontalContentAlignment="Left" />
+                            </dxg:GridColumn.EditSettings>
+                        </dxg:GridColumn>
+
+                        <dxg:GridColumn Header="Tanggal Pengambilan" Width="3*" Binding="{Binding Path=TanggalPengambilan}" />
+                        <dxg:GridColumn Header="Tipe Hp" Width="2*" Binding="{Binding Path=TipeHp}" />
+                        <dxg:GridColumn Header="Kerusakan" Width="2*" Binding="{Binding Path=Kerusakan}" />
+
+                        <dxg:GridColumn Header="Biaya" Width="3*" Binding="{Binding Path=Biaya}">
+                            <dxg:GridColumn.EditSettings>
+                                <dxe:TextEditSettings HorizontalContentAlignment="Left" DisplayFormat="C0" />
+                            </dxg:GridColumn.EditSettings>
+                        </dxg:GridColumn>
+
+                        <dxg:GridColumn Header="DP" Width="3*" Binding="{Binding Path=Dp}">
+                            <dxg:GridColumn.EditSettings>
+                                <dxe:TextEditSettings HorizontalContentAlignment="Left" DisplayFormat="C0" />
+                            </dxg:GridColumn.EditSettings>
+                        </dxg:GridColumn>
+
+                        <dxg:GridColumn Header="Sisa" Width="3*" Binding="{Binding Path=Sisa}">
+                            <dxg:GridColumn.EditSettings>
+                                <dxe:TextEditSettings HorizontalContentAlignment="Left" DisplayFormat="C0" />
+                            </dxg:GridColumn.EditSettings>
+                        </dxg:GridColumn>
+
+                        <dxg:GridControl.View>
+                            <dxg:TableView AllowScrollAnimation="True"
+                               AllowFixedGroups="True"
+                               AllowEditing="False" />
+                        </dxg:GridControl.View>
+                    </dxg:GridControl>
+
+                    <!-- Refresh button -->
+                    <Button Style="{StaticResource MaterialDesignFloatingActionButton}"
+                            ToolTip="Refresh"
+                            Background="{DynamicResource PrimaryHueMidBrush}"
+                            Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Bottom"
+                            Margin="22"
+                            Width="48"
+                            Height="48"
+                            cal:Message.Attach="[Event Click] = [Action LoadResults]">
+                        <material:PackIcon Kind="Refresh" />
+                    </Button>
+
+                    <!-- Progress bar -->
+                    <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
+                                 Width="40"
+                                 Height="40"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center"
+                                 Value="0"
+                                 IsIndeterminate="True"
+                                 Visibility="{c:Binding Path=IsLoading}" />
+                </Grid>
+            </dxlc:LayoutGroup>
+
+            <!-- Max width calculation is a workaround so that the layout control resizing respects min width -->
+            <dxlc:LayoutGroup x:Name="InfoLayoutGroup" Orientation="Horizontal" MinWidth="300" 
+                              MaxWidth="{DXBinding '@e(MainLayoutControl).ActualWidth-@e(GridLayoutGroup).MinWidth-@e(MainLayoutControl).ItemSpace'}">
+                <Grid>
+                    <!-- Info box -->
+                    <StackPanel Orientation="Vertical"
+                                Margin="10 10 0 10"
+                                VerticalAlignment="Bottom"
+                                Visibility="{c:Binding Path=ShowInfo, FalseToVisibility=Hidden}">
+                        <TextBlock FontSize="16" Text="{Binding Path=TotalRevenue, StringFormat=Total biaya: Rp{0:N0}}"
+                                   TextWrapping="Wrap" />
+
+                        <TextBlock FontSize="16" Text="{Binding Path=TotalDp, StringFormat=Total DP: Rp{0:N0}}"
+                                   TextWrapping="Wrap" Margin="0 5 0 0" />
+
+                        <TextBlock FontSize="16" Text="{Binding Path=TotalSisa, StringFormat=Total sisa: Rp{0:N0}}"
+                                   TextWrapping="Wrap" Margin="0 5 0 0" />
+
+                        <dx:SimpleButton x:Name="ExportToExcel" 
+                                         Content="Export" FontSize="16"
+                                         HorizontalAlignment="Left"
+                                         MaxWidth="150" Padding="20 5" Margin="0 10 0 0" />
+                    </StackPanel>
+
+                    <TextBlock Visibility="{c:Binding Path=!ShowInfo}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Text="Tidak ditemukan" />
+                </Grid>
+            </dxlc:LayoutGroup>
+        </dxlc:LayoutControl>
+    </Grid>
+</UserControl>
