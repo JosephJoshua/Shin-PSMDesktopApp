@@ -237,7 +237,7 @@
                                     Background="{DynamicResource PrimaryHueMidBrush}"
                                     Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
                                     IsEnabled="{Binding Path=CanEditService}"
-                                    Visibility="{c:Binding Path=!IsCustomerService}"
+                                    Visibility="{c:Binding Path=IsAdmin}"
                                     cal:Message.Attach="[Event Click] = [Action EditService]">
                                 <material:PackIcon Kind="Edit" />
                             </Button>
@@ -246,7 +246,7 @@
                                     Background="{DynamicResource PrimaryHueMidBrush}"
                                     Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
                                     IsEnabled="{Binding Path=CanEditService}"
-                                    Visibility="{c:Binding Path=IsCustomerService}"
+                                    Visibility="{c:Binding Path=!IsAdmin}"
                                     cal:Message.Attach="[Event Click] = [Action EditServiceLimited]">
                                 <material:PackIcon Kind="Edit" />
                             </Button>

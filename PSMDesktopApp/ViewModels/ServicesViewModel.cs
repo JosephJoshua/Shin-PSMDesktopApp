@@ -197,7 +197,7 @@ namespace PSMDesktopApp.ViewModels
 
         public bool CanAddSparepart => !IsCustomerService && !IsLoading && (SelectedService != null || SelectedSparepart != null);
 
-        public bool CanEditService => !IsBuyer && !IsLoading && SelectedService != null;
+        public bool CanEditService => IsAdmin && !IsLoading && SelectedService != null;
 
         public bool CanDeleteService => IsAdmin && !IsLoading && SelectedService != null;
 
